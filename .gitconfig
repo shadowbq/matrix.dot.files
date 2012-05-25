@@ -1,0 +1,30 @@
+[user]
+	name = shadowbq
+	email = shadowbq@gmail.com
+[color]
+	branch = auto
+	diff = auto
+	interactive = auto
+	status = auto
+[github]
+	user = shadowbq
+	email = shadowbq@gmail.com
+[core]
+        excludesfile = ~/.gitignore_global
+[alias]
+        st = status
+        ci = commit
+        co = checkout
+        br = branch  
+        df = diff
+        tree = log --graph --pretty='format:%C(yellow)%h%Creset %s %Cgreen(%an)%Creset %Cred%d%Creset'
+	staged = diff --cached
+	unstage = reset HEAD --
+	ignored = ls-files --others
+	oneline = log --oneline --decorate
+	last = log --oneline -1 HEAD
+	out = log --oneline origin/master..HEAD
+	wdiff = diff --color-words
+	info = remote -v
+[http]
+	sslVerify = false

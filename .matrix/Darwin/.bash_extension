@@ -1,0 +1,47 @@
+# Test for an interactive shell.  There is no need to set anything
+# past this point for scp and rcp, and it's important to refrain from
+# outputting anything in those cases.
+if [[ $- != *i* ]] ; then
+	# Shell is non-interactive.  Be done now!
+	return
+fi
+
+function osx {
+  [[ `uname -s` == 'Darwin' ]]
+}
+
+# Prompt
+PSBGREEN='\[\033[1;32m\]'
+PSGREEN='\[\033[0;32m\]'
+PSBRED='\[\033[1;31m\]'
+PSRED='\[\033[0;31m\]'
+PSBBLUE='\[\033[1;34m\]'
+PSBLUE='\[\033[0;34m\]'
+PSNORMAL='\[\033[00m\]'
+PS1="${PSNORMAL}[\u${PSBBLUE}@\h${PSNORMAL}]${PSBLUE}(${PSNORMAL}\w${PSBLUE})${PSRED}\$ ${PSNORMAL}"
+# X Terminal titles
+case "$TERM" in
+xterm*|rxvt*)
+	PROMPT_COMMAND='echo -ne "\033]0;${USER}@${HOSTNAME}: ${PWD}\007"'
+	;;
+*)
+	;;
+esac
+
+
+alias ls='ls -G'
+alias ldd='otool -L'
+alias libtoolize='glibtoolize'
+
+ssh-add -l >/dev/null 2>&1
+
+if [ $? -eq 1 ]; then
+ eval `keychain --inherit any --agents ssh --eval id_dsa` || exit 1
+fi
+
+[[ -s "$HOME/.rvm/scripts/rvm" ]] && . "$HOME/.rvm/scripts/rvm" # Load RVM function
+
+# MacPorts Installer addition on 2011-11-15_at_07:56:01: adding an appropriate PATH variable for use with MacPorts.
+export PATH=/opt/local/bin:/opt/local/sbin:$PATH
+# Finished adapting your PATH environment variable for use with MacPorts.
+

@@ -1,0 +1,5 @@
+#export ftp_proxy=http://proxy.example.com/
+export https_proxy=http://proxy.example.com:8080
+export http_proxy=http://proxy.example.com:8080
+
+export GIT_SSL_NO_VERIFY=true
