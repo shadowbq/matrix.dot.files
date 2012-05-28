@@ -1,6 +1,6 @@
 function extract() {
   if [ -f $1 ] ; then
-case $1 in
+    case $1 in
       *.tar.bz2) tar xvjf $1 ;;
       *.tar.gz) tar xvzf $1 ;;
       *.bz2) bunzip2 $1 ;;
@@ -14,9 +14,34 @@ case $1 in
       *.7z) 7z x $1 ;;
       *) echo "'$1' cannot be extracted via >extract<" ;;
     esac
-else
-echo "'$1' is not a valid file"
+  else
+    echo "'$1' is not a valid file"
   fi
 }
 
 
+function grab() {
+  sudo chown -R ${USER} ${1:-.}
+}
+
+#################
+#backup files--> ~/.backup/#
+#################
+bu ()
+{
+    if [ "`dirname $1`" == "." ]; then
+        mkdir -p ~/.backup/`pwd`;
+        cp $1 ~/.backup/`pwd`/$1-`date +%Y%m%d%H%M`.backup;
+    else
+        mkdir -p ~/.backup/`dirname $1`;
+        cp $1 ~/.backup/$1-`date +%Y%m%d%H%M`.backup;
+    fi
+} 
+
+# sudo vi/vim
+function svi {
+        sudo vi $@
+}
+function svim {
+        sudo vim $@
+}

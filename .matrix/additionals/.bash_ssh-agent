@@ -1,0 +1,27 @@
+# Check for ssh-agent
+function check_ssh_agent {
+    if [[ -z $SSH_AUTH_SOCK ]]; then
+       SOCKETFILE=~/.ssh/ssh-agent.sock
+    else
+       SOCKETFILE=${SSH_AUTH_SOCK}
+    fi
+
+    ps -wU ${USER} | grep "[s]sh-agent" > /dev/null
+    if [[ $? -gt 0 ]]; then
+       rm -f ${SOCKETFILE}
+       ssh-agent -a ${SOCKETFILE} > /dev/null
+       chmod 600 ${SOCKETFILE}
+    fi
+
+    if [ "$(ssh-add -l)" = "The agent has no identities." ]; then
+        echo "Add ssh keys to agent?"
+        select opt in $OPTIONS; do
+            if [ "$opt" = "Yes" ]; then
+                ssh-add
+                break
+            else
+                break
+            fi
+        done
+    fi
+}

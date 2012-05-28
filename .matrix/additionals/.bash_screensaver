@@ -1,0 +1,21 @@
+# Really Nice bash matrix screensaver 
+
+#                                    1                           8
+#                                                            8              2
+#      3  1                   7                                              5
+#           7                   8 0                      5
+#       2        0      3  2             5        0            4          7
+#                                      7                                        8
+#                                                  7             5        1    5
+#      8                                                              0       6
+#                                                           6                   5
+#                                  8                3          6
+#                        6                 9
+#             1                            07            7       6    43     0
+#       6          4     6                                             1
+#       7   4             9            5
+#               778                                   8                        9
+#        9                                                 2      2
+
+
+alias screensaver='tr -c "[:digit:]" " " < /dev/urandom | dd cbs=$COLUMNS conv=unblock | GREP_COLOR="1;32" grep --color "[^ ]"'
