@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+  if [ -f $HOME/.ssh/known_hosts ]; then
+    if [ "$#" -eq 0 ];then
+      echo "missing ip or host to remove from know_hosts file"
+      exit 1;
+    else
+      while [ "$1" != "" ]; do
+        ssh-keygen -f "$HOME/.ssh/known_hosts" -R $1 >/dev/null 2>&1
+        shift
+      done
+      rm $HOME/.ssh/known_hosts.old
+    fi
+  else
+    echo "missing known_host file"
+    exit 1;
+  fi
+exit 0
