@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+# Bash one-liner for find duplicate files
+# ksaver, Aug 2011
+# http://www.commandlinefu.com/commands/view/8958/find-duplicate-files-using-sha1-hash
+# Public Domain Code
+# Updated with some nice changes, now is smaller and faster... :-)
+# Changed again to use openssl format
+     
+for i in $(find . -type f -exec openssl sha1 {} \+ |tee /tmp/.hashes.tmp |awk '{print $2}' |sort |uniq -d); do 
+  grep $i /tmp/.hashes.tmp 
+  echo 
+done
