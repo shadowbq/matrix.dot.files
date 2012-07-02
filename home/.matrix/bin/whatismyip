@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+EXTERNAL_IP=$($XPULL_TOOL_SILENT "http://automation.whatismyip.com/n09230945.asp")
+export EXTERNAL_IP
+echo -e "$EXTERNAL_IP ($(dig -x $EXTERNAL_IP +short))"

@@ -33,13 +33,14 @@ alias ls='ls -G'
 alias ldd='otool -L'
 alias libtoolize='glibtoolize'
 
+command -v brew >/dev/null 2>&1 || { echo >&2 "You should think about installing homebrew."; }
+
 ssh-add -l >/dev/null 2>&1
-
 if [ $? -eq 1 ]; then
- eval `keychain --inherit any --agents ssh --eval id_dsa` || exit 1
+  if [ $(command -v keychain) ]; then 
+    eval `keychain --inherit any --agents ssh --eval id_dsa` || exit 1
+  fi
 fi
-
-[[ -s "$HOME/.rvm/scripts/rvm" ]] && . "$HOME/.rvm/scripts/rvm" # Load RVM function
 
 # MacPorts Installer addition on 2011-11-15_at_07:56:01: adding an appropriate PATH variable for use with MacPorts.
 export PATH=/opt/local/bin:/opt/local/sbin:$PATH

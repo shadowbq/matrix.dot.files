@@ -1,0 +1,14 @@
+#!/usr/bin/env bash -e
+#toggle AppleShowAllFiles
+
+current_value=$(defaults read com.apple.finder AppleShowAllFiles)
+if [ $current_value = "TRUE" ]
+then
+  defaults write com.apple.finder AppleShowAllFiles FALSE
+else
+  defaults write com.apple.finder AppleShowAllFiles TRUE
+fi
+
+killall Finder
+
+echo $(defaults read com.apple.finder AppleShowAllFiles)

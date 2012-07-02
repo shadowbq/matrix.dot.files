@@ -26,10 +26,15 @@ fi
 
 bash_os="`uname -s`"
 
-if [ -f "~/.matrix/${bash_os}/.bash_extension" ]; then
-  . "~/.matrix/${bash_os}/.bash_extension"
+if [ -f $HOME/.matrix/${bash_os}/.bash_extension ]; then
+  . $HOME/.matrix/${bash_os}/.bash_extension
 else 
-  echo -e "${RED} .bash_extension not found for ${bash_os}.${NORMAL}"
+  echo -e "${RED}matrix/.bash_extension not found for ${bash_os}.${NORMAL}"
+fi
+
+if [ -d $HOME/.matrix/${bash_os}/bin ]; then
+  PATH=$PATH:$HOME/.matrix/${bash_os}/bin 
+  export PATH
 fi
 
 ###########################
@@ -47,5 +52,5 @@ fi
 ###########################
 # Last User specific environment and startup programs
 
-PATH=$PATH:$HOME/bin
+PATH=$PATH:$HOME/.matrix/bin:$HOME/bin
 export PATH

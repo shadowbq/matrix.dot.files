@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+find . -type d -name .svn -exec rm -rf {} \;
