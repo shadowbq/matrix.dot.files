@@ -27,6 +27,10 @@ NORMAL='\033[00m'
 #############################
 # Load SSH KEYS
 
+if [ "`type -t go_strict_ssh`" == "function" ]; then
+  go_strict_ssh
+fi
+
 ssh-add -l >/dev/null 2>&1
 
 if [ $? -eq 0 ]; then

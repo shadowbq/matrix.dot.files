@@ -17,8 +17,8 @@ fi
 
 ###########################
 # Get the base aliases and functions
-if [ -f ~/.bashrc ]; then
-        . ~/.bashrc
+if [ -f "$HOME"/.bashrc ]; then
+        . "$HOME"/.bashrc
 fi
 
 ###########################
@@ -26,31 +26,31 @@ fi
 
 bash_os="`uname -s`"
 
-if [ -f $HOME/.matrix/${bash_os}/.bash_extension ]; then
-  . $HOME/.matrix/${bash_os}/.bash_extension
+if [ -f "$HOME"/.matrix/${bash_os}/.bash_extension ]; then
+  . "$HOME"/.matrix/${bash_os}/.bash_extension
 else 
   echo -e "${RED}matrix/.bash_extension not found for ${bash_os}.${NORMAL}"
 fi
 
-if [ -d $HOME/.matrix/${bash_os}/bin ]; then
-  PATH=$PATH:$HOME/.matrix/${bash_os}/bin 
+if [ -d "$HOME"/.matrix/${bash_os}/bin ]; then
+  PATH=$PATH:"$HOME"/.matrix/${bash_os}/bin 
   export PATH
 fi
 
 ###########################
 # User configurable location to include addition configs to be loaded
-if [ -f ~/.bash_matrix ]; then
-   . ~/.bash_matrix
+if [ -f "$HOME"/.bash_matrix ]; then
+   . "$HOME"/.bash_matrix
 fi
 
 ###########################
 # use .bash_local for settings specific to one system
-if [ -f ~/.bash_local ]; then
-  . ~/.bash_local
+if [ -f "$HOME"/.bash_local ]; then
+  . "$HOME"/.bash_local
 fi
 
 ###########################
 # Last User specific environment and startup programs
 
-PATH=$PATH:$HOME/.matrix/bin:$HOME/bin
+PATH=$PATH:"$HOME"/.matrix/bin:"$HOME"/bin
 export PATH

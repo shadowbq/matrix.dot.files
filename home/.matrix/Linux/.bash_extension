@@ -1,0 +1,25 @@
+# .bashrc
+
+# Prompt
+PSBGREEN='\[\033[1;32m\]'
+PSGREEN='\[\033[0;32m\]'
+PSBRED='\[\033[1;31m\]'
+PSRED='\[\033[0;31m\]'
+PSBBLUE='\[\033[1;34m\]'
+PSBLUE='\[\033[0;34m\]'
+PSNORMAL='\[\033[00m\]'
+PS1="${PSNORMAL}[\u${PSBBLUE}@\h${PSNORMAL}]${PSBLUE}(${PSNORMAL}\w${PSBLUE})${PSRED}\$ ${PSNORMAL}"
+# X Terminal titles
+case "$TERM" in
+xterm*|rxvt*)
+	PROMPT_COMMAND='echo -ne "\033]0;${USER}@${HOSTNAME}: ${PWD}\007"'
+	;;
+*)
+	;;
+esac
+
+# Fallback to non GNUv3 ls with color. Color should be implemented in /etc/profile.d/colorls.sh
+ls --version > /dev/null 2>&1
+if [ $? -gt 0 ]; then
+  alias ls="ls -G"
+fi
