@@ -29,6 +29,7 @@
 .gitk
 .gstreamer-0.10/*
 .heroku
+.htoprc
 .idlerc
 .ipython
 .lesshst
@@ -43,6 +44,7 @@
 .secrets
 .ssh/authorized_key*
 .ssh/id*
+.ssh/github*
 .ssh/known*
 .ssh/cork*
 .Spotlight-V100
@@ -54,6 +56,7 @@
 .vimgolf
 .viminfo
 .vim-fuf-data
+.vim/.netrw*
 my.cnf
 Applications
 Books

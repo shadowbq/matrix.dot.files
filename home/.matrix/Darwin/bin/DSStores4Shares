@@ -1,7 +1,7 @@
 #!/usr/bin/env bash -e
 #toggle the create of .DS_Stores on remote file systems 
 
-current_value=$(defaults read com.apple.deskopservices DSDontWriteNetworkStores)
+current_value=$(defaults read com.apple.desktopservices DSDontWriteNetworkStores)
 if [ $current_value = "TRUE" ]
 then
   defaults write com.apple.desktopservices DSDontWriteNetworkStores FALSE
