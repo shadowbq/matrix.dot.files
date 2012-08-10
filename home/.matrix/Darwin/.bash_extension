@@ -46,3 +46,9 @@ fi
 export PATH=/opt/local/bin:/opt/local/sbin:$PATH
 # Finished adapting your PATH environment variable for use with MacPorts.
 
+###########################
+# Check for TextMate installation, if installed use mate as core editor
+if [ -f "/usr/local/bin/mate" ]; then
+       export EDITOR="/usr/local/bin/mate -w" 
+fi
+
