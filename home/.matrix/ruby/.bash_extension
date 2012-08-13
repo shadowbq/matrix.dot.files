@@ -6,5 +6,5 @@ if [ "`type -t rvm`" == "function" ]; then
   echo -ne "${GREEN}RVM is present => ${NORMAL} "
   rvm gemdir
 else
-  echo -ne "${YELLOW}rvm is not present.${NORMAL}"
+  echo -e "${YELLOW}rvm is not present. ${NORMAL}"
 fi
