@@ -1,0 +1,13 @@
+# groups the results by file
+#--group
+
+# only show one line of output context around the results
+# --context=1
+
+# follow symlinks
+--follow
+
+--color
+
+# Ignore Directory Directives, list one per line
+#--ignore-dir=tmp

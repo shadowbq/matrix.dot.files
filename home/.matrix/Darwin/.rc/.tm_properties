@@ -1,0 +1,23 @@
+# https://gist.github.com/1478685
+softWrap         = false
+tabSize          = 2
+softTabs         = true
+showInvisibles   = true
+# Variables
+TM_GIT = "/opt/local/bin/git"
+
+# File type specific configuration
+#
+[ text ]
+showInvisibles   = true
+
+[ .git/COMMIT_EDITMSG ]
+spellChecking    = true
+spellingLanguage = 'en'
+
+[ *.{icns,ico,jpg,jpeg,m4v,nib,pdf,png,psd,pyc,rtf,tif,tiff,xib} ]
+binary           = true
+
+[ "{README,INSTALL,LICENSE,TODO}" ]
+fileType         = "text.plain"
+
