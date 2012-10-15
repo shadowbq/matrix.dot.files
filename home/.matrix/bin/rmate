@@ -6,9 +6,10 @@ $KCODE   = "U" if RUBY_VERSION < "1.9"  # -KU
 
 require 'optparse'
 require 'socket'
-require 'fileutils'
+require 'tempfile'
+require 'yaml'
 
-VERSION_STRING = 'rmate version 1.3 (2011-10-18)'
+VERSION_STRING = 'rmate version 1.5 (2012-09-19)'
 
 class Settings
   attr_accessor :host, :port, :wait, :force, :verbose
@@ -16,36 +17,46 @@ class Settings
   def initialize
     @host, @port = 'localhost', 52698
 
-    @host = ENV['RMATE_HOST'].to_s if ENV.has_key? 'RMATE_HOST'
-    @port = ENV['RMATE_PORT'].to_i if ENV.has_key? 'RMATE_PORT'
-
-    if @host == 'auto' and (conn = ENV['SSH_CONNECTION'])
-      @host = conn.split(' ').first
-    end
-
     @wait    = false
     @force   = false
     @verbose = false
 
     read_disk_settings
+
+    @host = ENV['RMATE_HOST'].to_s if ENV.has_key? 'RMATE_HOST'
+    @port = ENV['RMATE_PORT'].to_i if ENV.has_key? 'RMATE_PORT'
+
     parse_cli_options
+
+    @host = parse_ssh_connection if @host == 'auto'
   end
 
   def read_disk_settings
-    # TODO
+    [ "/etc/rmate.rc", "~/.rmate.rc"].each do |current_file|
+      file = File.expand_path current_file
+      if File.exist? file
+        params = YAML::load(File.open(file))
+        @host = params["host"] unless params["host"].nil?
+        @port = params["port"] unless params["port"].nil?
+      end
+    end
   end
 
   def parse_cli_options
     OptionParser.new do |o|
       o.on(           '--host=name',       "Connect to host.", "Use 'auto' to detect the host from SSH.", "Defaults to #{@host}.") { |v| @host    = v          }
-      o.on('-p',      '--port=#', Integer, "Port number to use for connection.", "Defaults to #{@port}.")                       { |v| @port    = v          }
-      o.on('-w',      '--[no-]wait',       'Wait for file to be closed by TextMate.')                                        { |v| @wait    = v          }
-      o.on('-f',      '--force',           'Open even if the file is not writable.')                                         { |v| @force   = v          }
-      o.on('-v',      '--verbose',         'Verbose logging messages.')                                                      { |v| @verbose = v          }
-      o.on_tail('-h', '--help',            'Show this message.')                                                             { puts o; exit              }
-      o.on_tail(      '--version',         'Show version.')                                                                  { puts VERSION_STRING; exit }
+      o.on('-p',      '--port=#', Integer, "Port number to use for connection.", "Defaults to #{@port}.")                          { |v| @port    = v          }
+      o.on('-w',      '--[no-]wait',       'Wait for file to be closed by TextMate.')                                              { |v| @wait    = v          }
+      o.on('-f',      '--force',           'Open even if the file is not writable.')                                               { |v| @force   = v          }
+      o.on('-v',      '--verbose',         'Verbose logging messages.')                                                            { |v| @verbose = v          }
+      o.on_tail('-h', '--help',            'Show this message.')                                                                   { puts o; exit              }
+      o.on_tail(      '--version',         'Show version.')                                                                        { puts VERSION_STRING; exit }
       o.parse!
     end
+  end
+
+  def parse_ssh_connection
+    ENV['SSH_CONNECTION'].nil? ? 'localhost' : ENV['SSH_CONNECTION'].split(' ').first
   end
 end
 
@@ -84,9 +95,21 @@ def handle_save(socket, variables, data)
   path = variables["token"]
   $stderr.puts "Saving #{path}" if $settings.verbose
   begin
-    FileUtils.cp(path, "#{path}~") if File.exist? path
-    File.open(path, 'wb') { |file| file << data }
-    File.unlink("#{path}~")        if File.exist? "#{path}~"
+    backup_path = "#{path}~"
+    backup_path = "#{backup_path}~" while File.exists? backup_path
+    File.link(path, backup_path) if File.exist? path
+    Tempfile.open("rmate", File.dirname(path)) do |temp|
+      temp.close(false)
+      if File.exists?(path)
+        if stat = File.stat(path)
+          File.chown(stat.uid, stat.gid, temp.path)
+          File.chmod(stat.mode, temp.path)
+        end
+      end
+      open(temp.path, 'wb') {|file| file << data }
+      File.rename(temp.path, path)
+    end
+    File.unlink(backup_path) if File.exist? backup_path
   rescue
     # TODO We probably want some way to notify the server app that the save failed
     $stderr.puts "Save failed! #{$!}" if $settings.verbose
@@ -160,4 +183,3 @@ unless $settings.wait
 else
   connect_and_handle_cmds($settings.host, $settings.port, cmds)
 end
-
