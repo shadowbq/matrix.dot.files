@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
+# JSON Bash Parser
+# https://raw.github.com/dominictarr/JSON.sh/master/JSON.sh
 
 throw () {
   echo "$*" >&2
