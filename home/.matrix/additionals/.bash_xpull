@@ -18,5 +18,3 @@ fi
 export XPULL_TOOL
 export XPULL_TOOL_SILENT
 
-alias xpull=$XPULL_TOOL
-alias xspull=$XPULL_TOOL_SILENT
