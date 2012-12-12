@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+rpm -qa --qf '%{NAME}\t%{VENDOR}\n' | sort | column -t -s $'\t' |grep -v 'Red Hat'
