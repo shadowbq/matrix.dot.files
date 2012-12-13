@@ -1,0 +1,36 @@
+#!/usr/bin/env bash
+
+matrix="$HOME/.matrix/lib"
+source $matrix/randomz/help.sh
+source $matrix/randomz/randomz.sh
+source $matrix/randomz/reseed.sh
+source $matrix/randomz/alpha.sh
+source $matrix/randomz/range.sh
+source $matrix/randomz/boolean.sh
+
+if [ ${#@} -gt 0 ]; then
+
+while getopts ":zebaAnir:xuh" opt; do
+	case $opt in
+		z) reseed    ;;
+		e) NO_CR=1    ;;
+		a) alphalower  ;;
+		A) alphaupper  ;;
+		n) randomwrapper  ;;
+		i) rangewrapper '0 9' ;;
+		x) rangewrapper '0 100' ;;
+		r) rangewrapper $OPTARG ;;
+		u) urandomwrapper ;;
+		b) booleanwrapper ;;
+		h) extend_help
+		   exit 0              ;;
+		* ) die "Could not find task \"$opt\"."
+		   exit 1              ;;
+	esac
+done
+
+else
+
+	extend_help
+	exit 1
+fi
