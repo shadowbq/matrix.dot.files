@@ -5,7 +5,7 @@ entering the matrix of my maze of dot files.
 
 The core concept is to have a unified experience across all POSIX systems.
 
-## Installing the matrix
+## Hooking into the matrix
 
 Use an application like [homesick rubygem](https://github.com/technicalpickles/homesick) or [homeshick bash script](https://github.com/andsens/homeshick).
 
