@@ -19,5 +19,5 @@ function alphaupper {
 }
 
 function lorumipsum {
-	grep -E --binary-files=text -o [[:alnum:]\ ] < /dev/urandom | tr 0-9 ' \n' | fmt |grep -v ^$ | sed 's/ //g' |fmt
+	grep -E --binary-files=text -o [[:alnum:]\ ] < /dev/urandom | fmt | tr 0-9 '@ \n' | sed 's/ //g' | grep -v ^$ | tr '@' ' \n' | sed 's/^ .*//' |fmt
 }
