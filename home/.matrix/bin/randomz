@@ -7,10 +7,11 @@ source $matrix/randomz/reseed.sh
 source $matrix/randomz/alpha.sh
 source $matrix/randomz/range.sh
 source $matrix/randomz/boolean.sh
+source $matrix/randomz/fileline.sh
 
 if [ ${#@} -gt 0 ]; then
 
-while getopts ":zebaAnir:xuh" opt; do
+while getopts ":zebaAnirl:LxuU:h" opt; do
 	case $opt in
 		z) reseed    ;;
 		e) NO_CR=1    ;;
@@ -21,7 +22,10 @@ while getopts ":zebaAnir:xuh" opt; do
 		x) rangewrapper '0 100' ;;
 		r) rangewrapper $OPTARG ;;
 		u) urandomwrapper ;;
+		U) urandombelow $OPTARG ;;
 		b) booleanwrapper ;;
+		l) randomline $OPTARG ;;
+		L) lorumipsum ;;
 		h) extend_help
 		   exit 0              ;;
 		* ) die "Could not find task \"$opt\"."
