@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+
+function usage {
+du -ch $@ 2> /dev/null |tail -1
+}
+
+function diskusage {
+df -hl | grep -v tmpfs
+}
+
+function osx_usage {
+gdu -hsx * | gsort -rh | ghead -10
+}
+
+usage $@

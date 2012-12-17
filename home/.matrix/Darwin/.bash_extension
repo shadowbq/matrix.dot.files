@@ -34,6 +34,10 @@ alias ldd='otool -L'
 alias libtoolize='glibtoolize'
 
 command -v brew >/dev/null 2>&1 || { echo >&2 "You should think about installing homebrew."; }
+command -v brew >/dev/null 2>&1 
+if [ $? -eq 0 ]; then
+  command -v gsort >/dev/null 2>&1 || { echo >&2 "Brew found - GNU Coreutils missing. Install as 'brew install coreutils'"; }
+fi
 
 ssh-add -l >/dev/null 2>&1
 if [ $? -eq 1 ]; then
