@@ -1,4 +1,4 @@
-Randomz - GPLv3 Shadowbq, 2012. Based on GNU derived work. 
+ Randomz - GPLv3 Shadowbq, 2012. Based on GNU derived work. 
  
  Execution:
  
@@ -9,7 +9,7 @@ Randomz - GPLv3 Shadowbq, 2012. Based on GNU derived work.
    present other than BASH v3.x or above. Randomz is SLOW, so COMPLEX Randomz is REALLY SLOW. Dont complain.  
 
  Random controls:
-   -z  			# Seed before execution (IMPORTANT for $RANDOM)
+   -z				# Seed before execution (IMPORTANT for $RANDOM)
 				  - Default is to not reseed before every execution
  Generic options:
    -e    			# Suppress new line
@@ -25,6 +25,7 @@ Randomz - GPLv3 Shadowbq, 2012. Based on GNU derived work.
    -u 				# Print a large /dev/urandom integer
    -U $max			# Print a /dev/urandom integer below $max
    -l $filename			# Print a random line from a file 
+   -s 				# Shuffle lines of STDIN to STDOUT
    -L 				# Generate stream of Lorum Ipsum random text 
 
  Complex Execution:
@@ -40,3 +41,7 @@ Randomz - GPLv3 Shadowbq, 2012. Based on GNU derived work.
 	   
 	Create Lorum Ipsum document
 		./randomz -L > /Lorum_ipsum.txt (break)
+		
+	Randomize (shuffle) the lines of an input file
+		cat foo | ./randomz -s 
+
