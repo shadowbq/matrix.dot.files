@@ -45,3 +45,26 @@ function svi {
 function svim {
         sudo vim $@
 }
+
+function coreutil_check {
+
+#bc usage: 0 if the relation is false and 1 if the relation is true.
+
+  sortver=`sort --version|head -1|grep -Eo '[0-9\.]+'`
+  if [ ! `echo "$sortver > 6.0" | bc` ]; then
+    export MODERNCOREUTILS=true
+  else
+    echo 'gplv2 coreutils, consider using modern gnu coreutils'
+    echo 'Sort version: ' $sortver
+    export MODERNCOREUTILS=false
+  fi
+
+  command -v gsort >/dev/null 2>&1
+  if [ $? -eq 0 ]; then
+    export BREWCORE=true
+    gsort=`which gsort`
+    foo=`ls -la $gsort |grep -o "$gsort.*"`
+    echo "GNU coreutils sideloaded: $foo"
+  fi
+
+}

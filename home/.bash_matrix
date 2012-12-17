@@ -9,8 +9,15 @@ if [ -n "$matrixproxy" ]; then
    . /.matrix/proxy/.bash_extension 
 fi
 
+source ./.matrix/functions/.bash_extension
+
 source ./.matrix/ruby/.bash_extension
 source ./.matrix/additionals/.bash_xpull
 source ./.matrix/additionals/.bash_screensaver
 source ./.matrix/additionals/.bash_ssh-strictmodes
 # source ./.matrix/completions/.bash_extension
+
+
+##########################
+# Final .matrix Commands to be executed
+coreutil_check

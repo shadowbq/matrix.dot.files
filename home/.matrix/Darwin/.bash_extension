@@ -39,6 +39,11 @@ if [ $? -eq 0 ]; then
   command -v gsort >/dev/null 2>&1 || { echo >&2 "Brew found - GNU Coreutils missing. Install as 'brew install coreutils'"; }
 fi
 
+command -v gsort >/dev/null 2>&1
+if [ $? -eq 0 ]; then
+  export BREWCORE=true
+fi
+
 ssh-add -l >/dev/null 2>&1
 if [ $? -eq 1 ]; then
   if [ $(command -v keychain) ]; then 
