@@ -28,6 +28,7 @@ function extend_help {
    -u 				# Print a large /dev/urandom integer
    -U \$max			# Print a /dev/urandom integer below \$max
    -l \$filename			# Print a random line from a file 
+   -s 				# Shuffle lines of STDIN to STDOUT
    -L 				# Generate stream of Lorum Ipsum random text 
 
  Complex Execution:
@@ -43,6 +44,9 @@ function extend_help {
 	   
 	Create Lorum Ipsum document
 		./randomz -L > /Lorum_ipsum.txt (break)
+		
+	Randomize (shuffle) the lines of an input file
+		cat foo | ./randomz -s 
 
 EOM
 }

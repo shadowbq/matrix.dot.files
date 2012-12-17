@@ -11,7 +11,7 @@ source $matrix/randomz/fileline.sh
 
 if [ ${#@} -gt 0 ]; then
 
-while getopts ":zebaAnirl:LxuU:h" opt; do
+while getopts ":zebaAnirsl:LxuU:h" opt; do
 	case $opt in
 		z) reseed    ;;
 		e) NO_CR=1    ;;
@@ -25,6 +25,7 @@ while getopts ":zebaAnirl:LxuU:h" opt; do
 		U) urandombelow $OPTARG ;;
 		b) booleanwrapper ;;
 		l) randomline $OPTARG ;;
+		s) shuffle ;;
 		L) lorumipsum ;;
 		h) extend_help
 		   exit 0              ;;
