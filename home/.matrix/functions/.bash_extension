@@ -54,7 +54,7 @@ function coreutil_check {
   if [ ! `echo "$sortver > 6.0" | bc` ]; then
     export MODERNCOREUTILS=true
   else
-    echo 'gplv2 coreutils, consider using modern gnu coreutils'
+    echo 'gplv2 coreutils, consider using modern gnu coreutils > 6.0 '
     echo 'Sort version: ' $sortver
     export MODERNCOREUTILS=false
   fi
@@ -68,3 +68,5 @@ function coreutil_check {
   fi
 
 }
+
+

@@ -1,10 +1,31 @@
+
+function bundler_check {
+
+	command -v bundle >/dev/null 2>&1
+ 
+	if [ $? -eq 1 ]; then
+	   echo -e "${YELLOW} Bundle gem is missing. Run: 'gem install bundler' ${NORMAL}"
+	   echo -e "${YELLOW} Run: 'cd ~/.matrix/ruby/ && bundle install' ${NORMAL}"
+	else
+	   [ -f ~/.matrix/ruby/Gemfile.lock ] || echo -e "${YELLOW} GemFile not reconciled. Run: 'cd ~/.matrix/ruby/ && bundle install' ${NORMAL}"
+	fi
+
+}
+
 PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
 
 [[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
 
-if [ "`type -t rvm`" == "function" ]; then
-  echo -ne "${GREEN}RVM is present => ${NORMAL} "
-  rvm gemdir
+command -v ruby >/dev/null 2>&1 
+if [ $? -eq 1 ]; then
+  echo -e >&2 "${RED}[WARNING] No Ruby Found. ${NORMAL}"
 else
-  echo -e "${YELLOW}rvm is not present. ${NORMAL}"
+	if [ "`type -t rvm`" == "function" ]; then
+	  echo -ne "${GREEN}RVM is present => ${NORMAL} "
+	  rvm gemdir
+	  bundler_check
+	else
+	  echo -e "${YELLOW}RVM is not present. ${NORMAL}"
+	  bundler_check
+	fi
 fi

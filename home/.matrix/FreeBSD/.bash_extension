@@ -28,3 +28,4 @@ esac
 command -v portaudit >/dev/null 2>&1 || { echo >&2 "You should think about installing portaudit."; }
 command -v sudo >/dev/null 2>&1 || { echo >&2 "You should think about installing sudo."; }
 
+alias top='top -P -q -z -a'

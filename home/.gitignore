@@ -5,6 +5,7 @@
 .bash_history
 .bash_local
 .localrc
+.Gemfile.local
 .systemrc
 .cache
 .CFUserTextEncoding
@@ -75,3 +76,4 @@ Sites
 VirtualBox*
 VMs
 Virtual*
+Gemfile.lock
