@@ -26,5 +26,6 @@
 	out = log --oneline origin/master..HEAD
 	wdiff = diff --color-words
 	info = remote -v
+        unstash = stash pop
 [http]
 	sslVerify = false
