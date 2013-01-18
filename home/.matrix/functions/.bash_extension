@@ -50,7 +50,7 @@ function coreutil_check {
 
 #bc usage: 0 if the relation is false and 1 if the relation is true.
 
-  sortver=`sort --version|head -1|grep -Eo '[0-9\.]+'`
+  sortver=`sort --version|head -1|grep -Eo '[0-9\.]+'|head -1`
   if [ ! `echo "$sortver > 6.0" | bc` ]; then
     export MODERNCOREUTILS=true
   else
