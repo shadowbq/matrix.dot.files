@@ -33,6 +33,8 @@ alias ls='ls -G'
 alias ldd='otool -L'
 alias libtoolize='glibtoolize'
 
+alias firefox='open -a Firefox.app'
+
 command -v brew >/dev/null 2>&1 || { echo >&2 "You should think about installing homebrew."; }
 command -v brew >/dev/null 2>&1 
 if [ $? -eq 0 ]; then
