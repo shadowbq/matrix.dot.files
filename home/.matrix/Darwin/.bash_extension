@@ -34,6 +34,7 @@ alias ldd='otool -L'
 alias libtoolize='glibtoolize'
 
 alias firefox='open -a Firefox.app'
+alias finder='open -a Finder.app'
 
 command -v brew >/dev/null 2>&1 || { echo >&2 "You should think about installing homebrew."; }
 command -v brew >/dev/null 2>&1 
