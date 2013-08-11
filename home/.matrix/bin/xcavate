@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+# For serious digging in DNS in a single line format
+dig +nocmd +noquestion +noqr +nomultiline +nostats +nocomments $@
