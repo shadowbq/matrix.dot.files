@@ -7,6 +7,8 @@ set history=100 " Increase the search history
 set ignorecase " Ignore case in search patterns
 set incsearch " While typing a searc:h command, show where the pattern, as it was typed
 
+set ruler
+
 set nobackup
 set nowritebackup
 set noswapfile
