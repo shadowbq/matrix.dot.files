@@ -16,12 +16,18 @@ You use the homesick command to clone a castle (the matrix):
 ```shell
 homesick clone git://github.com/shadowbq/matrix.dot.files.git
 ```
+-or-
+```
+homesick clone https://github.com/shadowbq/matrix.dot.files.git
+```
 
 Next symlink the matrix to your $HOME
 
 ```shell
 homesick symlink matrix.dot.files
 ```
+
+Note: you may not want to accept the (.ssh) directory.
 
 Show the available castles:
 
@@ -55,22 +61,24 @@ matrixdirectory holds all additional plugins
 * OS specific - load paths, bins, aliases, advisors
               - (./Darwin/.bash_extensions)
 * Global bins - cross platform shell scripts (xpull, rmate, ssh-copy-id, epoch, etc.. )
+* Rubygems in bundler format that improve experience
 * Additional functions, environment needs, and mockups
 
 ### Other Files
 
 ```
-.bash_bashrc
+.bashrc
 .bash_logout
 ```
 
-base cross platform bash files
+Base cross platform bash files (defaults in .bashrc)
 
 ```
 .bash_local 
+.secrets
 ```
 
-Local file for ENV changes that are excluded from unified profile (SECRETS)
+Local files for ENV changes that are excluded from unified profile (SECRETS)
 
 ```
 .gitconfig
