@@ -18,7 +18,14 @@ function check_matrix_online {
 function check_matrix_local {
   command -v homesick >/dev/null 2>&1
   if [ $? -eq 0 ]; then
-    homesick status matrix.dot.files
+    matrix_status=`homesick status matrix.dot.files`
+    if [[ "$matrix_status" =~ "nothing to commit" ]]; then
+      echo "clean"
+      echo -e "$matrix_status"
+    else
+      echo "dirty"
+      echo -e "$matrix_status"
+    fi
   else 
     echo -e "${YELLOW} unable to validate .matrix local (missing:homesick/git)${NORMAL}"
   fi
