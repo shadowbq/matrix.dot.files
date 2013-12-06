@@ -20,10 +20,8 @@ function check_matrix_local {
   if [ $? -eq 0 ]; then
     matrix_status=`homesick status matrix.dot.files`
     if [[ "$matrix_status" =~ "nothing to commit" ]]; then
-      echo "clean"
-      echo -e "$matrix_status"
+      echo -n ""
     else
-      echo "dirty"
       echo -e "$matrix_status"
     fi
   else 
