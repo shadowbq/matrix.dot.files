@@ -64,3 +64,8 @@ if [ -f "/usr/local/bin/mate" ]; then
        export EDITOR="/usr/local/bin/mate -w" 
 fi
 
+
+##########################
+# Deal with Java
+export JAVA_HOME=`/usr/libexec/java_home -v 1.7`
+
