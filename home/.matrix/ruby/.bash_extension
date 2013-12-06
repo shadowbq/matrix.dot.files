@@ -4,10 +4,10 @@ function bundler_check {
 	command -v bundle >/dev/null 2>&1
  
 	if [ $? -eq 1 ]; then
-	   echo -e "${YELLOW} Bundle gem is missing. Run: 'gem install bundler' ${NORMAL}"
-	   echo -e "${YELLOW} Run: 'cd ~/.matrix/ruby/ && bundle install' ${NORMAL}"
+	   echo -e "${YELLOW} Bundle gem is missing. Run: 'sudo gem install bundler' ${NORMAL}"
+	   echo -e "${YELLOW} Run: 'cd ~/.matrix/ruby/ && sudo bundle install' ${NORMAL}"
 	else
-	   [ -f ~/.matrix/ruby/Gemfile.lock ] || echo -e "${YELLOW} GemFile not reconciled. Run: 'cd ~/.matrix/ruby/ && bundle install' ${NORMAL}"
+	   [ -f ~/.matrix/ruby/Gemfile.lock ] || echo -e "${YELLOW} GemFile not reconciled. Run: 'cd ~/.matrix/ruby/ && sudo bundle install' ${NORMAL}"
 	fi
 
 }
@@ -23,9 +23,11 @@ else
 	if [ "`type -t rvm`" == "function" ]; then
 	  echo -ne "${GREEN}RVM is present => ${NORMAL} "
 	  rvm gemdir
+    ruby --version
 	  bundler_check
 	else
 	  echo -e "${YELLOW}RVM is not present. ${NORMAL}"
+    ruby --version
 	  bundler_check
 	fi
 fi

@@ -1,5 +1,9 @@
 ###########################
 #Completion configs to be loaded
-source ~/.matrix/completions/git_completion
-complete -C ~/.matrix/completions/rake_completion -o default rake
-complete -C ~/.matrix/completions/capistrano_completion -o default ca
+source ~/.matrix/completions/ssh_hosts_completion
+
+function extended_completions {
+  source ~/.matrix/completions/git_completion
+  complete -C ~/.matrix/completions/rake_completion -o default rake
+  complete -C ~/.matrix/completions/capistrano_completion -o default ca
+}

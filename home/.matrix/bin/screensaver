@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 # Really Nice bash matrix screensaver 
 
 #                                    1                           8
@@ -18,4 +19,4 @@
 #        9                                                 2      2
 
 
-alias screensaver='tr -c "[:digit:]" " " < /dev/urandom | dd cbs=$COLUMNS conv=unblock | GREP_COLOR="1;32" grep --color "[^ ]"'
+tr -c "[:digit:]" " " < /dev/urandom | dd cbs=$COLUMNS conv=unblock | GREP_COLOR="1;32" grep --color "[^ ]"

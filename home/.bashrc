@@ -13,7 +13,7 @@ if [[ $- != *i* ]] ; then
 fi
 
 #############################
-# Color Definitions
+# Color Definitions(non-exported) used for .matrix loader
 BGREEN='\033[1;32m'
 GREEN='\033[0;32m'
 BRED='\033[1;31m'
@@ -25,39 +25,15 @@ YELLOW='\033[0;33m'
 NORMAL='\033[00m'
 
 #############################
-# Load SSH KEYS
-
-if [ "`type -t go_strict_ssh`" == "function" ]; then
-  go_strict_ssh
-fi
-
-ssh-add -l >/dev/null 2>&1
-
-if [ $? -eq 0 ]; then
- echo -ne "${GREEN}Keys successfully imported.${NORMAL}\n"
-else
- echo -ne "${RED}No Keys Imported.${NORMAL}\n"
-fi
-
-#############################
-# Tab completion for ssh hosts
-
-SSH_COMPLETE=( $(cat ~/.ssh/known_hosts | \
-cut -f 1 -d ' ' | \
-sed -e s/,.*//g | \
-uniq | sort ) )
-complete -o default -W "${SSH_COMPLETE[*]}" ssh
-export SSH_COMPLETE
-
-#############################
 # User specific aliases and functions
+# Setting up Defaults for .matrix prior to functions / OS calls
+
 export EDITOR="vi"
 export PAGER=less
 
-# which vim &>/dev/null && editor="$(which vim)"
-# export EDITOR="$editor -f"
-
 export VISUAL="$editor"
+
+export STRICT_SSH=false
 
 export TERM=xterm-256color
 export GREP_OPTIONS='--color=auto'

@@ -1,0 +1,28 @@
+#############################
+# Load SSH KEYS
+
+function load_ssh_keys {
+  if [ "`type -t go_strict_ssh`" == "function" ]; then
+    if $STRICT_SSH ; then
+      go_strict_ssh
+    fi
+  fi
+
+  ssh-add -l >/dev/null 2>&1
+
+  if [ $? -eq 0 ]; then
+   echo -ne "${GREEN}Keys successfully imported.${NORMAL}\n"
+  else
+   echo -ne "${RED}No Keys Imported.${NORMAL}\n"
+  fi
+}
+
+# SSH Strict Modes correction script
+function go_strict_ssh {
+  chmod 700 "$HOME"/.ssh/.
+  touch "$HOME"/.ssh/authorized_keys
+  touch "$HOME"/.ssh/known_hosts
+  chmod 600 "$HOME"/.ssh/authorized_keys
+  chmod 600 "$HOME"/.ssh/known_hosts
+  chmod 600 "$HOME"/.ssh/config
+}

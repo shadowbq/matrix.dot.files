@@ -12,12 +12,19 @@ fi
 source ./.matrix/functions/.bash_extension
 
 source ./.matrix/ruby/.bash_extension
-source ./.matrix/additionals/.bash_xpull
-source ./.matrix/additionals/.bash_screensaver
-source ./.matrix/additionals/.bash_ssh-strictmodes
-# source ./.matrix/completions/.bash_extension
+source ./.matrix/completions/.bash_extension
 
+# source ./.matrix/opt/something
 
 ##########################
 # Final .matrix Commands to be executed
+# Defined commonly in .matrix/functions
+
+load_ssh_keys
+symlink_alts
+xpull_assign
 coreutil_check
+
+##########################
+# Additional non-global Configs/Function calls can go into ~/.bash_local
+# such as 'extended_completions'

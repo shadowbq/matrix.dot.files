@@ -1,72 +1,9 @@
-function extract() {
-  if [ -f $1 ] ; then
-    case $1 in
-      *.tar.bz2) tar xvjf $1 ;;
-      *.tar.gz) tar xvzf $1 ;;
-      *.bz2) bunzip2 $1 ;;
-      *.rar) unrar x $1 ;;
-      *.gz) gunzip $1 ;;
-      *.tar) tar xvf $1 ;;
-      *.tbz2) tar xvjf $1 ;;
-      *.tgz) tar xvzf $1 ;;
-      *.zip) unzip $1 ;;
-      *.Z) uncompress $1 ;;
-      *.7z) 7z x $1 ;;
-      *) echo "'$1' cannot be extracted via >extract<" ;;
-    esac
-  else
-    echo "'$1' is not a valid file"
-  fi
-}
-
-
-function grab() {
-  sudo chown -R ${USER} ${1:-.}
-}
-
-#################
-#backup files--> ~/.backup/#
-#################
-bu ()
-{
-    if [ "`dirname $1`" == "." ]; then
-        mkdir -p ~/.backup/`pwd`;
-        cp $1 ~/.backup/`pwd`/$1-`date +%Y%m%d%H%M`.backup;
-    else
-        mkdir -p ~/.backup/`dirname $1`;
-        cp $1 ~/.backup/$1-`date +%Y%m%d%H%M`.backup;
-    fi
-} 
-
-# sudo vi/vim
-function svi {
-        sudo vi $@
-}
-function svim {
-        sudo vim $@
-}
-
-function coreutil_check {
-
-#bc usage: 0 if the relation is false and 1 if the relation is true.
-
-  sortver=`sort --version|head -1|grep -Eo '[0-9]+[\.][0-9]+'|head -1`
-  if [ ! `echo "$sortver > 6.0" | bc` ]; then
-    export MODERNCOREUTILS=true
-  else
-    echo 'gplv2 coreutils, consider using modern gnu coreutils > 6.0 '
-    echo 'Sort version: ' $sortver
-    export MODERNCOREUTILS=false
-  fi
-
-  command -v gsort >/dev/null 2>&1
-  if [ $? -eq 0 ]; then
-    export BREWCORE=true
-    gsort=`which gsort`
-    foo=`ls -la $gsort |grep -o "$gsort.*"`
-    echo "GNU coreutils sideloaded: $foo"
-  fi
-
-}
-
+matrix="$HOME/.matrix/functions"
+source $matrix/archive_functions
+source $matrix/symlink_alternatives
+source $matrix/core_utilities
+source $matrix/file_functions
+source $matrix/xpull
+source $matrix/ssh_agent_functions
+source $matrix/ssh_keys_loading
 

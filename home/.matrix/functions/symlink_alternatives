@@ -1,0 +1,19 @@
+function symlink_alts {
+  command -v vim > /dev/null 2>&1
+  if [ $? -eq 0 ]; then
+    alias vi=`which vim`
+    if [ "$EDITOR" == "vi" ]; then
+      export EDITOR="vim"
+    fi
+  fi
+}
+
+# sudo vi/vim
+function svi {
+        sudo vi $@
+}
+function svim {
+        sudo vim $@
+}
+
+
