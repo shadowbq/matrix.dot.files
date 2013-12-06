@@ -25,5 +25,10 @@ xpull_assign
 coreutil_check
 
 ##########################
+# Check for .matrix consistancy
+check_matrix_online
+check_matrix_local
+
+##########################
 # Additional non-global Configs/Function calls can go into ~/.bash_local
 # such as 'extended_completions'

@@ -1,0 +1,25 @@
+function check_matrix_online {
+
+  command -v git >/dev/null 2>&1
+  if [ $? -eq 0 ]; then
+
+    head=`git --git-dir="$HOME"/.homesick/repos/matrix.dot.files/.git rev-parse HEAD`
+    remote=`git --git-dir="$HOME"/.homesick/repos/matrix.dot.files/.git ls-remote origin -h refs/heads/master |cut -f1`
+
+    if [ "$head" != "$remote" ]; then
+      echo ".matrix is outdated"
+    fi
+  else
+    echo -e "${YELLOW} unable to validate .matrix online (missing:homesick/git)${NORMAL}"
+  fi
+  
+}
+
+function check_matrix_local {
+  command -v homesick >/dev/null 2>&1
+  if [ $? -eq 0 ]; then
+    homesick status matrix.dot.files
+  else 
+    echo -e "${YELLOW} unable to validate .matrix local (missing:homesick/git)${NORMAL}"
+  fi
+}
