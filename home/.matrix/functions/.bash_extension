@@ -1,9 +1,6 @@
 matrix="$HOME/.matrix/functions"
-source $matrix/archive_functions
-source $matrix/symlink_alternatives
-source $matrix/core_utilities
-source $matrix/file_functions
-source $matrix/xpull
-source $matrix/ssh_agent_functions
-source $matrix/ssh_keys_loading
+files=$(ls $matrix/ 2>/dev/null)
+for file in ${files}; do
+        source $matrix/${file}
+done
 
