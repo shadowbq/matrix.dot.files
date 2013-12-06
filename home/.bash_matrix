@@ -6,13 +6,12 @@
 ###########################
 # Proxy configs to be loaded
 if [ -n "$matrixproxy" ]; then
-   . /.matrix/proxy/.bash_extension 
+   source "$HOME"/.matrix/proxy/.bash_extension 
 fi
 
-source ./.matrix/functions/.bash_extension
-
-source ./.matrix/ruby/.bash_extension
-source ./.matrix/completions/.bash_extension
+source "$HOME"/.matrix/functions/.bash_extension
+source "$HOME"/.matrix/ruby/.bash_extension
+source "$HOME"/.matrix/completions/.bash_extension
 
 # source ./.matrix/opt/something
 
