@@ -5,6 +5,7 @@ gem "pru"
 gem "homesick"
 gem "wirble"
 gem "gist"
+gem "rmate"
 
 local_gemfile = "~/.Gemfile.local"
 
