@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## 
+## Internet test to freebsd.org (inet_test)
+## of 0=success | 1=failed
+## BSD/MIT Licensed. - shadowbq
+## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## 
+## (~)$ host -t SOA -W 1 freebsdzzz.org
+## Host freebsdzzz.org not found: 3(NXDOMAIN)
+## (~)$ echo $?
+## 1
+## (~)$ host -t SOA -W 1 freebsd.org
+## ;; connection timed out; no servers could be reached
+## (~)$ echo $?
+## 1
+## (~)$ host -t SOA -W 1 freebsd.org
+## freebsd.org has SOA record ns0.freebsd.org. hostmaster.freebsd.org. 2013122006 3600 900 604800 600
+## (~)$ echo $?
+## 0
+## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## 
+host -t SOA -W 1 freebsd.org > /dev/null
+

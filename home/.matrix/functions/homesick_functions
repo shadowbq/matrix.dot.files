@@ -1,16 +1,22 @@
 function check_matrix_online {
-
-  command -v git >/dev/null 2>&1
+  inet_test
   if [ $? -eq 0 ]; then
 
-    head=`git --git-dir="$HOME"/.homesick/repos/matrix.dot.files/.git rev-parse HEAD`
-    remote=`git --git-dir="$HOME"/.homesick/repos/matrix.dot.files/.git ls-remote origin -h refs/heads/master |cut -f1`
+    command -v git >/dev/null 2>&1
+    if [ $? -eq 0 ]; then
 
-    if [ "$head" != "$remote" ]; then
-      echo -e "${RED} .matrix is outdated, run 'homesick pull matrix.dot.files' ${NORMAL}"
+      head=`git --git-dir="$HOME"/.homesick/repos/matrix.dot.files/.git rev-parse HEAD`
+      remote=`git --git-dir="$HOME"/.homesick/repos/matrix.dot.files/.git ls-remote origin -h refs/heads/master |cut -f1`
+
+      if [ "$head" != "$remote" ]; then
+        echo -e "${RED} .matrix is outdated, run 'homesick pull matrix.dot.files' ${NORMAL}"
+      fi
+    else
+      echo -e "${YELLOW} unable to validate .matrix online (missing:homesick/git)${NORMAL}"
     fi
+
   else
-    echo -e "${YELLOW} unable to validate .matrix online (missing:homesick/git)${NORMAL}"
+    echo -e "${YELLOW} no internet connection.${NORMAL}"
   fi
   
 }
