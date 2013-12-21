@@ -38,6 +38,10 @@ if [ -d "$HOME"/.matrix/${bash_os}/bin ]; then
 fi
 
 ###########################
+# Matrix Global Path bin
+PATH=$PATH:"$HOME"/.matrix/bin
+
+###########################
 # User configurable location to include addition configs to be loaded
 if [ -f "$HOME"/.bash_matrix ]; then
    . "$HOME"/.bash_matrix
@@ -52,5 +56,5 @@ fi
 ###########################
 # Last User specific environment and startup programs
 
-PATH=$PATH:"$HOME"/.matrix/bin:"$HOME"/bin
+PATH=$PATH:"$HOME"/bin
 export PATH
