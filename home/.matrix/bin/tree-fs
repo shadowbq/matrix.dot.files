@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+if (( $# >= 1 )); then
+  echo $1
+  find $1 -print | sed -e 's;[^/]*/;|____;g;s;____|; |;g'
+else
+  echo `pwd`
+  find . -print | sed -e 's;[^/]*/;|____;g;s;____|; |;g'
+fi
