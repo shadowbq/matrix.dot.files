@@ -1,4 +1,4 @@
-#!/usr/bin/bash
+#!/usr/bin/env bash
 gconftool-2 --set /apps/gnome-terminal/profiles/Default/foreground_color --type string "#DCDCCC"
 gconftool-2 --set /apps/gnome-terminal/profiles/Default/background_color --type string "#1F1F1F"
 gconftool-2 --set /apps/gnome-terminal/profiles/Default/bold_color --type string "#FFCFAF"
