@@ -2,7 +2,8 @@
 #EXTERNAL_IP=$($XPULL_TOOL_SILENT "https://www.packetmail.net/myip.php")
 # Alternative URLs
 # curl -s icanhazip.com
-# https://ip.appspot.com/
+# curl -s http://ifconfig.me
+# curl -s https://ip.appspot.com/
 # via dns -  dig +short myip.opendns.com @resolver1.opendns.com
 EXTERNAL_IP=$(xspull http://checkip.dyndns.org | sed -e 's/^.*Current IP Address: //g' -e 's/<.*$//g')
 export EXTERNAL_IP
