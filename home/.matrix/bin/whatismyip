@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 #EXTERNAL_IP=$($XPULL_TOOL_SILENT "https://www.packetmail.net/myip.php")
+# Alternative URLs
+# curl -s icanhazip.com
+# https://ip.appspot.com/
 EXTERNAL_IP=$(xspull http://checkip.dyndns.org | sed -e 's/^.*Current IP Address: //g' -e 's/<.*$//g')
 export EXTERNAL_IP
 echo -e "$EXTERNAL_IP ($(dig -x $EXTERNAL_IP +short))"
