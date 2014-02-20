@@ -3,6 +3,7 @@
 # Alternative URLs
 # curl -s icanhazip.com
 # https://ip.appspot.com/
+# via dns -  dig +short myip.opendns.com @resolver1.opendns.com
 EXTERNAL_IP=$(xspull http://checkip.dyndns.org | sed -e 's/^.*Current IP Address: //g' -e 's/<.*$//g')
 export EXTERNAL_IP
 echo -e "$EXTERNAL_IP ($(dig -x $EXTERNAL_IP +short))"
