@@ -11,6 +11,7 @@
 	email = shadowbq@gmail.com
 [core]
         excludesfile = ~/.gitignore_global
+	editor = /usr/bin/vim
 [alias]
         st = status
         ci = commit
