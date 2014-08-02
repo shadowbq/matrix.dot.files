@@ -21,12 +21,12 @@ esac
 # Fallback to non GNUv3 ls with color. Color should be implemented in /etc/profile.d/colorls.sh
 ls --version > /dev/null 2>&1
 if [ $? -gt 0 ]; then
-  alias ls="ls -G"
+  alias ls="LC_COLLATE=C ls -G"
 fi
 
 if [ -x /usr/bin/dircolors ]; then
     test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
-    alias ls='ls --color=auto'
+    alias ls='LC_COLLATE=C ls --color=auto'
     #alias dir='dir --color=auto'
     #alias vdir='vdir --color=auto'
 
