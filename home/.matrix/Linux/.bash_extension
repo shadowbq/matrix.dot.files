@@ -18,17 +18,17 @@ xterm*|rxvt*)
 	;;
 esac
 
-alias "ls_perms=ls -al|awk '{k=0;s=0;for(i=0;i<=8;i++){;k+=((substr(\$1,i+2,1)~/[rwxst]/)*2^(8-i));};j=4;for(i=4;i<=10;i+=3){;s+=((substr(\$1,i,1)~/[stST]/)*j);j/=2;};if(k){;printf(\"%0o%0o \",s,k);};print;}'"
-
 # Fallback to non GNUv3 ls with color. Color should be implemented in /etc/profile.d/colorls.sh
 ls --version > /dev/null 2>&1
 if [ $? -gt 0 ]; then
   alias ls="LC_COLLATE=C ls -G"
+  alias "ls_perms=ls -alG|awk '{k=0;s=0;for(i=0;i<=8;i++){;k+=((substr(\$1,i+2,1)~/[rwxst]/)*2^(8-i));};j=4;for(i=4;i<=10;i+=3){;s+=((substr(\$1,i,1)~/[stST]/)*j);j/=2;};if(k){;printf(\"%0o%0o \",s,k);};print;}'"
 fi
 
 if [ -x /usr/bin/dircolors ]; then
     test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
     alias ls='LC_COLLATE=C ls --color=auto'
+    alias ls_perms="LC_COLLATE=C ls -al --color=always|awk '{k=0;s=0;for(i=0;i<=8;i++){;k+=((substr(\$1,i+2,1)~/[rwxst]/)*2^(8-i));};j=4;for(i=4;i<=10;i+=3){;s+=((substr(\$1,i,1)~/[stST]/)*j);j/=2;};if(k){;printf(\"%0o%0o \",s,k);};print;}'"
     #alias dir='dir --color=auto'
     #alias vdir='vdir --color=auto'
 
