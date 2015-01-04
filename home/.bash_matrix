@@ -10,6 +10,7 @@ if [ -n "$matrixproxy" ]; then
 fi
 
 source "$HOME"/.matrix/functions/.bash_extension
+source "$HOME"/.matrix/python/.bash_extension
 source "$HOME"/.matrix/ruby/.bash_extension
 source "$HOME"/.matrix/completions/.bash_extension
 
