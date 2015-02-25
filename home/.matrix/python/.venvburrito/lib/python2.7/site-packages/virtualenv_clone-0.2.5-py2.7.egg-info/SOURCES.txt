@@ -1,0 +1,11 @@
+LICENSE
+MANIFEST.in
+README
+clonevirtualenv.py
+setup.cfg
+setup.py
+virtualenv_clone.egg-info/PKG-INFO
+virtualenv_clone.egg-info/SOURCES.txt
+virtualenv_clone.egg-info/dependency_links.txt
+virtualenv_clone.egg-info/entry_points.txt
+virtualenv_clone.egg-info/top_level.txt
