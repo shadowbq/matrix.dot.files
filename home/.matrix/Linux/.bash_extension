@@ -1,5 +1,21 @@
 # .bashrc
 
+###########################
+# Add Distro Specific
+
+if [ -f /etc/debian_version ]; then
+  PATH=$PATH:"$HOME"/.matrix/Linux/Debian/bin
+  export PATH
+fi
+
+if [ -f /etc/redhat-release ]; then
+  PATH=$PATH:"$HOME"/.matrix/Linux/RHEL/bin
+  export PATH
+fi
+
+###########################
+# Common Prompts
+
 # Prompt
 PSBGREEN='\[\033[1;32m\]'
 PSGREEN='\[\033[0;32m\]'
@@ -36,4 +52,3 @@ if [ -x /usr/bin/dircolors ]; then
     alias fgrep='fgrep --color=auto'
     alias egrep='egrep --color=auto'
 fi
-

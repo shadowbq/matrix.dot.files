@@ -38,19 +38,6 @@ if [ -d "$HOME"/.matrix/${bash_os}/bin ]; then
 fi
 
 ###########################
-# Add Distro Specific
-
-if [ -f /etc/debian_version ]; then
-  PATH=$PATH:"$HOME"/.matrix/Linux/Debian/bin
-  export PATH
-fi
-
-if [ -f /etc/redhat-release ]; then
-  PATH=$PATH:"$HOME"/.matrix/Linux/RHEL/bin
-  export PATH
-fi
-
-###########################
 # Matrix Global Path bin
 PATH=$PATH:"$HOME"/.matrix/bin
 
