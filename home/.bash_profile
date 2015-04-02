@@ -28,12 +28,25 @@ bash_os="`uname -s`"
 
 if [ -f "$HOME"/.matrix/${bash_os}/.bash_extension ]; then
   . "$HOME"/.matrix/${bash_os}/.bash_extension
-else 
+else
   echo -e "${RED}matrix/.bash_extension not found for ${bash_os}.${NORMAL}"
 fi
 
 if [ -d "$HOME"/.matrix/${bash_os}/bin ]; then
-  PATH=$PATH:"$HOME"/.matrix/${bash_os}/bin 
+  PATH=$PATH:"$HOME"/.matrix/${bash_os}/bin
+  export PATH
+fi
+
+###########################
+# Add Distro Specific
+
+if [ -f /etc/debian_version ]; then
+  PATH=$PATH:"$HOME"/.matrix/Linux/Debian/bin
+  export PATH
+fi
+
+if [ -f /etc/redhat-release ]; then
+  PATH=$PATH:"$HOME"/.matrix/Linux/RHEL/bin
   export PATH
 fi
 
