@@ -1,0 +1,117 @@
+#!/usr/bin/env ruby
+GROPE_VERSION = 1.0
+require 'optparse'
+require 'json'
+require 'net/ssh'
+require 'etc'
+require 'highline/import'
+require 'tempfile'
+
+def get_password(prompt="Enter the SSH Password")
+   ask(prompt) {|q| q.echo = false}
+end
+
+def handsy
+  'PID=$$ && touch /tmp/$PID && echo $PID >> /tmp/$PID && rm /tmp/$PID'
+end
+
+def do_it(ip, user, password, task)
+  puts "#{ip}"
+  Net::SSH.start(ip, user, :password => password) do |ssh|
+    if task == "grope"
+      output = ssh.exec!(handsy)
+    else
+      output = ssh.exec!(task)
+    end
+    return output
+  end  
+end
+
+username = Etc.getlogin
+password = get_password 
+
+if File.file?(File.expand_path('~/.grope'))
+  grope_hash= JSON.parse(File.read(File.expand_path('~/.grope')))
+else
+  puts '~/.grope file mising.'
+  exit(1)
+end
+
+@subgroup1 = grope_hash['subgroup1']
+@subgroup2 = grope_hash['subgroup2']
+@groped = @subgroup1 + @subgroup2
+@servers = (@groped).sort.uniq
+
+options = {}
+
+optparse = OptionParser.new do |opts|
+  opts.banner = "Grope (Version #{GROPE_VERSION} )"  
+  opts.separator " Usage: #$0 [options] \"example remote command to run\""
+  opts.separator " Note: Commands must be escaped, not providing a command will cause groping."
+  opts.separator ""    
+  opts.separator " Grope Actions:"    
+
+  opts.on( '-a', '--all', 'All Grope Related Servers' ) do
+    options[:server] = @servers
+  end
+
+  opts.on( '-s', '--Sub-Grope', 'Groped SubGroup Servers' ) do
+    options[:server] = @subgroup1
+  end
+ 
+ opts.separator ""
+   opts.separator "  Global Options:"
+
+   opts.on( '-g', '--grope-a-file', 'Create, Write, Read, and Delete file. (overides custom command) ' ) do
+     options[:grope] = true
+   end
+  
+   opts.on( '-x', '--root', 'Connect via root rather than current user' ) do
+     options[:root] = true
+   end
+
+   opts.on( '-z', '--sudo', 'Connect via current user and sudo' ) do
+     options[:sudo] = true
+   end
+
+   opts.on( '-v', '--verbose', 'Verbose Debugging Enabled' ) do
+     options[:verbose] = true
+   end
+  
+   opts.on_tail( '-h', '--help', 'Display this screen' ) do
+     puts opts
+     exit
+  end
+end
+
+#Verrify the options
+begin
+  raise unless ARGV.size > 0
+  optparse.parse!
+  
+#If options fail display help
+rescue
+  puts optparse
+  exit
+end
+
+if !(ARGV[0])
+   options[:grope] = true
+end
+
+options[:server].each do |ip| 
+ puts "use server #{ip}" if options[:verbose]
+ if options[:root]
+   puts `ssh -q root\@#{ip} -t #{ARGV[0]}`
+ elsif options[:sudo]
+   puts `ssh -q #{ip} -t sudo sh -c '#{ARGV[0]}'`
+ else
+   if options[:grope]
+     puts do_it(ip, username, password, "grope")
+   else
+     puts do_it(ip, username, password, ARGV[0])
+   end  
+ end
+
+end
+  
