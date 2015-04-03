@@ -41,7 +41,7 @@ eptime=`echo $line | grep -Eo "[0-9]{10}"|head -1`;
      if [[ "$OSTYPE" == "linux-gnu" ]]; then
        htime=`date -d @$eptime`
      elif [[ "$OSTYPE" == "freebsd"* ]]; then
-       htime=`date -f $eptime`
+       htime=`date -r $eptime`
      fi
      line=`echo $line | sed "s/\([\D]*\)\([0-9]\{10\}\)\([\D]*\)/\1$htime\3/";`
    done
