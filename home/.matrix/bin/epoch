@@ -38,7 +38,11 @@ LICENSE
 while read line; do
 while [[ "$line" =~ \([0-9]\{10\}\) ]]; do
 eptime=`echo $line | grep -Eo "[0-9]{10}"|head -1`;
-     htime=`date -d @$eptime`
+     if [[ "$OSTYPE" == "linux-gnu" ]]; then
+       htime=`date -d @$eptime`
+     elif [[ "$OSTYPE" == "freebsd"* ]]; then
+       htime=`date -f $eptime`
+     fi
      line=`echo $line | sed "s/\([\D]*\)\([0-9]\{10\}\)\([\D]*\)/\1$htime\3/";`
    done
 echo $line
