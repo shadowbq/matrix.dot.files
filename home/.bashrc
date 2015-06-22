@@ -27,6 +27,7 @@ NORMAL='\033[00m'
 #############################
 # User specific aliases and functions
 # Setting up Defaults for .matrix prior to functions / OS calls
+# (exist as .matrix extensions) GREP MATCHERS: nvm.sh rvm pythonenv
 
 export EDITOR="vi"
 export PAGER=less
