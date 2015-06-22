@@ -1,0 +1,16 @@
+export NVM_DIR="$HOME/.nvm" # Add NVM to PATH for scripting
+[[ -s "$NVM_DIR/nvm.sh" ]] && source "$NVM_DIR/nvm.sh"  # This loads nvm
+
+command -v node >/dev/null 2>&1
+if [ $? -eq 1 ]; then
+  echo -e >&2 "${RED}[WARNING] No Native Node(js) Found. ${NORMAL}"
+fi
+
+if [ "`type -t nvm`" == "function" ]; then
+  nvm alias default 0.10 >/dev/null 2>&1
+  echo -ne "${GREEN}NVM is present => ${NORMAL} "
+  nvm current
+else
+  echo -e "${YELLOW}NVM is not present. ${NORMAL}"
+  node -v
+fi

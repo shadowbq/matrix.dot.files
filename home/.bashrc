@@ -42,4 +42,3 @@ export CLICOLOR=1
 
 export HISTSIZE=1000000
 export HISTIGNORE="clear:bg:fg:cd:cd -:exit:date:w:* --help"
-

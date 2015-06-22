@@ -2,16 +2,17 @@
 # Matrix Configuration to load additional extensions into bash
 
 # Uncomment lines to include the extensions
- 
+
 ###########################
 # Proxy configs to be loaded
 if [ -n "$matrixproxy" ]; then
-   source "$HOME"/.matrix/proxy/.bash_extension 
+   source "$HOME"/.matrix/proxy/.bash_extension
 fi
 
 source "$HOME"/.matrix/functions/.bash_extension
 source "$HOME"/.matrix/python/.bash_extension
 source "$HOME"/.matrix/ruby/.bash_extension
+source "$HOME"/.matrix/nodejs/.bash_extension
 source "$HOME"/.matrix/completions/.bash_extension
 
 # source ./.matrix/opt/something
