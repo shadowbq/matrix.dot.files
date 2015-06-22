@@ -7,9 +7,10 @@ if [ $? -eq 1 ]; then
 fi
 
 if [ "`type -t nvm`" == "function" ]; then
-  nvm alias default 0.10 >/dev/null 2>&1
+  nvm alias default iojs >/dev/null 2>&1
   echo -ne "${GREEN}NVM is present => ${NORMAL} "
-  nvm current
+  nvm current | tr -d "\n"
+  echo -e " (V8: `node -p process.versions.v8 | tr -d '\n'`)"
 else
   echo -e "${YELLOW}NVM is not present. ${NORMAL}"
   node -v
