@@ -13,6 +13,7 @@ source "$HOME"/.matrix/functions/.bash_extension
 source "$HOME"/.matrix/python/.bash_extension
 source "$HOME"/.matrix/ruby/.bash_extension
 source "$HOME"/.matrix/nodejs/.bash_extension
+source "$HOME"/.matrix/go/.bash_extension
 source "$HOME"/.matrix/completions/.bash_extension
 
 # source ./.matrix/opt/something
