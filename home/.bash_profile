@@ -56,5 +56,11 @@ fi
 ###########################
 # Last User specific environment and startup programs
 
+
+
+alias grep="`which grep` $GREP_OPTIONS"
+unset GREP_OPTIONS
+
+
 PATH=$PATH:"$HOME"/bin
 export PATH
