@@ -37,7 +37,12 @@ export VISUAL="$editor"
 export STRICT_SSH=false
 
 export TERM=xterm-256color
+
+## Hack Job on GREP OPTIONS (I've excluded upstream GREP_OPTIONS
 export GREP_OPTIONS='--color=auto'
+alias grep="`which grep` $GREP_OPTIONS"
+unset GREP_OPTIONS
+
 export GREP_COLOR='1;32'
 export CLICOLOR=1
 
