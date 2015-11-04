@@ -17,6 +17,7 @@ set noswapfile
 set cursorline
 set number
 set showmatch
+set hidden
 
 " Control tabs/spaces/column displays
 set expandtab " Expand tab to spaces
@@ -30,5 +31,19 @@ autocmd StdinReadPre * let s:std_in=1
 autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
 
 let mapleader="-"
-nnoremap <leader>l :TagbarToggle<cr> 
-nnoremap <leader>n :NumbersToggle<cr> 
+nnoremap <leader>b :BufExplorer<cr> 
+nnoremap <leader>n :badd .<cr> :BufExplorer<cr>
+nnoremap <leader>t :TagbarToggle<cr> 
+nnoremap <leader>l :NumbersToggle<cr> 
+nnoremap <leader>s :Ag 
+
+" Enable the list of buffers
+let g:airline#extensions#tabline#enabled = 1
+
+" Show just the filename
+let g:airline#extensions#tabline#fnamemod = ':t'
+let g:airline#extensions#tabline#left_sep = ''
+let g:airline#extensions#tabline#left_alt_sep = ''
+" let g:airline#extensions#tabline#left_alt_sep = '|'
+let g:airline_powerline_fonts = 1
+let g:airline_theme='base16'
