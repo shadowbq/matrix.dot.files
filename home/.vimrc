@@ -30,6 +30,9 @@ set tabstop=2 " How many columns a tab counts for. For displaying text
 autocmd StdinReadPre * let s:std_in=1
 autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
 
+" No direct ExMode
+nnoremap Q <nop>
+
 let mapleader="-"
 nnoremap <leader>b :BufExplorer<cr> 
 nnoremap <leader>n :badd .<cr> :BufExplorer<cr>
