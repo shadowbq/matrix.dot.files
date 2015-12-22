@@ -3,6 +3,10 @@
 
 # Uncomment lines to include the extensions
 
+callback_pwd=`pwd`
+cd "$HOME"
+
+#
 ###########################
 # Proxy configs to be loaded
 if [ -n "$matrixproxy" ]; then
@@ -35,3 +39,4 @@ check_matrix_local
 ##########################
 # Additional non-global Configs/Function calls can go into ~/.bash_local
 # such as 'extended_completions'
+cd $callback_pwd
