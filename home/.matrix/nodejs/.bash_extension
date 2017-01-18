@@ -7,16 +7,16 @@ export NVM_DIR="$HOME/.nvm"
 command -v node >/dev/null 2>&1
 if [ $? -eq 1 ]; then
   echo -e >&2 "${RED}[WARNING] No Native Node(js) Found. ${NORMAL}"
-fi
-
-if [ "`type -t nvm`" == "function" ]; then
-  nvm alias default node >/dev/null 2>&1
-  echo -e "${GREEN}NVM is present => ${NORMAL} "
-  echo -e " (`nvm use node | tr -d '\n'`)"
-  #echo -ne "${GREEN}NVM is present => ${NORMAL} "
-  #nvm current | tr -d "\n"
-  #echo -e " (V8: `node -p process.versions.v8 | tr -d '\n'`)"
 else
-  echo -e "${YELLOW}NVM is not present. ${NORMAL}"
-  node -v
+  if [ "`type -t nvm`" == "function" ]; then
+    nvm alias default node >/dev/null 2>&1
+    echo -e "${GREEN}NVM is present => ${NORMAL} "
+    echo -e " (`nvm use node | tr -d '\n'`)"
+    #echo -ne "${GREEN}NVM is present => ${NORMAL} "
+    #nvm current | tr -d "\n"
+    #echo -e " (V8: `node -p process.versions.v8 | tr -d '\n'`)"
+  else
+    echo -e "${YELLOW}NVM is not present. ${NORMAL}"
+    node -v
+  fi
 fi
