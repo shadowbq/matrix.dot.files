@@ -1,6 +1,9 @@
 ##########################
 # Matrix Configuration to load additional extensions into bash
 
+##### History Control
+HISTCONTROL=ignoredups:ignorespace
+
 # Uncomment lines to include the extensions
 
 callback_pwd=`pwd`
