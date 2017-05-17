@@ -73,8 +73,14 @@ checkout = git clone 'https://github.com/tpope/vim-surround.git' 'vim-surround'
 # [.vim/bundle/vim-colors-solarized]
 # checkout = git clone 'https://github.com/altercation/vim-colors-solarized.git' 'vim-colors-solarized'
 
-[.vim/bundle/vim_colors]
-checkout = git clone 'https://github.com/shadowbq/vim_colors.git' 'vim-colors'
+[.vim/bundle/nerdtree]
+checkout = git clone 'https://github.com/scrooloose/nerdtree.git' nerdtree'
 
-[.vim/bundle/Vundle]
-checkout = git clone 'https://github.com/gmarik/Vundle.vim.git' 'vundle'
+[.vim/bundle/vim_colors]
+checkout = git clone 'https://github.com/shadowbq/vim_colors.git' 'vim_colors'
+
+[.vim/bundle/Vundle.vim]
+checkout = git clone 'https://github.com/gmarik/Vundle.vim.git' 'Vundle.vim'
+
+[.powerline/fonts]
+checkout = git clone 'https://github.com/powerline/fonts.git' 'fonts'
