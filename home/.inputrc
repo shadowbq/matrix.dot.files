@@ -2,4 +2,4 @@
 # See readline(3readline) and `info rluserman' for more information.
 
 
-. "$HOME"/.matrix/.inputrc
+$include .matrix/.inputrc
