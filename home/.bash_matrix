@@ -44,6 +44,7 @@ load_ssh_keys
 symlink_alts
 xpull_assign
 coreutil_check
+mr_check
 
 ##########################
 # Check for .matrix consistancy
