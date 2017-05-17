@@ -1,7 +1,8 @@
 ##########################
 # Matrix Configuration to load additional extensions into bash
 
-##### History Control
+###########################
+# History Control
 HISTCONTROL=ignoredups:ignorespace
 HISTFILESIZE=5000
 HISTSIZE=2000
