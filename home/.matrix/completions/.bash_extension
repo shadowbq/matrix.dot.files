@@ -20,6 +20,8 @@ fi
 
 source "$HOME"/.matrix/completions/ssh_hosts_completion
 
+## Additional functions that can be called for splat inclusions in .bash_local
+
 function extended_completions {
   source "$HOME"/.matrix/completions/git_completion
   complete -C "$HOME"/.matrix/completions/rake_completion -o default rake
@@ -28,7 +30,7 @@ function extended_completions {
 
 function all_bash_completions {
 
-# Set the following to the location of the matrix completion dir.
+  # Set the following to the location of the matrix completion dir.
   : ${MATRIX_COMPLETION_DIR:="$HOME"/.matrix/completions}
   readonly MATRIX_COMPLETION_DIR
 
