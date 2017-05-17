@@ -11,10 +11,8 @@ HISTFILE="$HOME"/.bash_history
 ## Heavy handed shared terminal bash history
 # export PROMPT_COMMAND="history -a; history -c; history -r; $PROMPT_COMMAND"
 
-# alternate mappings for "page up" and "page down" to search the history
-"e[5~": history-search-backward
-"e[6~": history-search-forward
-
+# See local libreadline for keymaps 
+#~/.inputrc
 
 ###########################
 # Uncomment lines to include the extensions
