@@ -1,9 +1,38 @@
 ###########################
-#Completion configs to be loaded
+# Completion configs to be loaded
+###########################
+
+## Global completions
+
+# enable programmable completion features (you don't need to enable
+# this, if it's already enabled in /etc/bash.bashrc and /etc/profile
+# sources /etc/bash.bashrc).
+
+if ! shopt -oq posix; then
+  if [ -f /usr/share/bash-completion/bash_completion ]; then
+    . /usr/share/bash-completion/bash_completion
+  elif [ -f /etc/bash_completion ]; then
+    . /etc/bash_completion
+  fi
+fi
+
+## Matrix Completions
+
 source "$HOME"/.matrix/completions/ssh_hosts_completion
 
 function extended_completions {
   source "$HOME"/.matrix/completions/git_completion
   complete -C "$HOME"/.matrix/completions/rake_completion -o default rake
   complete -C "$HOME"/.matrix/completions/capistrano_completion -o default ca
+}
+
+function all_bash_completions {
+  if [[ -d $MATRIX_COMPLETION_DIR && -r $MATRIX_COMPLETION_DIR && \
+      -x $MATRIX_COMPLETION_DIR ]]; then
+      for i in $(LC_ALL=C command ls "$MATRIX_COMPLETION_DIR"); do
+          i=$MATRIX_COMPLETION_DIR/$i
+          [[ ${i##*/} != @($_backup_glob|Makefile*|$_blacklist_glob) \
+              && -f $i && -r $i ]] && . "$i"
+      done
+  fi
 }
