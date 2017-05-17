@@ -54,6 +54,12 @@ if [ -f "$HOME"/.bash_local ]; then
 fi
 
 ###########################
+# use .bash_aliases for alias settings specific to one system
+if [ -f ~/.bash_aliases ]; then
+    . ~/.bash_aliases
+fi
+
+###########################
 # Last User specific environment and startup programs
 
 
