@@ -27,12 +27,21 @@ function extended_completions {
 }
 
 function all_bash_completions {
-  if [[ -d $MATRIX_COMPLETION_DIR && -r $MATRIX_COMPLETION_DIR && \
-      -x $MATRIX_COMPLETION_DIR ]]; then
+
+# Set the following to the location of the matrix completion dir.
+  : ${MATRIX_COMPLETION_DIR:="$HOME"/.matrix/completions}
+  readonly MATRIX_COMPLETION_DIR
+
+  _backup_glob='@(#*#|*@(~|.@(bak|orig|rej|swp|dpkg*|rpm@(orig|new|save))))'
+  _blacklist_glob='@(acroread.sh)'
+  MATRIX_COMPLETION_DIR
+  if [[ -d $MATRIX_COMPLETION_DIR && -r $MATRIX_COMPLETION_DIR && -x $MATRIX_COMPLETION_DIR ]]; then
       for i in $(LC_ALL=C command ls "$MATRIX_COMPLETION_DIR"); do
           i=$MATRIX_COMPLETION_DIR/$i
-          [[ ${i##*/} != @($_backup_glob|Makefile*|$_blacklist_glob) \
-              && -f $i && -r $i ]] && . "$i"
+          [[ ${i##*/} != @($_backup_glob|Makefile*|$_blacklist_glob) && -f $i && -r $i ]] && . "$i"
       done
   fi
+  unset i _blacklist_glob
 }
+
+
