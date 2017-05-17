@@ -3,6 +3,10 @@
 
 ##### History Control
 HISTCONTROL=ignoredups:ignorespace
+HISTFILESIZE=5000
+HISTSIZE=2000
+HISTFILE="$HOME"/.bash_history
+
 
 # Uncomment lines to include the extensions
 
