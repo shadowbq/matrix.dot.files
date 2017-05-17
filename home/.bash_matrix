@@ -7,6 +7,8 @@ HISTCONTROL=ignoredups:ignorespace
 HISTFILESIZE=5000
 HISTSIZE=2000
 HISTFILE="$HOME"/.bash_history
+## Heavy handed shared terminal bash history
+# export PROMPT_COMMAND="history -a; history -c; history -r; $PROMPT_COMMAND"
 
 
 # Uncomment lines to include the extensions
