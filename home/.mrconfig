@@ -1,41 +1,41 @@
 [.vim/bundle/ack.vim]
-checkout = git clone 'https://github.com/mileszs/ack.vim' 'ack.vim'
+checkout = git clone 'https://github.com/mileszs/ack.vim.git' 'ack.vim'
 
 [.vim/bundle/auto-pairs]
-checkout = git clone 'https://github.com/jiangmiao/auto-pairs' 'auto-pairs'
+checkout = git clone 'https://github.com/jiangmiao/auto-pairs.git' 'auto-pairs'
 
 [.vim/bundle/ctrlp.vim]
-checkout = git clone 'https://github.com/kien/ctrlp.vim' 'ctrlp.vim'
+checkout = git clone 'https://github.com/kien/ctrlp.vim.git' 'ctrlp.vim'
 
 [.vim/bundle/goyo.vim]
-checkout = git clone 'https://github.com/junegunn/goyo.vim' 'goyo.vim'
+checkout = git clone 'https://github.com/junegunn/goyo.vim.git' 'goyo.vim'
 
 [.vim/bundle/grep.vim]
-checkout = git clone 'https://github.com/vim-scripts/grep.vim' 'grep.vim'
+checkout = git clone 'https://github.com/vim-scripts/grep.vim.git' 'grep.vim'
 
 [.vim/bundle/gundo.vim]
-checkout = git clone 'https://github.com/sjl/gundo.vim' 'gundo.vim'
+checkout = git clone 'https://github.com/sjl/gundo.vim.git' 'gundo.vim'
 
 [.vim/bundle/html5.vim]
-checkout = git clone 'git@github.com:othree/html5.vim.git' 'html5.vim'
+checkout = git clone 'https://github.com/othree/html5.vim.git' 'html5.vim'
 
 [.vim/bundle/lightline.vim]
-checkout = git clone 'https://github.com/itchyny/lightline.vim' 'lightline.vim'
+checkout = git clone 'https://github.com/itchyny/lightline.vim.git' 'lightline.vim'
 
 [.vim/bundle/matchit.zip]
-checkout = git clone 'https://github.com/vim-scripts/matchit.zip' 'matchit.zip'
+checkout = git clone 'https://github.com/vim-scripts/matchit.zip.git' 'matchit.zip'
 
 [.vim/bundle/scss-syntax.vim]
-checkout = git clone 'git@github.com:cakebaker/scss-syntax.vim.git' 'scss-syntax.vim'
+checkout = git clone 'https://github.com/cakebaker/scss-syntax.vim.git' 'scss-syntax.vim'
 
 [.vim/bundle/supertab]
-checkout = git clone 'https://github.com/ervandew/supertab' 'supertab'
+checkout = git clone 'https://github.com/ervandew/supertab.git' 'supertab'
 
 [.vim/bundle/syntastic]
 checkout = git clone 'https://github.com/scrooloose/syntastic.git' 'syntastic'
 
 [.vim/bundle/tcomment_vim]
-checkout = git clone 'https://github.com/tomtom/tcomment_vim' 'tcomment_vim'
+checkout = git clone 'https://github.com/tomtom/tcomment_vim.git' 'tcomment_vim'
 
 [.vim/bundle/tlib_vim]
 checkout = git clone 'https://github.com/tomtom/tlib_vim.git' 'tlib_vim'
@@ -47,7 +47,7 @@ checkout = git clone 'https://github.com/MarcWeber/vim-addon-mw-utils.git' 'vim-
 checkout = git clone 'https://github.com/hail2u/vim-css3-syntax.git' 'vim-css3-syntax'
 
 [.vim/bundle/vim-fugitive]
-checkout = git clone 'git://github.com/tpope/vim-fugitive.git' 'vim-fugitive'
+checkout = git clone 'https://github.com/tpope/vim-fugitive.git' 'vim-fugitive'
 
 [.vim/bundle/vim-json]
 checkout = git clone 'https://github.com/elzr/vim-json' 'vim-json'
@@ -68,8 +68,13 @@ checkout = git clone 'https://github.com/garbas/vim-snipmate.git' 'vim-snipmate'
 checkout = git clone 'https://github.com/honza/vim-snippets.git' 'vim-snippets'
 
 [.vim/bundle/vim-surround]
-checkout = git clone 'git://github.com/tpope/vim-surround.git' 'vim-surround'
+checkout = git clone 'https://github.com/tpope/vim-surround.git' 'vim-surround'
 
-[.vim/bundle/vim-colors-solarized]
-checkout = git clone 'git://github.com/altercation/vim-colors-solarized.git' 'vim-colors-solarized'
+# [.vim/bundle/vim-colors-solarized]
+# checkout = git clone 'https://github.com/altercation/vim-colors-solarized.git' 'vim-colors-solarized'
 
+[.vim/bundle/vim_colors]
+checkout = git clone 'https://github.com/shadowbq/vim_colors.git' 'vim-colors'
+
+[.vim/bundle/Vundle]
+checkout = git clone 'https://github.com/gmarik/Vundle.vim.git' 'vundle'
