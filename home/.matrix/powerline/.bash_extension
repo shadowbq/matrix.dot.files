@@ -20,6 +20,7 @@ function check_powerline {
       POWERLINE_BASH_CONTINUATION=1
       POWERLINE_BASH_SELECT=1
       POWERLINE_REPO_ROOT=$(pip show powerline-status |ack "Location:(.*)" --output '$1')
+      export POWERLINE_REPO_ROOT
       . $POWERLINE_REPO_ROOT/powerline/bindings/bash/powerline.sh
     else
       { echo -e >&2 "${RED}[WARNING] Powerline is not found, but enabled.${NORMAL}"; }

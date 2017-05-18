@@ -84,3 +84,6 @@ checkout = git clone 'https://github.com/gmarik/Vundle.vim.git' 'Vundle.vim'
 
 [.powerline/fonts]
 checkout = git clone 'https://github.com/powerline/fonts.git' 'fonts'
+
+[.tmux/plugins/tpm]
+checkout = git clone 'https://github.com/tmux-plugins/tpm.git' 'tpm'
