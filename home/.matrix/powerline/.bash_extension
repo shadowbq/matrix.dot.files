@@ -1,0 +1,28 @@
+# powerline-status
+
+## Debian / Ubuntu
+# apt install fonts-powerline
+
+
+function check_powerline_requirements {
+  command -v socat >/dev/null 2>&1 || { echo -e >&2 "${YELLOW}[POWERLINE WARNING] No socat found.${NORMAL}"; }
+  command -v pip >/dev/null 2>&1 || { echo -e >&2 "${YELLOW}[POWERLINE WARNING] No python pip found.${NORMAL}"; }
+  pip show psutils -q >/dev/null 2>&1 || { echo -e >&2 "${YELLOW}[POWERLINE WARNING] No python pip psutils Found.${NORMAL}"; }
+}
+
+function check_powerline {
+  if [[ -n $MATRIX_POWERLINE ]]; then
+    command -v powerline-daemon >/dev/null 2>&1
+    if [ $? -eq 0 ]; then
+      check_powerline_requirements
+      powerline-daemon -q
+      POWERLINE_BASH_CONTINUATION=1
+      POWERLINE_BASH_SELECT=1
+      POWERLINE_REPO_ROOT=$(pip show powerline-status |ack "Location:(.*)" --output '$1')
+      . $POWERLINE_REPO_ROOT/powerline/bindings/bash/powerline.sh
+    else
+      { echo -e >&2 "${RED}[WARNING] Powerline is not found, but enabled.${NORMAL}"; }
+    fi
+
+  fi
+}

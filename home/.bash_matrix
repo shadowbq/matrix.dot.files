@@ -11,7 +11,7 @@ HISTFILE="$HOME"/.bash_history
 ## Heavy handed shared terminal bash history
 # export PROMPT_COMMAND="history -a; history -c; history -r; $PROMPT_COMMAND"
 
-# See local libreadline for keymaps 
+# See local libreadline for keymaps
 #~/.inputrc
 
 ###########################
@@ -33,8 +33,14 @@ source "$HOME"/.matrix/ruby/.bash_extension
 source "$HOME"/.matrix/nodejs/.bash_extension
 source "$HOME"/.matrix/go/.bash_extension
 source "$HOME"/.matrix/completions/.bash_extension
+source "$HOME"/.matrix/powerline/.bash_extension
 
 # source ./.matrix/opt/something
+
+#########################
+# Enable powerline bash shell
+# define it to use it.
+MATRIX_POWERLINE="true"
 
 ##########################
 # Final .matrix Commands to be executed
@@ -45,9 +51,10 @@ symlink_alts
 xpull_assign
 coreutil_check
 mr_check
+check_powerline
 
 ##########################
-# Check for .matrix consistancy
+# Check for .matrix consistency
 check_matrix_online
 check_matrix_local
 
