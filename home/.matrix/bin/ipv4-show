@@ -1,0 +1,4 @@
+echo -n "gateway: " 
+ip route show default | awk '/default/ {print $3}'
+ip -4 addr | grep -oP '(?<=inet\s)\d+(\.\d+){3}'
+
