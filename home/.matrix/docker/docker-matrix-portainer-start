@@ -9,10 +9,7 @@
 
 function portainer()
 {
-	image_name='my_portainer_io_auto'
 	watchtower_name='watchtower'
-
-	
 	[[ $(docker ps -f "name=$watchtower_name" --format '{{.Names}}') == $watchtower_name ]] || docker start $watchtower_name
 }
 
