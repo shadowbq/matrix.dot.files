@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+sudo groupadd -f choke
+sudo -g choke -s

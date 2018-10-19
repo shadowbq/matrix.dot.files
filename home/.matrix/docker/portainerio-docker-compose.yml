@@ -1,0 +1,22 @@
+# docker run --name=my_portainer_io_auto --label=com.centurylinklabs.watchtower.enable=true \
+#   --hostname=4c89c2f74c83 --env="PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin" \
+#   --volume="/var/run/docker.sock:/var/run/docker.sock" --volume="/opt/portainer:/data" --volume="/data" \
+#   -p 9000:9000 --restart=always --detach=true portainer/portainer
+version: '3'
+services:
+  portainer:
+    image: portainer/portainer
+    container_name: my_portainer_io_composed
+    hostname: 4c89c2f74c83
+    labels:
+      com.centurylinklabs.watchtower.enable: "true"
+    restart: always
+    ports:
+      - "9000:9000"
+    command: -H unix:///var/run/docker.sock
+    environment:
+      - PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /opt/portainer:/data
+

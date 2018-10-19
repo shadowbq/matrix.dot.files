@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+## Use set -x for debug
+# set -x
+## This should be a docker-compose.yml 
+# $> docker-compose up -d 
+
+#  docker run -d --name watchtower --restart=always -v /var/run/docker.sock:/var/run/docker.sock v2tec/watchtower --label-enable --schedule "0 0 13 1/1 * ? *"
+#  docker run --name=my_portainer_io_auto --label=com.centurylinklabs.watchtower.enable=true --hostname=4c89c2f74c83 --env="PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin" --volume="/var/run/docker.sock:/var/run/docker.sock" --volume="/opt/portainer:/data" --volume="/data" -p 9000:9000 --restart=always --detach=true portainer/portainer
+
+function portainer()
+{
+	image_name='my_portainer_io_auto'
+	watchtower_name='watchtower'
+
+	
+	[[ $(docker ps -f "name=$watchtower_name" --format '{{.Names}}') == $watchtower_name ]] || docker start $watchtower_name
+}
+
+FUNCS=$(declare -f portainer)
+docker-compose -f ~/.matrix/docker/portainerio-docker-compose.yml up -d
+sudo bash -c "$FUNCS; portainer"
+/usr/bin/google-chrome-stable %U http://localhost:9000/
