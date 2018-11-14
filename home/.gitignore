@@ -45,6 +45,7 @@
 .secrets
 .ssh/authorized_key*
 .ssh/id*
+.ssh/*id*
 .ssh/github*
 .ssh/known*
 .ssh/cork*
