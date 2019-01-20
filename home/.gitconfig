@@ -30,5 +30,6 @@
 	info = remote -v
   unstash = stash pop
   remove-tags = "!f() { git tag -l ${1} | xargs -I % echo \"git tag -d % && git push --delete origin %\" | sh; }; f"
+  markdown-toc = "git-md-toc-creator"
 [http]
 	sslVerify = false
