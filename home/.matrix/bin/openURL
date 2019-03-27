@@ -1,0 +1,15 @@
+#!/bin/bash 
+
+if [ $# -gt 0 ]; then
+    echo "Your command line contains $# arguments"
+else
+    echo "Your command line contains no arguments"
+fi
+
+urlfilename=$@
+
+echo $urlfilename
+
+URL=$(awk -F "=" '/URL/ {print $2}' "$urlfilename") 
+echo $URL
+google-chrome "$URL"
