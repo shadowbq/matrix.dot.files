@@ -9,14 +9,14 @@ function check_matrix_online {
       remote=`git --git-dir="$HOME"/.homesick/repos/matrix.dot.files/.git ls-remote origin -h refs/heads/master |cut -f1`
 
       if [ "$head" != "$remote" ]; then
-        echo -e "${RED} .matrix is outdated, run 'homesick pull matrix.dot.files' ${NORMAL}"
+        echo -e "${RED}.matrix is outdated, run 'homesick pull matrix.dot.files' ${NORMAL}"
       fi
     else
-      echo -e "${YELLOW} unable to validate .matrix online (missing:homesick/git)${NORMAL}"
+      echo -e "${YELLOW}Unable to validate .matrix online (missing:homesick/git)${NORMAL}"
     fi
 
   else
-    echo -e "${YELLOW} no internet connection.${NORMAL}"
+    echo -e "${YELLOW}No internet connection.${NORMAL}"
   fi
   
 }

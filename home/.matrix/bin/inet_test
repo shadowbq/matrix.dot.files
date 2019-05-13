@@ -18,4 +18,11 @@
 ## 0
 ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## 
 host -t SOA -W 1 freebsd.org > /dev/null
-
+if [ $? -eq 0 ]; then
+  command -v wget >/dev/null 2>&1
+  if [ $? -eq 0 ]; then
+    wget -q --spider http://google.com
+  fi
+else
+  echo $?
+fi
