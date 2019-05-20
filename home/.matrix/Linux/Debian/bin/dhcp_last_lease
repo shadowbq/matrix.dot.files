@@ -1,0 +1,1 @@
+ cat "$(ls -rt /var/lib/NetworkManager/*.lease | tail -n1)"

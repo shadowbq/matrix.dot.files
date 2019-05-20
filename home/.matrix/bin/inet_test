@@ -6,7 +6,7 @@
 ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## 
 ## (~)$ host -t SOA -W 1 freebsdzzz.org
 ## Host freebsdzzz.org not found: 3(NXDOMAIN)
-## (~)$ echo $?
+## (~)$ echo $?e
 ## 1
 ## (~)$ host -t SOA -W 1 freebsd.org
 ## ;; connection timed out; no servers could be reached
@@ -17,12 +17,50 @@
 ## (~)$ echo $?
 ## 0
 ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## 
+BGREEN='\033[1;32m'
+GREEN='\033[0;32m'
+BRED='\033[1;31m'
+RED='\033[0;31m'
+BBLUE='\033[1;34m'
+BLUE='\033[0;34m'
+BYELLOW='\033[1;33m'
+YELLOW='\033[0;33m'
+NORMAL='\033[00m'
+
 host -t SOA -W 1 freebsd.org > /dev/null
 if [ $? -eq 0 ]; then
   command -v wget >/dev/null 2>&1
   if [ $? -eq 0 ]; then
     wget -q --spider http://google.com
+    case $? in
+      4)
+        echo -e "${RED}Network failure.${NORMAL}"
+        rtv=4
+        ;;
+      5)
+        echo -e "${RED}SSL verification failure.${NORMAL}"
+        rtv=5
+        ;;
+      6)
+        echo -e "${RED}Username/password authentication failure.${NORMAL}"
+        rtv=6
+        ;;
+      7)
+        echo -e "${RED}Protocol errors.${NORMAL}"
+        rtv=7
+        ;;
+      8)
+        echo -e "${RED}Possible Proxy Issue. Server issued an error response.${NORMAL}"
+        rtv=8
+        ;;
+      *)
+        rtv=$?
+        ;;
+    esac
+  else
+    rtv=$?
   fi
 else
-  echo $?
+  rtv=$?
 fi
+exit $rtv
