@@ -1,0 +1,32 @@
+#!/usr/bin/env python
+import os
+import sys
+from pyftpdlib import servers
+from pyftpdlib.handlers import FTPHandler
+from pyftpdlib.authorizers import DummyAuthorizer
+
+def main():
+
+    if os.geteuid() != 0:
+        print "Please run as root, but remember this is a hack job.. to run on port 21"
+        sys.exit()
+
+    authorizer = DummyAuthorizer()
+    authorizer.add_anonymous(os.getcwd())
+
+    handler = FTPHandler
+    handler.authorizer = authorizer
+
+    handler.banner = "ftpd-here ready."
+
+    address = ("0.0.0.0", 21)  # listen on every IP on my machine on port 21
+    server = servers.FTPServer(address, handler)
+
+    # set a limit for connections
+    server.max_cons = 10
+    server.max_cons_per_ip = 10
+
+    server.serve_forever()
+
+if __name__ == '__main__':
+    main()
