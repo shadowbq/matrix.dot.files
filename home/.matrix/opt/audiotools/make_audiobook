@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+# Combine mp3 into a m4b
+FILELIST=`find ./* -name '*.mp3' |sort -u|tr '\n' '|'| grep -o .*mp3`
+# echo -e \"concat:$FILELIST\"
+ffmpeg -i "concat:$FILELIST" -c:a aac -strict experimental -b:a 64k -f mp4 audiobook-out-$$.m4b
