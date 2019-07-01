@@ -1,4 +1,0 @@
-#!/usr/bin/env bash
-# This will split an mp3 file into 5 minute chunks (audiobooks etc..)
-name=$( echo $1|cut -d'.' -f1 )
-ffmpeg -i $name -f segment -segment_time 300 -c copy $name_Part_%03d.mp3
