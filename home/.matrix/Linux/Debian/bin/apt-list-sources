@@ -1,2 +1,2 @@
 #!/usr/bin/env bash
-apt-cache policy |grep http |awk '{print $2 $3}' |sort -u
+apt-cache policy |grep http |awk -v b=$BBLUE -v n=$NORMAL '{print $2 " " b$3n}' |sort -u

@@ -16,6 +16,12 @@ if [ -f /etc/bashrc ]; then
 fi
 
 ###########################
+# Get the bash colors and aliases and functions
+if [ -f "$HOME"/.bash_colors ]; then
+        . "$HOME"/.bash_colors
+fi
+
+###########################
 # Get the base aliases and functions
 if [ -f "$HOME"/.bashrc ]; then
         . "$HOME"/.bashrc

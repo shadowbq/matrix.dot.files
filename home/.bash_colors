@@ -1,0 +1,39 @@
+#############################
+# Color Definitions(non-exported) used for .matrix loader
+
+export BLACK='\033[0;30m'
+export RED='\033[0;31m'
+export GREEN='\033[0;32m'
+export BROWN='\033[0;33m'
+export NAVY='\033[0;34m'
+export PURPLE='\033[0;35m'
+export CYAN='\033[0;36m'
+export SILVER='\033[0;37m'
+export GRAY='\033[1;30m'
+
+export PINK='\033[1;31m'
+export LIME='\033[1;32m'
+export YELLOW='\033[1;33m'
+export BLUE='\033[1;34m'
+export MAGENTA='\033[1;35m'
+export BCYAN='\033[1;36m'
+export WHITE='\033[1;37m'
+
+export NORMAL='\033[00m'
+
+export TERM=xterm-256color
+
+## Hack Job on GREP OPTIONS (I've excluded upstream GREP_OPTIONS
+export GREP_OPTIONS='--color=auto'
+alias grep="`which grep` $GREP_OPTIONS"
+unset GREP_OPTIONS
+
+export GREP_COLOR='1;32'
+export CLICOLOR=1
+
+function showcolors() {
+	echo -e "$BLACK BLACK $RED RED $GREEN GREEN $BROWN BROWN"
+	echo -e "$NAVY NAVY $PURPLE PURPLE $CYAN CYAN $SILVER SILVER"
+	echo -e "$GRAY GRAY $PINK PINK $LIME LIME $YELLOW YELLOW $BLUE BLUE"
+	echo -e "$MAGENTA MAGENTA $BCYAN BCYAN $WHITE WHITE$NC"
+}
