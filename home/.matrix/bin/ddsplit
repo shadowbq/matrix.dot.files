@@ -3,6 +3,7 @@
 PROGRAM="ddsplit" # Quick and dirty command to backup / restore disk / data using dd and compress & split backup files
 AUTHOR="(L) 2016 by Orsiris de Jong"
 CONTACT="http://www.netpower.fr - ozy@netpower.fr"
+REFERENCEDOCS="https://github.com/deajan/linuxscripts/blob/master/ddsplit.sh"
 PROGRAM_VERSION=0.1-stable
 PROGRAM_BUILD=2016032302
 
