@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+if command -v python3 &>/dev/null; then
+    if command -v curl &>/dev/null; then
+       curl -s https://raw.githubusercontent.com/sivel/speedtest-cli/master/speedtest.py | python3 -
+    else
+       echo Curl is not installed
+       exit 1
+    fi
+else
+    echo Python 3 is not installed
+    exit 1
+fi
