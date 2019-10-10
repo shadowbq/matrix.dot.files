@@ -22,8 +22,9 @@ cd "$HOME"
 
 #
 ###########################
-# Proxy configs to be loaded
-if [ -n "$matrixproxy" ]; then
+# Proxy configs to be loaded if $matrix_proxy is set to true
+# $globalurl_proxy is used to set envs
+if [ -n "$matrix_proxy" ]; then
    source "$HOME"/.matrix/proxy/.bash_extension
 fi
 

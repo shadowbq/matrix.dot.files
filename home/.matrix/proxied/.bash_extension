@@ -1,5 +1,62 @@
-#export ftp_proxy=http://proxy.example.com/
-export https_proxy=http://proxy.example.com:8080
-export http_proxy=http://proxy.example.com:8080
+export globalurl_proxy="proxy.example.com:8080"
 
-export GIT_SSL_NO_VERIFY=true
+## wpad="http://wpad/wpad.dat"
+
+path_to_corkscrew=$(which corkscrew)
+if [ -x "$path_to_corkscrew" ]; then
+  echo "Corkscrew found."
+fi
+
+## curl_proxy = "/usr/bin/curl --connect-timeout 10 -s --proxy '' -I -L ${url}
+
+######## Bash functions ############
+
+# Set Proxy
+function proxy_set() {
+    export {http,https,ftp}_proxy="$globalurl_proxy"
+    export GIT_SSL_NO_VERIFY=true
+}
+
+# Unset Proxy
+function proxy_unset() {
+    unset {http,https,ftp}_proxy
+    export GIT_SSL_NO_VERIFY=false
+}
+
+function proxy_show() {
+    env | grep -i _proxy
+}
+
+<<COMMENT1
+# GNOME keeps its own proxy settings. This can handle PAC files, but still has the problem that it is system-wide
+
+## GNOME proxy settings
+
+$> gsettings list-recursively org.gnome.system.proxy
+org.gnome.system.proxy use-same-proxy true
+org.gnome.system.proxy mode 'none'
+org.gnome.system.proxy autoconfig-url ''
+org.gnome.system.proxy ignore-hosts ['localhost', '127.0.0.0/8', '::1']
+org.gnome.system.proxy.ftp host ''
+org.gnome.system.proxy.ftp port 0
+org.gnome.system.proxy.socks host ''
+org.gnome.system.proxy.socks port 0
+org.gnome.system.proxy.http host ''
+org.gnome.system.proxy.http port 8080
+org.gnome.system.proxy.http use-authentication false
+org.gnome.system.proxy.http authentication-password ''
+org.gnome.system.proxy.http authentication-user ''
+org.gnome.system.proxy.http enabled false
+org.gnome.system.proxy.https host ''
+org.gnome.system.proxy.https port 0
+$> gsettings get org.gnome.system.proxy.http host
+''
+COMMENT1
+
+<<COMMENT2
+nmcli con show RestonOffice |grep proxy
+proxy.method:                           auto
+proxy.browser-only:                     no
+proxy.pac-url:                          http://pacfile.itm.mcafee.com/proxy.pac
+proxy.pac-script:                       --
+COMMENT2
