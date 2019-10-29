@@ -6,6 +6,8 @@ if [[ $- != *i* ]] ; then
 	return
 fi
 
+export BASH_SILENCE_DEPRECATION_WARNING=1
+
 function osx {
   [[ `uname -s` == 'Darwin' ]]
 }
@@ -34,6 +36,7 @@ alias ldd='otool -L'
 alias libtoolize='glibtoolize'
 
 alias firefox='open -a Firefox.app'
+alias chrome='open -a Chrome.app'
 alias finder='open -a Finder.app'
 
 command -v brew >/dev/null 2>&1 || { echo >&2 "You should think about installing homebrew."; }
@@ -67,5 +70,5 @@ fi
 
 ##########################
 # Deal with Java
-export JAVA_HOME=`/usr/libexec/java_home -v 1.7`
+# export JAVA_HOME=`/usr/libexec/java_home -v 1.7`
 
