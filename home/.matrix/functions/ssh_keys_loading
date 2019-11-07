@@ -7,13 +7,14 @@ function load_ssh_keys {
       go_strict_ssh
     fi
   fi
-
+  
+  ssh-add >/dev/null 2>&1
   ssh-add -l >/dev/null 2>&1
 
   if [ $? -eq 0 ]; then
    echo -ne "${GREEN}Keys successfully imported.${NORMAL}\n"
   else
-   echo -ne "${RED}No Keys Imported.${NORMAL}\n"
+   echo -ne "${RED}No SSH Keys Imported.${NORMAL}\n"
   fi
 }
 
