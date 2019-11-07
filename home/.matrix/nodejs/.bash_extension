@@ -10,7 +10,7 @@ if [ $? -eq 1 ]; then
 else
   if [ "`type -t nvm`" == "function" ]; then
     nvm alias default node >/dev/null 2>&1
-    echo -e "${GREEN}NVM is present => ${NORMAL} "
+    echo -ne "${GREEN}NVM is present => ${NORMAL} "
     echo -e " (`nvm use node | tr -d '\n'`)"
     #echo -ne "${GREEN}NVM is present => ${NORMAL} "
     #nvm current | tr -d "\n"

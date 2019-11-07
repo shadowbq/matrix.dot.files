@@ -14,10 +14,10 @@ function coreutil_check {
       foo=`ls -la $gsort |grep -o "$gsort.*"`
       gsortver=`gsort --version|head -1|grep -Eo '[0-9]+[\.][0-9]+'|head -1`
       echo -e "${YELLOW}Modern GNU coreutils sideloaded: $foo ${NORMAL}"
-      echo 'GSort version: ' $gsortver
+      # echo 'GSort version: ' $gsortver
     else
       echo -e "${RED}GPLV2 gnu-coreutils found, consider using modern gplv3 gnu-coreutils > 6.0${NORMAL}"
-      echo 'Sort version: ' $sortver
+      # echo 'Sort version: ' $sortver
     fi
 
   fi
