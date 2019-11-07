@@ -8,7 +8,7 @@
 function check_powerline_requirements {
   command -v socat >/dev/null 2>&1 || { echo -e >&2 "${YELLOW}[POWERLINE WARNING] No socat found.${NORMAL}"; }
   command -v pip >/dev/null 2>&1 || { echo -e >&2 "${YELLOW}[POWERLINE WARNING] No python pip found.${NORMAL}"; }
-  pip show psutil -q >/dev/null 2>&1 || { echo -e >&2 "${YELLOW}[POWERLINE WARNING] No python pip psutils Found.${NORMAL}"; }
+  pip show psutil -q >/dev/null 2>&1 || { echo -e >&2 "${YELLOW}[POWERLINE WARNING] No python pip psutil Found.${NORMAL}"; }
 }
 
 function check_powerline {

@@ -22,11 +22,11 @@ else
 	if [ "`type -t rvm`" == "function" ]; then
 	  echo -ne "${GREEN}RVM is present => ${NORMAL} "
 	  rvm gemdir
-    ruby --version
+	  ruby --version
 	  bundler_check
 	else
 	  echo -e "${YELLOW}RVM is not present. ${NORMAL}"
-    ruby --version
+	  ruby --version
 	  bundler_check
 	fi
 fi

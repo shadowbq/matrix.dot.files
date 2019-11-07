@@ -10,12 +10,16 @@ call vundle#begin()
 " let Vundle manage Vundle, required
 Plugin 'VundleVim/Vundle.vim'
 Plugin 'scrooloose/nerdtree'
+Plugin 'scrooloose/syntastic'
 Plugin 'vim-airline/vim-airline'
 Plugin 'vim-airline/vim-airline-themes'
+Plugin 'elzr/vim-json'
+Plugin 'nathanaelkane/vim-indent-guides'
 Plugin 'chriskempson/base16-vim'
 Plugin 'tpope/vim-fugitive'
 Plugin 'godlygeek/tabular'
 Plugin 'plasticboy/vim-markdown'
+Plugin 'towolf/vim-helm'
 
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
@@ -88,3 +92,23 @@ let g:airline_theme='base16'
 " Markdown Options
 let g:vim_markdown_folding_disabled = 1
 let g:vim_markdown_toc_autofit = 1
+
+" NerdTree Options
+let NERDTreeShowHidden = 1
+
+" Show IndentGuides
+let g:indent_guides_enable_on_vim_startup = 1
+
+" Syntastic Sane Options
+set statusline+=%#warningmsg#
+set statusline+=%{SyntasticStatuslineFlag()}
+set statusline+=%*
+
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_auto_loc_list = 1
+let g:syntastic_loc_list_height = 5
+let g:syntastic_check_on_open = 1
+let g:syntastic_check_on_wq = 0
+
+" syntastic_[filetype]_[subchecker]_args
+let g:syntastic_python_flake8_args = "--ignore=E501"

@@ -2,8 +2,8 @@
 # past this point for scp and rcp, and it's important to refrain from
 # outputting anything in those cases.
 if [[ $- != *i* ]] ; then
-	# Shell is non-interactive.  Be done now!
-	return
+    # Shell is non-interactive.  Be done now!
+    return
 fi
 
 # Prompt
@@ -18,10 +18,10 @@ PS1="${PSNORMAL}[\u${PSBBLUE}@\h${PSNORMAL}]${PSBLUE}(${PSNORMAL}\w${PSBLUE})${P
 # X Terminal titles
 case "$TERM" in
 xterm*|rxvt*)
-	PROMPT_COMMAND='echo -ne "\033]0;${USER}@${HOSTNAME}: ${PWD}\007"'
-	;;
+    PROMPT_COMMAND='echo -ne "\033]0;${USER}@${HOSTNAME}: ${PWD}\007"'
+    ;;
 *)
-	;;
+    ;;
 esac
 
 

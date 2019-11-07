@@ -5,12 +5,12 @@ from pyftpdlib import servers
 from pyftpdlib.handlers import FTPHandler
 from pyftpdlib.authorizers import DummyAuthorizer
 
+
 def main():
 
     if os.geteuid() != 0:
-        print "Please run as root, but remember this is a hack job.. to run on port 21"
+        print("Please run as root, but remember this is a hack job.. to run on port 21")
         sys.exit()
-
     authorizer = DummyAuthorizer()
     authorizer.add_anonymous(os.getcwd())
 
@@ -27,6 +27,7 @@ def main():
     server.max_cons_per_ip = 10
 
     server.serve_forever()
+
 
 if __name__ == '__main__':
     main()
