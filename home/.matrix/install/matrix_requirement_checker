@@ -79,10 +79,32 @@ function check_first_mr {
     command -v mr >/dev/null 2>&1
  
     if [ $? -eq 1 ]; then
-        echo -e "${YELLOW} MR 'multiple repo' git bundle manager is missing. Install 'mr'. ${NORMAL}"
+        echo -e "${RED}[WARNING] MR 'multiple repo' git bundle manager is missing. Install 'mr'. ${NORMAL}"
         echo -e "${YELLOW} Run: 'cd ~ && mr -j5 update ' ${NORMAL}"
     fi
 }  
+
+function check_first_tmux {
+    command -v tmux >/dev/null 2>&1
+ 
+    if [ $? -eq 1 ]; then
+        echo -e "${RED}[WARNING] tmux is missing, install it (brew,apt,etc). ${NORMAL}" 
+    else 
+        echo -en "${GREEN}tmux found.. ${NORMAL}"
+    fi
+
+    command -v reattach-to-user-namespace >/dev/null 2>&1
+    if [ $? -eq 1 ]; then
+        echo -e "${YELLOW}[WARNING] tmux has a dependency 'reattach-to-user-namespace' missing, install it (brew,apt,etc). ${NORMAL}" 
+    fi
+        
+    if [ -d "$HOME"/.tmux/plugins/tpm ]; then
+        echo -e "${GREEN}Found tmux TPM${NORMAL}"
+    else
+        echo -e "${YELLOW}Install TPM and the plugins 'git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm'${NORMAL}"
+    fi
+
+}
 
 echo -e "${CYAN}Checking ENV${NORMAL}"
 check_first_ruby
@@ -91,4 +113,5 @@ check_first_nodejs
 check_first_bash_copmpletion
 check_first_vim
 check_first_mr
+check_first_tmux
 echo -e "${CYAN}Completed ENV check ${NORMAL}"
