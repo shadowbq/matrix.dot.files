@@ -8,7 +8,8 @@ Powerline has a number of configurations:
 
 There are samples like this
 
-`https://github.com/sbernheim4/dotfiles/blob/master/.tmux.conf`
+`https://github.com/sbernheim4/dotfiles/blob/master/.tmux.conf`  
+`https://github.com/powerline/powerline/blob/43c1707206781859aee05090b6e32d6e54e73649/powerline/bindings/tmux/powerline-base.conf`  
 
 Its gotten more confusing on where to inject tmux interpolation into powerline configs
 
