@@ -23,3 +23,6 @@ sudo tmutil disablelocal
 
 # Show the ~/Library folder
 chflags nohidden ~/Library
+
+
+# More https://github.com/eddiemonge/DOT.files/blob/master/.osx

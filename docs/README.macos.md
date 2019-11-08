@@ -1,3 +1,10 @@
+# OSX / macOS Hacks
+
+`/.matrix/Darwin/bin/osx_tweak`
+
+
+## Disabling Dashboards 
+
 With just a couple of simple terminal commands you can be rid of the Dashboard forever. To get started fire up the Terminal app and type the following into the console.
 
     defaults write com.apple.dashboard mcx-disabled -boolean YES
