@@ -41,20 +41,22 @@ alias chrome='open -a Chrome.app'
 alias finder='open -a Finder.app'
 alias play='open -a VLC.app'
 
-command -v brew >/dev/null 2>&1 || { echo >&2 "You should think about installing homebrew."; }
-command -v brew >/dev/null 2>&1 
-if [ $? -eq 0 ]; then
-  command -v gsort >/dev/null 2>&1 
+if [ -n "$matrix_skip_checks" ]; then 
+  command -v brew >/dev/null 2>&1 || { echo >&2 "You should think about installing homebrew."; }
+  command -v brew >/dev/null 2>&1 
   if [ $? -eq 0 ]; then
-    export BREWCORE=true
-  else
-    echo "Brew found - GNU Coreutils missing. Install as 'brew install coreutils'"
+    command -v gsort >/dev/null 2>&1 
+    if [ $? -eq 0 ]; then
+      export BREWCORE=true
+    else
+      echo "Brew found - GNU Coreutils missing. Install as 'brew install coreutils'"
+    fi
   fi
 fi
 
 ssh-add -l >/dev/null 2>&1
 if [ $? -eq 1 ]; then
-  if [ $(command -v keychain) ]; then 
+  if [ "$(command -v keychain)" ]; then 
     eval `keychain --inherit any --agents ssh --eval id_dsa` || exit 1
   fi
 fi
