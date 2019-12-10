@@ -1,0 +1,6 @@
+#!/bin/bash
+# https://superuser.com/a/354662
+
+for item in ./*.mp4; do
+  ffmpeg -i "$item" -q:a 0 -map a "${item[@]/%mp4/mp3}"
+done
