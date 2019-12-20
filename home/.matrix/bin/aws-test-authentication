@@ -1,0 +1,40 @@
+#!/usr/bin/env bash
+# To use in a shell (to automatically unset AWS_PROFILE): 
+# alias aws-login-status='eval $(aws-test-authentication)'
+
+# Note: eval in the example alias will not propagate the exit code
+# https://unix.stackexchange.com/q/414740/104660
+
+# You might want to use https://direnv.net/ to call when entering a directory and on those prompts
+# Latency is a b!+ch 0.513s maybe a periodic check.. somehow
+
+# If its been over 200 seconds check AWS SaaS creds
+
+if [[ -n "${AWS_PROFILE}" ]]; then
+    if [ "$1" = '--raw' ]; then
+        aws sts get-caller-identity
+    else
+        epoch=$(date +%s)
+        if [[ -n "${AWS_EPOCH}" ]]; then
+            if (( AWS_EPOCH+60 < epoch )); then
+                aws sts get-caller-identity > /dev/null 2>&1
+                retVal=$?
+                #echo "#checked aws sts (($AWS_EPOCH+60))"
+            else 
+                retVal=0
+            fi
+        else 
+            aws sts get-caller-identity > /dev/null 2>&1
+            retVal=$?
+        fi     
+        if [ $retVal -eq 255 ]; then 
+            echo "unset -v AWS_PROFILE && unset -v AWS_EPOCH"; exit 255
+        fi
+        if [ $retVal -eq 1 ]; then 
+            echo "unset -v AWS_PROFILE && unset -v AWS_EPOCH"; exit 255
+        fi
+        echo "export AWS_EPOCH='$epoch'"; exit 0
+    fi
+else 
+  exit 255
+fi
