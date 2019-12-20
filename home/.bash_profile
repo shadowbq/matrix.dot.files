@@ -38,6 +38,10 @@ else
   echo -e "${RED}matrix/.bash_extension not found for ${bash_os}.${NORMAL}"
 fi
 
+if [ -f "$HOME"/.matrix/${bash_os}/.bash_aliases ]; then
+  . "$HOME"/.matrix/${bash_os}/.bash_aliases
+fi
+
 if [ -d "$HOME"/.matrix/${bash_os}/bin ]; then
   PATH=$PATH:"$HOME"/.matrix/${bash_os}/bin
   export PATH

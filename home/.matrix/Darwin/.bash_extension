@@ -30,17 +30,6 @@ xterm*|rxvt*)
   ;;
 esac
 
-
-alias ls='ls -G'
-alias ldd='otool -L'
-alias libtoolize='glibtoolize'
-
-alias code='open -a "Visual Studio Code.app"'
-alias firefox='open -a Firefox.app'
-alias chrome='open -a Chrome.app'
-alias finder='open -a Finder.app'
-alias play='open -a VLC.app'
-
 if [ -n "$matrix_skip_checks" ]; then 
   command -v brew >/dev/null 2>&1 || { echo >&2 "You should think about installing homebrew."; }
   command -v brew >/dev/null 2>&1 
@@ -71,8 +60,6 @@ if [ -f "/usr/local/bin/mate" ]; then
        export EDITOR="/usr/local/bin/mate -w" 
 fi
 
-
 ##########################
 # Deal with Java
 # export JAVA_HOME=`/usr/libexec/java_home -v 1.7`
-
