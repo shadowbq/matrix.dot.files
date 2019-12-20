@@ -1,7 +1,16 @@
 {
+  "common": {
+    "term_truecolor": false
+  },
   "ext": {
     "shell": {
-       "theme": "default_leftonly"
+      "colorscheme": "default",
+      "theme": "matrix",
+      "local_themes": {
+              "continuation": "continuation",
+              "select": "select"
+      }
+       
      }
   }
 }
