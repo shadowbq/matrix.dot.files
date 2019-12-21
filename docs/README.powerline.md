@@ -8,6 +8,10 @@ Enabled by Default in .matrix: `home/.matrix/powerline/.bash_extension`
 
 **`check_powerline` is called which also enables it**
 
+## Install extras
+
+https://github.com/jaspernbrouwer/powerline-gitstatus
+
 ## Loaded?
 
 Is powerline loaded in bash?
