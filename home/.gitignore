@@ -50,6 +50,8 @@
 .ssh/github*
 .ssh/known*
 .ssh/cork*
+.ssh/*pem
+.ssh/*txt
 .Spotlight-V100
 .subversion
 .TemporaryItems
