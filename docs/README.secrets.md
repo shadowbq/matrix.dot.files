@@ -92,7 +92,14 @@ Passphrase:
 $> env |grep -i SECRET_TOKEN
 SECRET_TOKEN=abcdefg12345678ZYXWV
 ```
-## LUKS / Container
+
+## ENV from KEYCHAIN
+
+sorah/envchain - https://github.com/sorah/envchain
+
+envchain - set environment variables with macOS keychain or D-Bus secret service
+
+## Bad: LUKS / Container
 
 Mount it and unmount it into a FS. 
 
