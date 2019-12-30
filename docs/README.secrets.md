@@ -103,7 +103,7 @@ Source it from `.bash_local`, and in linux give it SELINUX labels.
 
 ```
 $> ls -lZ .bash_local
--rw-------. 1 scottmacgregor  root system_u:object_r:auditd_log_t 60 Dec 27 14:53 .bash_local
+-rw-------. 1 scottmacgregor  root system_u:object_r:secrets_log_t 60 Dec 27 14:53 .bash_local
 ```
 
 ## Not an Option
