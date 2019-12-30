@@ -79,6 +79,10 @@ Note (This was seen as require at least on **macos**):
 
 `export GPG_TTY=$(tty)` to my `~/.bashrc`
 
+*** PLEASE DO NOT DO THIS.. To kick the can *** 
+
+<s>` gpg --no-tty --batch --passphrase "$GPG_PASSPHRASE" --pinentry-mode loopback --output secrets.env --decrypt ~/.bash_secrets `</s>
+
 ### Example:
 ```
 $> env |grep -i SECRET_TOKEN
