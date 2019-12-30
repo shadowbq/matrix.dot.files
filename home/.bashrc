@@ -18,6 +18,8 @@ fi
 # Setting up Defaults for .matrix prior to functions / OS calls
 # (exist as .matrix extensions) GREP MATCHERS: nvm.sh rvm pythonenv
 
+export GPG_TTY=$(tty)
+
 export EDITOR="vi"
 export PAGER=less
 
