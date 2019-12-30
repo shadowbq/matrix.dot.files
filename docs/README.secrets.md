@@ -44,7 +44,7 @@ $> eval $(cat ~/.bash_encrypted |base64 -d |gpg --decrypt 2> /dev/null)
 
 You will need a pin entry application
 
-Example: `apt|brew|yum install pinentry-tty`
+Example: `apt|brew|yum install pinentry-tty` *[Install Help](https://superuser.com/questions/520980/how-to-force-gpg-to-use-console-mode-pinentry-to-prompt-for-passwords)
 
 ```shell
 ls -la /usr/bin/pinentry*
