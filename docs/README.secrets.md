@@ -102,7 +102,8 @@ Source it from `.bash_local`, and in linux give it SELINUX labels.
 (http://blog.siphos.be/2015/07/restricting-even-root-access-to-a-folder/)
 
 ```
--rw-------@ 1 scottmacgregor  root  60 Dec 27 14:53 .bash_local
+$> ls -lZ .bash_local
+-rw-------. 1 scottmacgregor  root system_u:object_r:auditd_log_t 60 Dec 27 14:53 .bash_local
 ```
 
 ## Not an Option
