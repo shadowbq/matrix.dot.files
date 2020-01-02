@@ -16,6 +16,16 @@ if [ -f /etc/bashrc ]; then
 fi
 
 ###########################
+# Source user config override definitions specific to one system
+# 
+# NOTE: Configure your .matrix in the .matrix_config file. **
+#
+#- ! Changes to this file are NOT sent upstream.!
+if [ -f "$HOME"/.matrix_config ]; then
+        . "$HOME"/.matrix_config
+fi
+
+###########################
 # Get the bash colors and aliases and functions
 if [ -f "$HOME"/.bash_colors ]; then
         . "$HOME"/.bash_colors
@@ -32,18 +42,18 @@ fi
 
 bash_os="`uname -s`"
 
-if [ -f "$HOME"/.matrix/${bash_os}/.bash_extension ]; then
-  . "$HOME"/.matrix/${bash_os}/.bash_extension
+if [ -f "$HOME"/.matrix/os/${bash_os}/.bash_extension ]; then
+  . "$HOME"/.matrix/os/${bash_os}/.bash_extension
 else
-  echo -e "${RED}matrix/.bash_extension not found for ${bash_os}.${NORMAL}"
+  echo -e "${RED}matrix .bash_extension not found for ${bash_os}.${NORMAL}"
 fi
 
-if [ -f "$HOME"/.matrix/${bash_os}/.bash_aliases ]; then
-  . "$HOME"/.matrix/${bash_os}/.bash_aliases
+if [ -f "$HOME"/.matrix/os/${bash_os}/.bash_aliases ]; then
+  . "$HOME"/.matrix/os/${bash_os}/.bash_aliases
 fi
 
-if [ -d "$HOME"/.matrix/${bash_os}/bin ]; then
-  PATH=$PATH:"$HOME"/.matrix/${bash_os}/bin
+if [ -d "$HOME"/.matrix/os/${bash_os}/bin ]; then
+  PATH=$PATH:"$HOME"/.matrix/os/${bash_os}/bin
   export PATH
 fi
 

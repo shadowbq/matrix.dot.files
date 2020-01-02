@@ -33,7 +33,7 @@ function check_first_ruby {
 }
 
 function check_first_powerline {
-  if [[ -n $MATRIX_POWERLINE ]]; then
+  if [[ -n $matrix_powerline ]]; then
     command -v powerline-daemon >/dev/null 2>&1
     if [ $? -eq 0 ]; then
         command -v socat >/dev/null 2>&1 || { echo -e >&2 "${YELLOW}[POWERLINE WARNING] No socat found.${NORMAL}"; }

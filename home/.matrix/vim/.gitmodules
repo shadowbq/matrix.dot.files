@@ -1,7 +1,0 @@
-[submodule ".vim-pathogen"]
-	path = .vim-pathogen
-	url = git://github.com/tpope/vim-pathogen.git
-
-[submodule ".vim_colors"]
-	path = .vim-colors
-	url = git://github.com/shadowbq/vim_colors.git

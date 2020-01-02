@@ -1,15 +1,5 @@
 ##########################
-# Matrix Configuration to load additional extensions into bash
-
-###########################
-# History Control
-HISTCONTROL=ignoredups:ignorespace
-HISTFILESIZE=5000
-HISTSIZE=2000
-HISTFILE="$HOME"/.bash_history
-
-## Heavy handed shared terminal bash history
-# export PROMPT_COMMAND="history -a; history -c; history -r; $PROMPT_COMMAND"
+# Matrix Master Configuration to load additional extensions into bash
 
 # See local libreadline for keymaps
 #~/.inputrc
@@ -20,44 +10,45 @@ HISTFILE="$HOME"/.bash_history
 callback_pwd=`pwd`
 cd "$HOME"
 
-#
 ###########################
-# Proxy configs to be loaded if $matrix_proxy is set to true
+# Proxy configs 
 # $globalurl_proxy is used to set envs
-if [ -n "$matrix_proxy" ]; then
-   source "$HOME"/.matrix/proxy/.bash_extension
-fi
+[ "$matrix_ext_proxy" == true ] && source "$HOME"/.matrix/extentions/proxied/.bash_extension
 
+###########################
+# Proxy configs 
 source "$HOME"/.matrix/functions/.bash_extension
-source "$HOME"/.matrix/python/.bash_extension
-source "$HOME"/.matrix/ruby/.bash_extension
-source "$HOME"/.matrix/nodejs/.bash_extension
-source "$HOME"/.matrix/go/.bash_extension
-source "$HOME"/.matrix/completions/.bash_extension
-source "$HOME"/.matrix/powerline/.bash_extension
 
-# source ./.matrix/opt/something
+###########################
+# Matrix Plugins configs 
+[ "$matrix_ext_history" == true ] && source "$HOME"/.matrix/extentions/history/.bash_extension
+[ "$matrix_ext_python" == true ] && source "$HOME"/.matrix/extentions/python/.bash_extension
+[ "$matrix_ext_ruby" == true ] && source "$HOME"/.matrix/extentions/ruby/.bash_extension
+[ "$matrix_ext_nodejs" == true ] && source "$HOME"/.matrix/extentions/nodejs/.bash_extension
+[ "$matrix_ext_go" == true ] && source "$HOME"/.matrix/extentions/go/.bash_extension
+[ "$matrix_ext_completions" == true ] && source "$HOME"/.matrix/extentions/completions/.bash_extension
+[ "$matrix_ext_powerline" == true ] && source "$HOME"/.matrix/extentions/powerline/.bash_extension
+[ "$matrix_ext_gcc" == true ] && source "$HOME"/.matrix/extentions/gcc/.bash_extension
+[ "$matrix_ext_docker" == true ] && source "$HOME"/.matrix/extentions/docker/.bash_extension
 
-#########################
-# Enable powerline bash shell
-# define it to use it.
-MATRIX_POWERLINE="true"
 
 ##########################
 # Final .matrix Commands to be executed
 # Defined commonly in .matrix/functions
 
-load_ssh_keys
+[ "$matrix_load_ssh_keys" == true  ] && load_ssh_keys
 symlink_alts
 xpull_assign
 coreutil_check
 mr_check
-check_powerline
+[ "$matrix_powerline" == true ] && check_powerline
 
 ##########################
 # Check for .matrix consistency
-check_matrix_online
-check_matrix_local
+if [ "$matrix_consistency" == true ]; then
+    check_matrix_online
+    check_matrix_local
+fi
 
 ##########################
 # Additional non-global Configs/Function calls can go into ~/.bash_local

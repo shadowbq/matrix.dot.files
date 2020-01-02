@@ -1,6 +1,7 @@
-export globalurl_proxy="proxy.example.com:8080"
-
-## wpad="http://wpad/wpad.dat"
+## Proxied
+# A matrix global proxy configuration tool
+# version 0.0.1-alpha 
+# wpad="http://wpad/wpad.dat"
 
 path_to_corkscrew=$(which corkscrew)
 if [ -x "$path_to_corkscrew" ]; then

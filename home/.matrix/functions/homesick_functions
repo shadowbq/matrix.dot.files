@@ -31,6 +31,6 @@ function check_matrix_local {
       echo -e "$matrix_status"
     fi
   else 
-    echo -e "${YELLOW} unable to validate .matrix local (missing:homesick/git)${NORMAL}"
+    echo -e "${YELLOW} unable to validate .matrix local (missing:homesick/git) (possible/rvm failure)${NORMAL}"
   fi
 }

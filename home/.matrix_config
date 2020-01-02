@@ -1,0 +1,35 @@
+##########################
+# Matrix User Configuration to load additional extensions into bash
+#
+# Primary User configuration file.
+#
+# Enable .matrix extensions
+# Remember these are being set to a command /usr/bin/true || /usr/bin/false not strings. DO NOT QUOTE false.
+
+export matrix_ext_python=true
+export matrix_ext_ruby=true 
+export matrix_ext_nodejs=true
+export matrix_ext_go=true
+export matrix_ext_completion=true
+export matrix_ext_powerline=true
+export matrix_ext_docker=false
+export matrix_ext_gcc=false
+
+# Enhanced History support
+export matrix_ext_history=true
+
+# Enable checks
+export matrix_checks=false
+
+# Enable Proxy Support
+export matrix_ext_proxy=false
+# set the globalUrl_proxy to your proxy server. 
+# export globalurl_proxy="proxy.example.com:8080"
+
+
+# Enable Default functions
+export matrix_load_ssh_keys=true
+export matrix_load_secrets=false
+
+# Ensure dot.matrix is current
+export matrix_consistency=true

@@ -22,13 +22,9 @@ export GPG_TTY=$(tty)
 
 export EDITOR="vi"
 export PAGER=less
-
 export VISUAL="$editor"
 
 export STRICT_SSH=false
-
-export HISTSIZE=1000000
-export HISTIGNORE="clear:bg:fg:cd:cd -:exit:date:w:* --help"
 
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
