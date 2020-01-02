@@ -41,7 +41,7 @@ symlink_alts
 xpull_assign
 coreutil_check
 mr_check
-[ "$matrix_powerline" == true ] && check_powerline
+[ "$matrix_ext_powerline" == true ] && check_powerline
 
 ##########################
 # Check for .matrix consistency
