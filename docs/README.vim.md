@@ -35,9 +35,13 @@ Base16 Theme is used by airline.
 
 ## Vim Colors
 
-This VIMRC uses twilight 
+The .VIMRC uses `colorscheme zenburn`
 
-* https://github.com/shadowbq/vim_colors
+You can copy a scheme file (whateva.vim) into the `.vim\color\` folder and load it with the proper name in the `.vimrc`
+
+### Changing the Scheme
+
+Addition Color Schemes: https://github.com/shadowbq/vim_colors
 
 ## VIM shortcuts to remember
 
