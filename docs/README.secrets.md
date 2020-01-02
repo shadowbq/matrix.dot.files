@@ -62,6 +62,13 @@ A pure cli experience on servers
 echo "pinentry-program /usr/bin/pinentry-tty" >> ~/.gnupg/gpg-agent.conf
 ```
 
+For *debian/ubuntu* 
+
+```
+sudo update-alternatives --config pinentry
+gpg-connect-agent reloadagent /bye
+```
+
 For *macos/OSX* you can use a GUI/popup which also works with `keychain`
 
 ```
@@ -95,6 +102,52 @@ created 2019-12-28 (main key ID 0123456789ABCDEF).
 Passphrase:
 $> env |grep -i SECRET_TOKEN
 SECRET_TOKEN=abcdefg12345678ZYXWV
+```
+
+### Working with your GPG Keys in more than one location.
+
+GPG: Extract private key and import on different machine
+Identify your private key by running `gpg --list-secret-keys`. 
+You need the ID of your private key (second column)
+
+
+Run this command to export your key: `gpg --export-secret-keys $ID > ~/.ssh/my-gpg-private-key.asc`.
+Copy the key to the other machine ( scp is your friend)
+
+`scp ~/.ssh/my-gpg-private-key.asc target:~/.ssh/.`
+
+To import the key on the *target-server*, run `gpg --import ~/.ssh/my-gpg-private-key.asc`.
+
+#### Ensure they are now trusted
+
+Ensure the keys are correct by observing the ID with LONG format:
+
+`gpg --keyid-format 0xLONG -k`
+
+Everything showed up as normal **except** for the uid which now reads `[unknown]`:
+
+```
+uid [ unknown ] User < user@useremail.com >
+```
+
+Bump that trust, because its yours!
+
+```
+$> gpg --edit-key user@useremail.com
+gpg> trust
+
+Please decide how far you trust this user to correctly verify other users' keys
+(by looking at passports, checking fingerprints from different sources, etc.)
+
+  1 = I don't know or won't say
+  2 = I do NOT trust
+  3 = I trust marginally
+  4 = I trust fully
+  5 = I trust ultimately
+  m = back to the main menu
+
+Your decision? 5
+gpg> save
 ```
 
 ## ENV from KEYCHAIN
