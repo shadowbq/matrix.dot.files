@@ -4,6 +4,10 @@ This repo uses VUNDLE to inject VIM plugins
 
 * https://github.com/gmarik/vundle
 
+When you install a new shell for matrix it will ask to install from command line: `vim +PluginInstall +qall`
+
+This is checked in `check_matrix_dependencies func:check_first_vim`
+
 ### Vundle Plugin List
 ```
 Plugin 'VundleVim/Vundle.vim'
