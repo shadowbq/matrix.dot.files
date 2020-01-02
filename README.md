@@ -38,6 +38,35 @@ Show the available castles:
 homesick list
 ```
 
+## Configuration
+
+`.matrix_config` in your home directory is where your personal changes should go.
+
+You can avoid error on **matrix local consistency** checks by adding this git nugget.
+
+```shell
+$> git update-index --skip-worktree home/.matrix_config
+$> git ls-files -v . |grep ^S
+S home/.matrix_config
+```
+
+Local files can be added to a singular system for individual enhancement.
+
+```shell
+.bash_local
+.bash_aliases
+```
+
+Secure files like these are ignored from the repo in the `.gitignore`
+
+```shell
+.secrets
+.bash_encrypted
+.ssh/*.pem
+.ssh/*.key
+.ssh/id*
+```
+
 ## Dependencies
 
 The Matrix has a few dependencies if you are going to use it.
@@ -89,13 +118,6 @@ matrixdirectory holds all additional plugins
 ```shell
 .bashrc
 .bash_logout
-```
-
-Base cross platform bash files (defaults in .bashrc)
-
-```shell
-.bash_local
-.secrets
 ```
 
 Local files for ENV changes that are excluded from unified profile (SECRETS)
