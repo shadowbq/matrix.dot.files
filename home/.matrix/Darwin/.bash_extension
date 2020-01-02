@@ -32,16 +32,28 @@ esac
 
 if [ -n "$matrix_skip_checks" ]; then 
   command -v brew >/dev/null 2>&1 || { echo >&2 "You should think about installing homebrew."; }
-  command -v brew >/dev/null 2>&1 
+fi 
+
+command -v brew >/dev/null 2>&1 
+if [ $? -eq 0 ]; then
+  command -v gsort >/dev/null 2>&1 
   if [ $? -eq 0 ]; then
-    command -v gsort >/dev/null 2>&1 
-    if [ $? -eq 0 ]; then
-      export BREWCORE=true
-    else
+    export BREWCORE=true
+  else
+    if [ -n "$matrix_skip_checks" ]; then 
       echo "Brew found - GNU Coreutils missing. Install as 'brew install coreutils'"
-    fi
+    fi  
+  fi
+  command -v gsed >/dev/null 2>&1 
+  if [ $? -eq 0 ]; then
+    alias sed='gsed'
+  else
+    if [ -n "$matrix_skip_checks" ]; then 
+      echo "Brew found - GNU-SED missing. Install as 'brew install gnu-sed'"
+    fi 
   fi
 fi
+
 
 ssh-add -l >/dev/null 2>&1
 if [ $? -eq 1 ]; then
