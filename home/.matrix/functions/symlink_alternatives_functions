@@ -1,7 +1,7 @@
 function symlink_alts {
   command -v vim > /dev/null 2>&1
   if [ $? -eq 0 ]; then
-    alias vi=`which vim`
+    alias vi=`command -v vim`
     if [ "$EDITOR" == "vi" ]; then
       export EDITOR="vim"
     fi

@@ -1,4 +1,5 @@
 #############################
+# shellcheck shell=bash
 # Load SSH KEYS
 
 function load_ssh_keys {
@@ -19,11 +20,15 @@ function load_ssh_keys {
 }
 
 # SSH Strict Modes correction script
-function go_strict_ssh {
+function strict_ssh_set {
   chmod 700 "$HOME"/.ssh/.
   touch "$HOME"/.ssh/authorized_keys
   touch "$HOME"/.ssh/known_hosts
   chmod 600 "$HOME"/.ssh/authorized_keys
   chmod 600 "$HOME"/.ssh/known_hosts
   chmod 600 "$HOME"/.ssh/config
+  own "$HOME"/.ssh/.
+  own "$HOME"/.ssh/config
+  own "$HOME"/.ssh/known_hosts
+  own "$HOME"/.ssh/authorized_keys 
 }

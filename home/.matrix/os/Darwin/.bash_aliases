@@ -9,6 +9,9 @@ fi
 alias ls='ls -G'
 alias ldd='otool -L'
 alias libtoolize='glibtoolize'
+alias users-list="dscacheutil -q user | grep -A 3 -B 2 -e uid:\ 5'[0-9][0-9]'"
+alias groups-list="dscl . list /Group | grep -v '^_'"
+alias users-list-all="dscl . list /Users | grep -v '^_'"
 
 alias code='open -a "Visual Studio Code.app"'
 alias firefox='open -a Firefox.app'

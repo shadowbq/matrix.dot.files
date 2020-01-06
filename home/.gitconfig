@@ -10,15 +10,15 @@
 	user = shadowbq
 	email = shadowbq@gmail.com
 [core]
-  excludesfile = ~/.gitignore_global
+	excludesfile = ~/.gitignore_global
 	editor = /usr/bin/vim
 [alias]
-  st = status
-  ci = commit
-  co = checkout
-  br = branch  
-  df = diff
-  tree = log --graph --pretty='format:%C(yellow)%h%Creset %s %Cgreen(%an)%Creset %Cred%d%Creset'
+	st = status
+	ci = commit
+	co = checkout
+	br = branch  
+	df = diff
+	tree = log --graph --pretty='format:%C(yellow)%h%Creset %s %Cgreen(%an)%Creset %Cred%d%Creset'
 	staged = diff --cached
 	diff-staged = diff --cached
 	unstage = reset HEAD --
@@ -28,9 +28,9 @@
 	out = log --oneline origin/master..HEAD
 	wdiff = diff --color-words
 	info = remote -v
-  unstash = stash pop
-  remove-tags = "!f() { git tag -l ${1} | xargs -I % echo \"git tag -d % && git push --delete origin %\" | sh; }; f"
-  markdown-toc = "git-md-toc-creator"
+	unstash = stash pop
+	remove-tags = "!f() { git tag -l ${1} | xargs -I % echo \"git tag -d % && git push --delete origin %\" | sh; }; f"
+	markdown-toc = "git-md-toc-creator"
 [http]
 	sslVerify = false
 [filter "lfs"]

@@ -1,22 +1,28 @@
+## ## ##
+# Check for GNU GPLV3 Coreutilities 
+# 
+## ## ##
+# shellcheck shell=bash
+## ## ##
 function check_coreutil {
 
   #bc usage: 0 if the relation is false and 1 if the relation is true.
 
-  sortver=`sort --version|head -1|grep -Eo '[0-9]+[\.][0-9]+'|head -1`
-  if [ `echo "$sortver > 6.0" | bc` -eq 1 ]; then
+  sortver=$(sort --version|head -1|grep -Eo '[0-9]+[\.][0-9]+'|head -1)
+  if [ $(echo "${sortver} > 6.0" | bc) -eq 1 ]; then
     export MODERNCOREUTILS=true
   else
     export MODERNCOREUTILS=false
     command -v gsort >/dev/null 2>&1
     if [ $? -eq 0 ]; then
       export BREWCORE=true
-      gsort=`which gsort`
-      foo=`ls -la $gsort |grep -o "$gsort.*"`
-      gsortver=`gsort --version|head -1|grep -Eo '[0-9]+[\.][0-9]+'|head -1`
-      echo -e "${YELLOW}GPLV3 gnu-coreutils: $foo ${NORMAL}"
+      gsort=$(command -v gsort)
+      foo=$(ls -la $gsort |grep -o "$gsort.*")
+      echo_warn "GPLV3 gnu-coreutils: $foo"
+      # gsortver=$(gsort --version|head -1|grep -Eo '[0-9]+[\.][0-9]+'|head -1)
       # echo 'GSort version: ' $gsortver
     else
-      echo -e "${RED}GPLV2 gnu-coreutils found, consider using modern gplv3 gnu-coreutils > 6.0${NORMAL}"
+      echo_err "GPLV2 gnu-coreutils found, consider using modern gplv3 gnu-coreutils > 6.0"
       # echo 'Sort version: ' $sortver
     fi
 

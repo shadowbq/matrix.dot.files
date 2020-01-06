@@ -1,18 +1,22 @@
+#
 # This script finds an available web tool that can download a file and print it to standard out
+#
+# shellcheck shell=bash
+#
 
 function xpull_assign {
 
-  if [ -x "`which wget`" ]; then
+  if [ -x "$(command -v wget)" ]; then
     XPULL_TOOL='wget --no-check-certificate -O -' 
     XPULL_TOOL_SILENT='wget --no-check-certificate -q -O -' 
-  elif [ -x "`which curl`" ]; then
+  elif [ -x "$(command -v curl)" ]; then
     XPULL_TOOL='curl -L -k' 
     XPULL_TOOL_SILENT='curl -L -k -s' 
-  elif [ -x "`which fetch`" ]; then
+  elif [ -x "$(command -v fetch)" ]; then
     XPULL_TOOL='fetch -a -o -' 
     XPULL_TOOL_SILENT='fetch -a -q -o -' 
   else
-    echo "Error. Could not find a compatable xpull tool"
+    echo_err "Error. Could not find a compatable xpull tool"
   fi
 
   export XPULL_TOOL

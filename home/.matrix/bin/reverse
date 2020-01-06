@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-path_to_rev=$(which rev)
+path_to_rev=$(command -v rev)
 if test -x "$path_to_rev"; then
   rev
 else  

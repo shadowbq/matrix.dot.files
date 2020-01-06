@@ -3,7 +3,10 @@ function check_mr {
 	command -v mr >/dev/null 2>&1
  
 	if [ $? -eq 1 ]; then
-	   echo_warn "${YELLOW} MR git bundle manager is missing. Install 'mr'. ${NORMAL}"
-	   echo_warn "${YELLOW} Run: 'cd ~ && mr -j5 update ' ${NORMAL}"
+	   echo_warn " MR git bundle manager is missing. Install 'mr'. "
+	   echo_warn " Run: 'cd ~ && mr -j5 update ' "
 	fi
 }  
+
+# Search for INI value and replace it
+# grep -q '^option' file && sed -i 's/^option.*/option=value/' file || echo 'option=value' >> file

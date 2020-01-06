@@ -2,15 +2,13 @@
 # A matrix global proxy configuration tool
 # version 0.0.1-alpha 
 ## ## ## ## 
-#
+# Set your globalurl_proxy in the `.matrix_config`
 # globalurl_proxy = "proxyUsername:proxyPassword@proxy.server.com:port"
 #
 ## ## ## ## 
 #
-# TODO: Need a function to modify curlrc inplace with sed (insecure, proxy, and proxytunnel)
-# TODO: Need a function to run `git proxyclear`
+# README: docs/README.proxied.md
 #
-# TODO: handle wpad="http://wpad/wpad.dat"
 ## ## ## ##
 #
 # Setting http.<url>.sslVerify to false may help you quickly get going if 
@@ -19,41 +17,56 @@
 # specify it with either http.sslCAInfo or http.sslCAPath.
 # 
 
-echo_warn "Proxy Configuration loading.."
-echo_warn "$globalurl_proxy"
+if [  -z "$globalurl_proxy" ]; then 
+    echo_warn "Proxy Configuration loading.."
+    echo_warn "$globalurl_proxy"
 
-path_to_corkscrew=$(which corkscrew)
-if [ -x "$path_to_corkscrew" ]; then
-  echo_notify "Corkscrew found."
-fi
+    path_to_corkscrew=$(command -v corkscrew)
+    if [ -x "$path_to_corkscrew" ]; then
+        echo_notify "Corkscrew found."
+    fi
+else 
+    echo_error "'matrix proxied extension' loaded without setting \$globalurl_proxy"
+fi 
+
+
 
 ######## Bash functions ############
 
-# Set Proxy
+function curl_proxy() {
+    curl --connect-timeout 10 -s --proxy "${globalurl_proxy}" -L "$@"
+}
+
+function wget_proxy() {
+    wget --connect-timeout 10 --quiet -e use_proxy=yes -e http_proxy="${globalurl_proxy}" "$@"
+}
+
 function proxy_set() {
     export {http,https,ftp}_proxy="$globalurl_proxy"
-    export GIT_SSL_NO_VERIFY=true
     # git config --global http.sslVerify false
     git config --global http.proxy "http://$globalurl_proxy"
     git config --global https.proxy "https://$globalurl_proxy"
-
-function curl_proxy() {
-    curl --connect-timeout 10 -s --proxy "${globalurl_proxy}" -I -L ${url}
+    grep -q '^use_proxy' ~/.wgetrc && sed -i 's/^use_proxy.*/use_proxy=on/' ~/.wgetrc || echo 'use_proxy=on' >> ~/.wgetrc
+    strict_ssl_unset
 }
 
-# Unset Proxy
 function proxy_unset() {
     unset {http,https,ftp}_proxy
-    export GIT_SSL_NO_VERIFY=false
     git proxyclear
+    strict_ssl_set
+    sed -i '/^use_proxy/,$d' ~/.wgetrc
 }
 
 function proxy_show() {
-    env | grep -i _proxy
-    git config --global --get-regexp http.*
+    echo 'env settings: ' && env | grep -i '_proxy'
+    echo 'wget settings: ' && grep -q '^use_proxy' ~/.wgetrc
+    echo 'git settings: ' && git config --global --get-regexp http.*
+    strict_ssl_show
 }
 
-
+function check_proxy_driver() {
+    grep "proxydriver.*using" /var/log/syslog | tail -n 1
+}
 
 <<COMMENT1
 # GNOME keeps its own proxy settings. This can handle PAC files, but still has the problem that it is system-wide
@@ -85,6 +98,6 @@ COMMENT1
 nmcli con show RestonOffice |grep proxy
 proxy.method:                           auto
 proxy.browser-only:                     no
-proxy.pac-url:                          http://pacfile.itm.mcafee.com/proxy.pac
+proxy.pac-url:                          http://pacfile.example.com/proxy.pac
 proxy.pac-script:                       --
 COMMENT2

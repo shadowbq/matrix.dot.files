@@ -1,16 +1,21 @@
-# .bashrc
-
+# .matrix/Linux .bash_extension
 ###########################
-# Add Distro Specific
+# Add Linux Distro Specific
 
 if [ -f /etc/debian_version ]; then
-  PATH=$PATH:"$HOME"/.matrix/Linux/Debian/bin
+  PATH=$PATH:"$HOME"/.matrix/os/Linux/Debian/bin
   export PATH
+  if [ -f "$HOME"/.matrix/os/Debian/.bash_extension ]; then
+    . "$HOME"/.matrix/os/Debian/.bash_extension
+  fi
 fi
 
 if [ -f /etc/redhat-release ]; then
-  PATH=$PATH:"$HOME"/.matrix/Linux/RHEL/bin
+  PATH=$PATH:"$HOME"/.matrix/os/Linux/RHEL/bin
   export PATH
+  if [ -f "$HOME"/.matrix/os/RHEL/.bash_extension ]; then
+    . "$HOME"/.matrix/os/RHEL/.bash_extension
+  fi
 fi
 
 ###########################

@@ -1,4 +1,8 @@
+# shellcheck shell=bash
 function own() {
-  sudo chown -R ${USER} ${1:-.}
+  local OWNER_USER
+  local OWNER_GROUP
+  OWNER_USER=$(id -u -n)
+  OWNER_GROUP=$(id -g -n)
+  sudo chown -R "${OWNER_USER}:${OWNER_GROUP}" "${1:-.}"
 }
-
