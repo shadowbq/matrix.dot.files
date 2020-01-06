@@ -1,0 +1,58 @@
+#!/usr/bin/env bash
+#
+# gpgdecrypt - decrypt a file to a given directory
+#
+# This script is a simple wrapper around gpg(1) that per default decrypts a
+# given file and writes the decrypted file to the CWD.
+
+command -v gpg >/dev/null 2>&1 || { echo >&2 "GNU-GPG command gpg not found in path."; exit 255; }
+while getopts "o:" opt; do
+    case $opt in
+        o)
+            OPATH=$OPTARG
+            ;;
+        \?)
+            exit 1
+            ;;
+        :)
+            echo "Option -$OPTARG requires an argument" >&2
+            exit 1;
+            ;;
+    esac
+done
+
+shift $((OPTIND-1))
+FPATH=$1
+if [ -z $FPATH ] ; then
+    echo "no file given to decrypt, exiting!" >&2
+    exit 2
+elif [ ! -r $FPATH ] ; then
+    echo "file $FPATH not readable, exiting!" >&2
+    exit 3
+elif [ ! -f $FPATH ] ; then
+    echo "$FPATH is not a file, exiting!" >&2
+    exit 4
+fi
+
+if [ ! -z $OPATH ] ; then
+    if  [ ! -d $OPATH ] ; then
+        echo "$OPATH is not a directory, exiting!" >&2
+        exit 5
+    fi
+else
+    OPATH="."
+fi
+
+OPATH="${OPATH%/}/"
+
+FILENAME=$(basename $FPATH)
+NEWFILENAME=${FILENAME%.*}
+
+gpg -o "${OPATH}${NEWFILENAME}" $FPATH
+
+if [ $? != 0 ] ; then
+    echo "GPG returned an error : $?"
+    exit 1
+fi
+
+echo "\n${OPATH}${NEWFILENAME}\n"
