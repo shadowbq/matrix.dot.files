@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env bash
 #
 # This is a very simple template for shell scripts. It sets sane defaults for
 # execution parameters and has boilerplate code for stuff common to most
