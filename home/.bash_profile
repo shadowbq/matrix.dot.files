@@ -38,6 +38,10 @@ if [ -f "$HOME"/.bashrc ]; then
 fi
 
 ###########################
+# Functions
+source "$HOME"/.matrix/functions/.bash_extension
+
+###########################
 # OS specific aliases and functions
 
 bash_os="`uname -s`"
@@ -45,7 +49,7 @@ bash_os="`uname -s`"
 if [ -f "$HOME"/.matrix/os/${bash_os}/.bash_extension ]; then
   . "$HOME"/.matrix/os/${bash_os}/.bash_extension
 else
-  echo -e "${RED}matrix .bash_extension not found for ${bash_os}.${NORMAL}"
+  echo_err "matrix .bash_extension not found for ${bash_os}."
 fi
 
 if [ -f "$HOME"/.matrix/os/${bash_os}/.bash_aliases ]; then
@@ -62,7 +66,7 @@ fi
 PATH=$PATH:"$HOME"/.matrix/bin
 
 ###########################
-# User configurable location to include addition configs to be loaded
+# .matrix Extentions to be loaded, with running checks
 if [ -f "$HOME"/.bash_matrix ]; then
    . "$HOME"/.bash_matrix
 fi

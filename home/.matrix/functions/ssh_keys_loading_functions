@@ -12,9 +12,9 @@ function load_ssh_keys {
   ssh-add -l >/dev/null 2>&1
 
   if [ $? -eq 0 ]; then
-   echo -ne "${GREEN}Keys successfully imported.${NORMAL}\n"
+   echo_notify "Keys successfully imported."
   else
-   echo -ne "${RED}No SSH Keys Imported.${NORMAL}\n"
+   echo_err "No SSH Keys Imported."
   fi
 }
 

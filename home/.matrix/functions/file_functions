@@ -1,4 +1,4 @@
-function grab() {
+function own() {
   sudo chown -R ${USER} ${1:-.}
 }
 

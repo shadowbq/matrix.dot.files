@@ -1,4 +1,12 @@
-# OSX / macOS Hacks
+# OSX / macOS 
+
+God help us with Catalina. 
+
+It breaks.. so much.. local compilation, and the security restrictions are all over userspace.
+
+Reference: https://stackoverflow.com/questions/58278260/cant-compile-a-c-program-on-a-mac-after-upgrading-to-catalina-10-15/58278392#58278392
+
+## Hacks
 
 `/.matrix/Darwin/bin/osx_tweak`
 

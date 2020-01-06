@@ -36,6 +36,7 @@ fi
 
 command -v brew >/dev/null 2>&1 
 if [ $? -eq 0 ]; then
+  [ "${BASH_VERSINFO:-0}" -ge 4 ] || echo_warn "Bash still 3.x or lower"
   command -v gsort >/dev/null 2>&1 
   if [ $? -eq 0 ]; then
     export BREWCORE=true
@@ -53,6 +54,7 @@ if [ $? -eq 0 ]; then
     fi 
   fi
 fi
+
 
 
 ssh-add -l >/dev/null 2>&1

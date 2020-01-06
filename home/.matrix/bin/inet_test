@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## 
+## Internet test with multiple aggressive
+## assurances checked DNS and HTTP (proxy etc.).
+################################################
 ## Internet test to freebsd.org (inet_test)
 ## of 0=success | 1=failed
 ## BSD/MIT Licensed. - shadowbq
@@ -16,6 +19,19 @@
 ## freebsd.org has SOA record ns0.freebsd.org. hostmaster.freebsd.org. 2013122006 3600 900 604800 600
 ## (~)$ echo $?
 ## 0
+###############################################
+## Spider Google to ensure http is properly working
+## (~)$ wget -q spider http://google.com
+## Return values(rtv)
+## 0 No problems occurred.
+## 1 Generic error code.
+## 2 Parse error—for instance, when parsing command-line options, the ‘.wgetrc’ or ‘.netrc’...
+## 3 File I/O error.
+## 4 Network failure. (No DNS resolution of google.com)
+## 5 SSL verification failure.
+## 6 Username/password authentication failure.
+## 7 Protocol errors.
+## 8 Server issued an error response (Proxy failures)
 ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## 
 BGREEN='\033[1;32m'
 GREEN='\033[0;32m'
@@ -26,6 +42,7 @@ BLUE='\033[0;34m'
 BYELLOW='\033[1;33m'
 YELLOW='\033[0;33m'
 NORMAL='\033[00m'
+function echo_err() { echo -ne "${RED}"; cat <<< "$@" 1>&2; echo -ne "${NORMAL}";}
 
 host -t SOA -W 1 freebsd.org > /dev/null
 if [ $? -eq 0 ]; then
@@ -34,23 +51,23 @@ if [ $? -eq 0 ]; then
     wget -q --spider http://google.com
     case $? in
       4)
-        echo -e "${RED}Network failure.${NORMAL}"
+        echo_err "Network failure."
         rtv=4
         ;;
       5)
-        echo -e "${RED}SSL verification failure.${NORMAL}"
+        echo_err "SSL verification failure."
         rtv=5
         ;;
       6)
-        echo -e "${RED}Username/password authentication failure.${NORMAL}"
+        echo_err "Username/password authentication failure."
         rtv=6
         ;;
       7)
-        echo -e "${RED}Protocol errors.${NORMAL}"
+        echo_err "Protocol errors."
         rtv=7
         ;;
       8)
-        echo -e "${RED}Possible Proxy Issue. Server issued an error response.${NORMAL}"
+        echo_err "Possible Proxy Issue. Server issued an error response."
         rtv=8
         ;;
       *)

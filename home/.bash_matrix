@@ -16,10 +16,6 @@ cd "$HOME"
 [ "$matrix_ext_proxy" == true ] && source "$HOME"/.matrix/extentions/proxied/.bash_extension
 
 ###########################
-# Proxy configs 
-source "$HOME"/.matrix/functions/.bash_extension
-
-###########################
 # Matrix Plugins configs 
 [ "$matrix_ext_history" == true ] && source "$HOME"/.matrix/extentions/history/.bash_extension
 [ "$matrix_ext_python" == true ] && source "$HOME"/.matrix/extentions/python/.bash_extension
@@ -39,8 +35,8 @@ source "$HOME"/.matrix/functions/.bash_extension
 [ "$matrix_load_ssh_keys" == true  ] && load_ssh_keys
 symlink_alts
 xpull_assign
-coreutil_check
-mr_check
+check_coreutil
+check_mr
 [ "$matrix_ext_powerline" == true ] && check_powerline
 
 ##########################

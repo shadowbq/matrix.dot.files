@@ -1,6 +1,6 @@
-function coreutil_check {
+function check_coreutil {
 
-#bc usage: 0 if the relation is false and 1 if the relation is true.
+  #bc usage: 0 if the relation is false and 1 if the relation is true.
 
   sortver=`sort --version|head -1|grep -Eo '[0-9]+[\.][0-9]+'|head -1`
   if [ `echo "$sortver > 6.0" | bc` -eq 1 ]; then
@@ -22,13 +22,3 @@ function coreutil_check {
 
   fi
 }
-
-
-function mr_check {
-	command -v mr >/dev/null 2>&1
- 
-	if [ $? -eq 1 ]; then
-	   echo -e "${YELLOW} MR git bundle manager is missing. Install 'mr'. ${NORMAL}"
-	   echo -e "${YELLOW} Run: 'cd ~ && mr -j5 update ' ${NORMAL}"
-	fi
-}  

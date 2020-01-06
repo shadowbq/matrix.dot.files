@@ -1,0 +1,9 @@
+# Check for the existence of "mr" multiple repository tool. (used with VIM sub-repos)
+function check_mr {
+	command -v mr >/dev/null 2>&1
+ 
+	if [ $? -eq 1 ]; then
+	   echo_warn "${YELLOW} MR git bundle manager is missing. Install 'mr'. ${NORMAL}"
+	   echo_warn "${YELLOW} Run: 'cd ~ && mr -j5 update ' ${NORMAL}"
+	fi
+}  

@@ -1,14 +1,31 @@
 ## Proxied
 # A matrix global proxy configuration tool
 # version 0.0.1-alpha 
-# wpad="http://wpad/wpad.dat"
+## ## ## ## 
+#
+# globalurl_proxy = "proxyUsername:proxyPassword@proxy.server.com:port"
+#
+## ## ## ## 
+#
+# TODO: Need a function to modify curlrc inplace with sed (insecure, proxy, and proxytunnel)
+# TODO: Need a function to run `git proxyclear`
+#
+# TODO: handle wpad="http://wpad/wpad.dat"
+## ## ## ##
+#
+# Setting http.<url>.sslVerify to false may help you quickly get going if 
+# your workplace employs man-in-the-middle HTTPS proxying. Longer term, you 
+# could get the root CA that they are applying to the certificate chain and 
+# specify it with either http.sslCAInfo or http.sslCAPath.
+# 
+
+echo_warn "Proxy Configuration loading.."
+echo_warn "$globalurl_proxy"
 
 path_to_corkscrew=$(which corkscrew)
 if [ -x "$path_to_corkscrew" ]; then
-  echo "Corkscrew found."
+  echo_notify "Corkscrew found."
 fi
-
-## curl_proxy = "/usr/bin/curl --connect-timeout 10 -s --proxy '' -I -L ${url}
 
 ######## Bash functions ############
 
@@ -16,17 +33,27 @@ fi
 function proxy_set() {
     export {http,https,ftp}_proxy="$globalurl_proxy"
     export GIT_SSL_NO_VERIFY=true
+    # git config --global http.sslVerify false
+    git config --global http.proxy "http://$globalurl_proxy"
+    git config --global https.proxy "https://$globalurl_proxy"
+
+function curl_proxy() {
+    curl --connect-timeout 10 -s --proxy "${globalurl_proxy}" -I -L ${url}
 }
 
 # Unset Proxy
 function proxy_unset() {
     unset {http,https,ftp}_proxy
     export GIT_SSL_NO_VERIFY=false
+    git proxyclear
 }
 
 function proxy_show() {
     env | grep -i _proxy
+    git config --global --get-regexp http.*
 }
+
+
 
 <<COMMENT1
 # GNOME keeps its own proxy settings. This can handle PAC files, but still has the problem that it is system-wide

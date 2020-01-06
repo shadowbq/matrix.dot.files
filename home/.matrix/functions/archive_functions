@@ -19,11 +19,6 @@ function extract() {
   fi
 }
 
-
-function grab() {
-  sudo chown -R ${USER} ${1:-.}
-}
-
 #################
 #backup files--> ~/.backup/#
 #################
@@ -38,18 +33,4 @@ bu ()
     fi
 } 
 
-# sudo vi/vim
-function svi {
-        sudo vi $@
-}
-function svim {
-        sudo vim $@
-}
-
-function symlink_alts {
-  command -v vim > /dev/null 2>&1
-  if [ $? -eq 0 ]; then
-    alias vi=`which vim`
-  fi
-}
 

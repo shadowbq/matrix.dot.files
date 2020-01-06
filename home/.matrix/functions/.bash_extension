@@ -1,5 +1,16 @@
+#
+# Load all bash files with filename ending with '_functions' 
+# 
+# These files are loaded at shell login. (use .matrix/lib for runtime)
+#
+
+# Use as an STDERR reporter
+function echo_warn() { echo -ne "${YELLOW}"; cat <<< "$@" 1>&2; echo -ne "${NORMAL}";}
+function echo_err() { echo -ne "${RED}"; cat <<< "$@" 1>&2; echo -ne "${NORMAL}";}
+function echo_notify() { echo -ne "${GREEN}"; cat <<< "$@" 1>&2; echo -ne "${NORMAL}";}
+
 matrix="$HOME/.matrix/functions"
-files=$(ls $matrix/ 2>/dev/null)
+files=$(find $HOME/.matrix/functions/*_functions -type f 2>/dev/null)
 for file in ${files}; do
-        source $matrix/${file}
+        source ${file}
 done
