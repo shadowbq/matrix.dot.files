@@ -12,6 +12,8 @@ I prefer fancy and colorful output when possible.
 
 I prefer shell scripts that don't require python, ruby, node, etc.
 
+I agree with many concepts in https://google.github.io/styleguide/shell.xml but not all.
+
 ## Binaries
 
 Binaries (x86/i386/arm/arm7/ELF/Mach-O/PE32) need to be build on the target system, so I don't use them.
