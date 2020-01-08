@@ -1,12 +1,18 @@
+#############################
+# Check for Ruby and RVM and sane bundles
+#
+## ## ## ## ##
+# shellcheck shell=bash
+#############################
 function bundler_check() {
 
   command -v bundle >/dev/null 2>&1
 
   if [ $? -eq 1 ]; then
-    echo -e "${YELLOW} Bundle gem is missing. Run: 'sudo gem install bundler' ${NORMAL}"
-    echo -e "${YELLOW} Run: 'cd ~/.matrix/ruby/ && sudo bundle install' ${NORMAL}"
+      echo_warn "Bundle gem is missing. Run: 'sudo gem install bundler' "
+      echo_warn "Run: 'cd ~/.matrix/extensions/ruby/ && sudo bundle install' "
   else
-    [ -f ~/.matrix/ruby/Gemfile.lock ] || echo -e "${YELLOW} GemFile not reconciled. Run: 'cd ~/.matrix/ruby/ && sudo bundle install' ${NORMAL}"
+      [ -f ~/.matrix/extensions/ruby/Gemfile.lock ] || echo_warn "GemFile not reconciled. Run: 'cd ~/.matrix/extensions/ruby/ && sudo bundle install' "
   fi
 
 }
@@ -17,7 +23,7 @@ export PATH="$PATH:$HOME/.rvm/bin"                                   # Add RVM t
 if [ -n "$matrix_skip_checks" ]; then
   command -v ruby >/dev/null 2>&1
   if [ $? -eq 1 ]; then
-    echo -e "${RED}[WARNING] No Ruby Found. ${NORMAL}" >&2
+    echo_err "[WARNING] No Ruby Found." >&2
   else
     if [ "$(type -t rvm)" == "function" ]; then
       echo -ne "${GREEN}RVM is present => ${NORMAL} "
@@ -25,7 +31,7 @@ if [ -n "$matrix_skip_checks" ]; then
       ruby --version
       bundler_check
     else
-      echo -e "${YELLOW}RVM is not present. ${NORMAL}"
+      echo_warn "RVM is not present."
       ruby --version
       bundler_check
     fi

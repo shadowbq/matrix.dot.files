@@ -1,0 +1,69 @@
+#!/usr/bin/env bash
+#
+# References: http://mywiki.wooledge.org/BashGuide/Practices#Bash_Tests
+#             http://mywiki.wooledge.org/BashFAQ/031
+# 
+# dot.matrix opinionated testing.
+# dot.matix is for userspace consistancy, not service consistancy. dot.matrix isn't needed for alpine or coreos.  
+#
+# [[ works only in Bash, Zsh and the Korn shell, and is more powerful; [ and test are available in POSIX shells. 
+#  But its 2020.. so.. bash is available for userspace on all linux, macos, freebsd, even windows 10 on WSL. 
+#
+# The test command, also known as [, is an application that usually resides somewhere in /usr/bin or /bin
+# Using [[ we can avoid the mess altogether. [[ is safer.
+# [[ can see < operators before Bash gets to use it for Redirection -- problem fixed.  
+# [[ can see the whole command before it's being expanded. It sees $var, and not the expansion of $var. As a result, there is no need for the quotes at all! 
+
+function echo_warn()   { echo -ne "${YELLOW}"; cat <<<"$@" 1>&2 ; echo -ne "${NORMAL}"; }
+function echo_err()    { echo -ne "${RED}";    cat <<<"$@" 1>&2 ; echo -ne "${NORMAL}"; }
+function echo_notify() { echo -ne "${GREEN}";  cat <<<"$@" 1>&2 ; echo -ne "${NORMAL}"; }
+function echo_info()   { echo -ne "${BLUE}";   cat <<<"$@" 1>&2 ; echo -ne "${NORMAL}"; }
+function echo_debug()  { echo -ne "${GRAY}";   cat <<<"$@" 1>&2 ; echo -ne "${NORMAL}"; }
+
+function my-tests-1() {
+  local my_test_var
+  my_test_var=true
+  echo "\$my_test_var:$my_test_var"
+
+  echo -n "${FUNCNAME[0]} : 1 " && [ "$my_test_var" == true ]   && echo "true" || echo_err "failed tests"
+  echo -n "${FUNCNAME[0]} : 2 " && [ "$my_test_var" == "true" ] && echo "true" || echo_err "failed tests"
+  echo -n "${FUNCNAME[0]} : 3 " && [ -z "$my_test_var" ]        || echo "false" || echo_err "failed tests"
+  echo -n "${FUNCNAME[0]} : 4 " && [ -n "$my_test_var" ]        && echo "true" || echo_err "failed tests"
+  echo ""
+}
+
+function my-tests-2() {
+  local my_test_var
+  my_test_var=$(/usr/bin/true)
+  echo "\$my_test_var:$my_test_var"
+
+  echo -n "${FUNCNAME[0]} : 1 " && [ /usr/bin/true == /usr/bin/true ] && echo "true" || echo_err "failed tests"
+  echo -n "${FUNCNAME[0]} : 2 " && [ /usr/bin/true == true ]          && echo "true" || echo_err "failed tests"
+  echo -n "${FUNCNAME[0]} : 3 " && [ "$my_test_var" == true ]         && echo "true" || echo_err "failed tests"
+  echo ""
+}
+
+function my-tests-3() {
+  echo -n "${FUNCNAME[0]} : 1 " 
+  [ false ]; echo "$? - This should return 0 which is bad. [false] is not intutive that it equals true. SC2158" 
+
+  echo -n "${FUNCNAME[0]} : 2 " 
+  [ true ]; echo $?  
+
+  echo -n "${FUNCNAME[0]} : 3 "
+  if test false; then 
+   echo "Test always returns true for only one argument, unless it is null."; 
+  fi
+  echo ""
+}
+
+function my-tests-4() {
+  # use double brackets over double parenthesis as there is no shell expansion with double parenthesis.
+  [[ '1 + 1' -eq 2 ]] $(echo "this works." >&2) : echo 'bar'
+}
+
+# Run the tests
+my-tests-1
+my-tests-2
+my-tests-3
+my-tests-4

@@ -38,14 +38,15 @@ function echo_debug() {
 function matrix_loader() {
   local loader
   loader=$1
+  # -f file is a regular file (not a directory or device file)
   if [ -f "$HOME"/.matrix/${loader}/.bash_extension ]; then
-    source "$HOME"/.matrix/${loader}/.bash_extension
+    source "$HOME"/.matrix/"${loader}"/.bash_extension
   else
     echo_err "matrix .bash_extension not found for ${loader}."
   fi
 
   if [ -f "$HOME"/.matrix/${loader}/.bash_aliases ]; then
-    source "$HOME"/.matrix/${loader}/.bash_aliases
+    source "$HOME"/.matrix/"${loader}"/.bash_aliases
   fi
 
   if [ -d "$HOME"/.matrix/${loader}/bin ]; then
@@ -54,7 +55,7 @@ function matrix_loader() {
   fi
 }
 
-files=$(find $HOME/.matrix/functions/*_functions -type f 2>/dev/null)
-for file in ${files}; do
-  source ${file}
+for file in "$HOME"/.matrix/functions/*_functions; do    # Better! and...
+    [ -f "$file" ] || continue
+    source "$file"   # ...always double-quote expansions!
 done

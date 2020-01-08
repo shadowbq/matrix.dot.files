@@ -1,13 +1,18 @@
 #!/usr/bin/env bash
+function echo_warn()   { echo -ne "${YELLOW}"; cat <<<"$@" 1>&2 ; echo -ne "${NORMAL}"; }
+function echo_err()    { echo -ne "${RED}";    cat <<<"$@" 1>&2 ; echo -ne "${NORMAL}"; }
+function echo_notify() { echo -ne "${GREEN}";  cat <<<"$@" 1>&2 ; echo -ne "${NORMAL}"; }
+function echo_info()   { echo -ne "${BLUE}";   cat <<<"$@" 1>&2 ; echo -ne "${NORMAL}"; }
+function echo_debug()  { echo -ne "${GRAY}";   cat <<<"$@" 1>&2 ; echo -ne "${NORMAL}"; }
 
 function check_first_bundler {
     command -v bundle >/dev/null 2>&1
  
     if [ $? -eq 1 ]; then
-        echo -e "${YELLOW} Bundle gem is missing. Run: 'sudo gem install bundler' ${NORMAL}"
-        echo -e "${YELLOW} Run: 'cd ~/.matrix/ruby/ && sudo bundle install' ${NORMAL}"
+        echo_warn "Bundle gem is missing. Run: 'sudo gem install bundler' "
+        echo_warn "Run: 'cd ~/.matrix/extensions/ruby/ && sudo bundle install' "
     else
-        [ -f ~/.matrix/ruby/Gemfile.lock ] || echo -e "${YELLOW} GemFile not reconciled. Run: 'cd ~/.matrix/ruby/ && sudo bundle install' ${NORMAL}"
+        [ -f ~/.matrix/extensions/ruby/Gemfile.lock ] || echo_warn "GemFile not reconciled. Run: 'cd ~/.matrix/extensions/ruby/ && sudo bundle install' "
     fi
 }
 
@@ -17,7 +22,7 @@ function check_first_ruby {
 
     command -v ruby >/dev/null 2>&1 
     if [ $? -eq 1 ]; then
-        echo -e >&2 "${RED}[WARNING] No Ruby Found. ${NORMAL}"
+        echo_warn "[WARNING] No Ruby Found. "
     else
         if [ "`type -t rvm`" == "function" ]; then
             echo -ne "${GREEN}RVM is present => ${NORMAL} "
@@ -25,7 +30,7 @@ function check_first_ruby {
             ruby --version
             check_first_bundler
         else
-            echo -e "${YELLOW}RVM is not present. ${NORMAL}"
+            echo_warn "RVM is not present. "
             ruby --version
             check_first_bundler
         fi
@@ -36,11 +41,11 @@ function check_first_powerline {
   if [[ -n $matrix_ext_powerline ]]; then
     command -v powerline-daemon >/dev/null 2>&1
     if [ $? -eq 0 ]; then
-        command -v socat >/dev/null 2>&1 || { echo -e >&2 "${YELLOW}[POWERLINE WARNING] No socat found.${NORMAL}"; }
-        command -v pip >/dev/null 2>&1 || { echo -e >&2 "${YELLOW}[POWERLINE WARNING] No python pip found.${NORMAL}"; }
-        pip show psutil -q >/dev/null 2>&1 || { echo -e >&2 "${YELLOW}[POWERLINE WARNING] No python pip psutil Found.${NORMAL}"; }
+        command -v socat >/dev/null 2>&1 || { echo_warn "[POWERLINE WARNING] No socat found."; }
+        command -v pip >/dev/null 2>&1 || { echo_warn "[POWERLINE WARNING] No python pip found."; }
+        pip show psutil -q >/dev/null 2>&1 || { echo_warn "[POWERLINE WARNING] No python pip psutil Found."; }
     else
-        echo -e >&2 "${RED}[WARNING] Powerline is not found, but enabled.${NORMAL}"; 
+        echo_err "[WARNING] Powerline is not found, but enabled."; 
     fi
 
   fi
@@ -49,28 +54,28 @@ function check_first_powerline {
 function check_first_nodejs {
     command -v node >/dev/null 2>&1
     if [ $? -eq 1 ]; then
-        echo -e >&2 "${RED}[WARNING] No Native Node(js) Found. ${NORMAL}"
+        echo_err "[WARNING] No Native Node(js) Found. "
     fi
 }
 
 function check_first_bash_copmpletion
 {
-    [[ "$(type -t _get_comp_words_by_ref)" -eq "function" ]] ||  echo -e "Bash completion not installed?"
+    [[ "$(type -t _get_comp_words_by_ref)" -eq "function" ]] ||  echo_warn "Bash completion not installed?"
     # [[ `complete -p |wc -l` -ge 6 ]] ||  echo -e "Seems like bash completion is not sourcing the correct folders"
 }
 
 function check_first_vim {
     if [ -d "$HOME"/.vim/bundle/Vundle.vim ]; then
-        echo -en "Found Vundle..."
+        echo_info "Found Vundle..."
         if [ -d "$HOME"/.vim/bundle/vim-airline ]; then
-            echo -e "plugins likely found."
+            echo_info "Vundle plugins likely found."
         else
-            echo -e "${YELLOW}Need to install VIM Vundle bundles: 'vim +PluginInstall +qall'${NORMAL}"
+            echo_warn "Need to install VIM Vundle bundles: 'vim +PluginInstall +qall'"
         fi 
     else
-        echo -e "${RED}Vundle not found for VIM${NORMAL}"
-        echo -e "${YELLOW}Run 'git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim'${NORMAL}"
-        echo -e "${YELLOW}Need to install VIM Vundle bundles: 'vim +PluginInstall +qall'${NORMAL}"
+        echo_err "Vundle not found for VIM"
+        echo_warn "Run 'git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim'"
+        echo_warn "Need to install VIM Vundle bundles: 'vim +PluginInstall +qall'"
     fi
 }
 
@@ -79,8 +84,8 @@ function check_first_mr {
     command -v mr >/dev/null 2>&1
  
     if [ $? -eq 1 ]; then
-        echo -e "${RED}[WARNING] MR 'multiple repo' git bundle manager is missing. Install 'mr'. ${NORMAL}"
-        echo -e "${YELLOW} Run: 'cd ~ && mr -j5 update ' ${NORMAL}"
+        echo_err "[WARNING] MR 'multiple repo' git bundle manager is missing. Install 'mr'. "
+        echo_warn "Run: 'cd ~ && mr -j5 update ' "
     fi
 }  
 
@@ -88,25 +93,25 @@ function check_first_tmux {
     command -v tmux >/dev/null 2>&1
  
     if [ $? -eq 1 ]; then
-        echo -e "${RED}[WARNING] tmux is missing, install it (brew,apt,etc). ${NORMAL}" 
+        echo_err "[WARNING] tmux is missing, install it (brew,apt,etc). " 
     else 
-        echo -en "${GREEN}tmux found.. ${NORMAL}"
+        echo_notify "tmux found.. "
     fi
 
     command -v reattach-to-user-namespace >/dev/null 2>&1
     if [ $? -eq 1 ]; then
-        echo -e "${YELLOW}[WARNING] tmux has a dependency 'reattach-to-user-namespace' missing, install it (brew,apt,etc). ${NORMAL}" 
+        echo_warn "[WARNING] tmux has a dependency 'reattach-to-user-namespace' missing, install it (brew,apt,etc). " 
     fi
         
     if [ -d "$HOME"/.tmux/plugins/tpm ]; then
-        echo -e "${GREEN}Found tmux TPM${NORMAL}"
+        echo_notify "Found tmux TPM"
     else
-        echo -e "${YELLOW}Install TPM and the plugins 'git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm'${NORMAL}"
+        echo_warn "Install TPM and the plugins 'git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm'"
     fi
 
 }
 
-echo -e "${CYAN}Checking ENV${NORMAL}"
+echo_info "Checking ENV"
 check_first_ruby
 check_first_powerline
 check_first_nodejs
@@ -114,4 +119,4 @@ check_first_bash_copmpletion
 check_first_vim
 check_first_mr
 check_first_tmux
-echo -e "${CYAN}Completed ENV check ${NORMAL}"
+echo_info "Completed ENV check "

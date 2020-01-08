@@ -24,6 +24,11 @@ brew install homebrew-ffmpeg/ffmpeg/ffmpeg
 
 `/.matrix/Darwin/bin/osx_tweak`
 
+## Other useful tools
+
+cli notification disabled  
+
+https://github.com/sindresorhus/do-not-disturb-cli
 
 ## Disabling Dashboards 
 

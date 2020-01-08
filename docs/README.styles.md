@@ -96,6 +96,11 @@ https://www.cyberciti.biz/faq/howto-get-group-name-in-linux/
 
 ### Testing in Bash
 
+dot.matrix is for userspace consistency, not service consistency. dot.matrix isn't needed for alpine or coreos.  
+
+`[[` works only in Bash, Zsh and the Korn shell, and is more powerful; `[` and `test` are available in POSIX shells. 
+But its 2020.. so.. bash is available for userspace on all linux, macos, freebsd, even windows 10 on WSL. 
+
 Remember to set to a BOOLEAN variable via command /usr/bin/true || /usr/bin/false not strings. **DO NOT QUOTE false!**
 
 ### INI Option replacement

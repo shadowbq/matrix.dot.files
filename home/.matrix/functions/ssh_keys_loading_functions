@@ -5,9 +5,9 @@
 #############################
 
 function load_ssh_keys() {
-  if [ "$(type -t go_strict_ssh)" == "function" ]; then
+  if [ "$(type -t strict_ssh_set)" == "function" ]; then
     if $STRICT_SSH; then
-      go_strict_ssh
+      strict_ssh_set
     fi
   fi
 
