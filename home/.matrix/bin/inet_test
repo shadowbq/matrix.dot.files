@@ -42,7 +42,7 @@ BLUE='\033[0;34m'
 BYELLOW='\033[1;33m'
 YELLOW='\033[0;33m'
 NORMAL='\033[00m'
-function echo_err() { echo -ne "${RED}"; cat <<< "$@" 1>&2; echo -ne "${NORMAL}";}
+function echo_err { echo -ne "${RED}"; cat <<< "$@" 1>&2; echo -ne "${NORMAL}";}
 
 host -t SOA -W 1 freebsd.org > /dev/null
 if [ $? -eq 0 ]; then

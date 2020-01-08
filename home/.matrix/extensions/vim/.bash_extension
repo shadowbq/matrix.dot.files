@@ -1,4 +1,15 @@
-function symlink_alts {
+###########################
+# History Control
+# 
+###########################
+# shellcheck shell=bash
+#
+###########################
+function _matrix_vim-init {
+  vim-symlink-alts
+}
+
+function vim-symlink-alts {
   command -v vim > /dev/null 2>&1
   if [ $? -eq 0 ]; then
     alias vi=`command -v vim`
@@ -15,5 +26,3 @@ function svi {
 function svim {
         sudo vim $@
 }
-
-

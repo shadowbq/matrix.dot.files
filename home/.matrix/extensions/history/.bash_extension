@@ -10,8 +10,17 @@ export HISTCONTROL=ignoredups:erasedups:ignorespace
 export HISTFILESIZE=1000000
 export HISTFILE="$HOME"/.bash_history
 export HISTSIZE=1000000
-export HISTIGNORE="clear:bg:fg:cd:cd -:exit:date:w:* --help"
+export HISTIGNORE="clear:bg:fg:cd:cd -:exit:date:w:incognito:* --help"
 shopt -s histappend
 
 ## Heavy handed shared terminal bash history
 # export PROMPT_COMMAND="history -a; history -c; history -r; $PROMPT_COMMAND"
+
+function incognito {
+  # set +o history to turn it off, and set -o history to turn it on
+  set +o history
+  unset HISTFILE
+  echo_info "?#?#? Incognito mode started ?#?#? "
+  echo_debug "Do not use passwords on the cli, as the process can be viewed globally. Use ENV"
+  echo_debug "Use: \`history -d <number>\` where <number> is the entry number to remove the entry."
+}

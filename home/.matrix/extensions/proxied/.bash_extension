@@ -33,15 +33,15 @@ fi
 
 ######## Bash functions ############
 
-function curl_proxy() {
+function curl_proxy {
     curl --connect-timeout 10 -s --proxy "${globalurl_proxy}" -L "$@"
 }
 
-function wget_proxy() {
+function wget_proxy {
     wget --connect-timeout 10 --quiet -e use_proxy=yes -e http_proxy="${globalurl_proxy}" "$@"
 }
 
-function proxy_set() {
+function proxy_set {
     export {http,https,ftp}_proxy="$globalurl_proxy"
     # git config --global http.sslVerify false
     git config --global http.proxy "http://$globalurl_proxy"
@@ -50,21 +50,21 @@ function proxy_set() {
     strict_ssl_unset
 }
 
-function proxy_unset() {
+function proxy_unset {
     unset {http,https,ftp}_proxy
     git proxyclear
     strict_ssl_set
     sed -i '/^use_proxy/,$d' ~/.wgetrc
 }
 
-function proxy_show() {
+function proxy_show {
     echo 'env settings: ' && env | grep -i '_proxy'
     echo 'wget settings: ' && grep -q '^use_proxy' ~/.wgetrc
     echo 'git settings: ' && git config --global --get-regexp http.*
     strict_ssl_show
 }
 
-function check_proxy_driver() {
+function check_proxy_driver {
     grep "proxydriver.*using" /var/log/syslog | tail -n 1
 }
 

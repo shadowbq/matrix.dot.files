@@ -1,4 +1,9 @@
+#############################
 # Check for the existence of "mr" multiple repository tool. (used with VIM sub-repos)
+## ## ## ## ##
+# shellcheck shell=bash
+#############################
+
 function check_mr {
 	command -v mr >/dev/null 2>&1
  
@@ -8,5 +13,3 @@ function check_mr {
 	fi
 }  
 
-# Search for INI value and replace it
-# grep -q '^option' file && sed -i 's/^option.*/option=value/' file || echo 'option=value' >> file

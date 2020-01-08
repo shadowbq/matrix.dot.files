@@ -1,4 +1,6 @@
-function extract() {
+# shellcheck shell=bash
+
+function extract {
   if [ -f $1 ] ; then
     case $1 in
       *.tar.bz2) tar xvjf $1 ;;
@@ -22,8 +24,7 @@ function extract() {
 #################
 #backup files--> ~/.backup/#
 #################
-bu ()
-{
+function bu {
     if [ "`dirname $1`" == "." ]; then
         mkdir -p ~/.backup/`pwd`;
         cp $1 ~/.backup/`pwd`/$1-`date +%Y%m%d%H%M`.backup;
@@ -32,5 +33,3 @@ bu ()
         cp $1 ~/.backup/$1-`date +%Y%m%d%H%M`.backup;
     fi
 } 
-
-

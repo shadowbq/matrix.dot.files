@@ -7,33 +7,35 @@
 ###########################
 # Uncomment lines to include the extensions
 
-callback_pwd=`pwd`
+callback_pwd=$(pwd)
 cd "$HOME"
 
 ###########################
-# Proxy configs 
+# Proxy configs
 # $globalurl_proxy is used to set envs
-[ "$matrix_ext_proxy" == true ] && source "$HOME"/.matrix/extentions/proxied/.bash_extension
+[ "$matrix_ext_proxy" == true ] && matrix_loader "extensions/proxied"
 
 ###########################
-# Matrix Plugins configs 
-[ "$matrix_ext_history" == true ] && source "$HOME"/.matrix/extentions/history/.bash_extension
-[ "$matrix_ext_python" == true ] && source "$HOME"/.matrix/extentions/python/.bash_extension
-[ "$matrix_ext_ruby" == true ] && source "$HOME"/.matrix/extentions/ruby/.bash_extension
-[ "$matrix_ext_nodejs" == true ] && source "$HOME"/.matrix/extentions/nodejs/.bash_extension
-[ "$matrix_ext_go" == true ] && source "$HOME"/.matrix/extentions/go/.bash_extension
-[ "$matrix_ext_completions" == true ] && source "$HOME"/.matrix/extentions/completions/.bash_extension
-[ "$matrix_ext_powerline" == true ] && source "$HOME"/.matrix/extentions/powerline/.bash_extension
-[ "$matrix_ext_gcc" == true ] && source "$HOME"/.matrix/extentions/gcc/.bash_extension
-[ "$matrix_ext_docker" == true ] && source "$HOME"/.matrix/extentions/docker/.bash_extension
+# Matrix Plugins configs
+[ "$matrix_ext_history" == true ] && matrix_loader "extensions/history"
 
+[ "$matrix_ext_python" == true ] && matrix_loader "extensions/python"
+[ "$matrix_ext_ruby" == true ] && matrix_loader "extensions/ruby"
+[ "$matrix_ext_nodejs" == true ] && matrix_loader "extensions/nodejs"
+[ "$matrix_ext_go" == true ] && matrix_loader "extensions/go"
+[ "$matrix_ext_completions" == true ] && matrix_loader "extensions/completions"
+[ "$matrix_ext_powerline" == true ] && matrix_loader "extensions/powerline"
+[ "$matrix_ext_gcc" == true ] && matrix_loader "extensions/gcc"
+[ "$matrix_ext_docker" == true ] && matrix_loader "extensions/docker"
+[ "$matrix_ext_archives" == true ] && matrix_loader "extensions/archives"
+[ "$matrix_ext_vim" == true ] && matrix_loader "extensions/vim" && _matrix_vim-init
 
 ##########################
 # Final .matrix Commands to be executed
 # Defined commonly in .matrix/functions
 
-[ "$matrix_load_ssh_keys" == true  ] && load_ssh_keys
-symlink_alts
+[ "$matrix_load_ssh_keys" == true ] && load_ssh_keys
+
 xpull_assign
 check_coreutil
 check_mr

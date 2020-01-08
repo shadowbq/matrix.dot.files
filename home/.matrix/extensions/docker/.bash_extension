@@ -1,0 +1,52 @@
+# Docker 
+
+# Retrieve the tags from the docker hub registry for a specific image
+# 
+
+command -v docker >/dev/null 2>&1
+if [ $? -eq 1 ]; then
+  echo_warn "[matrix.dot.extension.docker] Docker not found, but extension loaded."
+fi
+
+# https://stackoverflow.com/questions/24481564/how-can-i-find-a-docker-image-with-a-specific-tag-in-docker-registry-on-the-dock/32622147#32622147
+function docker-tags {
+  command -v python >/dev/null 2>&1
+  if [ $? -eq 1 ]; then
+    echo_err "[matrix.dot.extension.docker] Python not found."
+    exit 1
+  fi
+  name=$1
+  # Initial URL
+  url=https://registry.hub.docker.com/v2/repositories/library/$name/tags/?page_size=100
+  (
+    # Keep looping until the variable URL is empty
+    while [ ! -z $url ]; do
+      # Every iteration of the loop prints out a single dot to show progress as it got through all the pages (this is inline dot)
+      >&2 echo -n "."
+      # Curl the URL and pipe the output to Python. Python will parse the JSON and print the very first line as the next URL (it will leave it blank if there are no more pages)
+      # then continue to loop over the results extracting only the name; all will be stored in a variable called content
+      content=$(curl -s $url | python -c 'import sys, json; data = json.load(sys.stdin); print(data.get("next", "") or ""); print("\n".join([x["name"] for x in data["results"]]))')
+      # Let's get the first line of content which contains the next URL for the loop to continue
+      url=$(echo "$content" | head -n 1)
+      # Print the content without the first line (yes +2 is counter intuitive)
+      echo "$content" | tail -n +2
+    done;
+    # Finally break the line of dots
+    >&2 echo
+  ) | cut -d '-' -f 1 | sort --version-sort | uniq;
+}
+
+# Run a bash shell in the specified container.
+#
+function docker-shell {
+  if [ $# -ne 1 ]; then
+    echo "Usage: $FUNCNAME CONTAINER_ID"
+    return 1
+  fi
+
+  docker exec -it $1 /bin/bash
+}
+
+function docker-remove-dangling-images {
+  docker rmi $(docker images --filter "dangling=true" -q --no-trunc)
+}

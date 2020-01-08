@@ -1,4 +1,9 @@
+#############################
 # Check for ssh-agent
+## ## ## ## ##
+# shellcheck shell=bash
+#############################
+
 function check_ssh_agent {
     if [[ -z $SSH_AUTH_SOCK ]]; then
        SOCKETFILE=~/.ssh/ssh-agent.sock

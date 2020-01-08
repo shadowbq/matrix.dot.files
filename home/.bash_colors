@@ -32,7 +32,7 @@ unset GREP_OPTIONS
 export GREP_COLOR='1;32'
 export CLICOLOR=1
 
-function showcolors() {
+function showcolors {
 	echo -e "$BLACK BLACK $RED RED $GREEN GREEN $BROWN BROWN"
 	echo -e "$NAVY NAVY $PURPLE PURPLE $CYAN CYAN $SILVER SILVER"
 	echo -e "$GRAY GRAY $PINK PINK $LIME LIME $YELLOW YELLOW $BLUE BLUE"

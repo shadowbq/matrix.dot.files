@@ -1,3 +1,9 @@
+#############################
+# matrix 
+## ## ## ## ##
+# shellcheck shell=bash
+#############################
+
 function check_matrix_online {
   inet_test
   if [ $? -eq 0 ]; then

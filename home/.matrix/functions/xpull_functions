@@ -1,8 +1,8 @@
-#
+#############################
 # This script finds an available web tool that can download a file and print it to standard out
-#
+## ## ## ## ##
 # shellcheck shell=bash
-#
+#############################
 
 function xpull_assign {
 

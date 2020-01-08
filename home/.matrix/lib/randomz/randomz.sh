@@ -1,11 +1,13 @@
 #!/usr/bin/env bash
+# shellcheck shell=bash
+# #####
 # random-between.sh
 # Random number between two specified values. 
 # Script by Bill Gradwohl, with minor modifications by the document author.
 # Corrections in lines 187 and 189 by Anthony Le Clezio.
 # Used with permission.
 
-randomBetween() {
+function randomBetween {
    #  Generates a positive or negative random number
    #+ between $min and $max
    #+ and divisible by $divisibleBy.
@@ -13,7 +15,7 @@ randomBetween() {
    #
    #  Bill Gradwohl - Oct 1, 2003
 
-   syntax() {
+   function syntax {
    # Function embedded within function.
       echo
       echo    "Syntax: randomBetween [min] [max] [multiple]"

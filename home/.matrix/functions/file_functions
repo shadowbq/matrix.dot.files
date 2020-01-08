@@ -1,4 +1,9 @@
+#############################
+# file functions
+## ## ## ## ##
 # shellcheck shell=bash
+#############################
+
 function own() {
   local OWNER_USER
   local OWNER_GROUP
