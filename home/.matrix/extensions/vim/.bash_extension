@@ -1,18 +1,18 @@
 ###########################
 # History Control
-# 
+#
 ###########################
 # shellcheck shell=bash
 #
 ###########################
-function _matrix_vim-init {
+function _matrix_vim-init() {
   vim-symlink-alts
 }
 
-function vim-symlink-alts {
-  command -v vim > /dev/null 2>&1
+function vim-symlink-alts() {
+  command -v vim >/dev/null 2>&1
   if [ $? -eq 0 ]; then
-    alias vi=`command -v vim`
+    alias vi=$(command -v vim)
     if [ "$EDITOR" == "vi" ]; then
       export EDITOR="vim"
     fi
@@ -20,9 +20,9 @@ function vim-symlink-alts {
 }
 
 # sudo vi/vim
-function svi {
-        sudo vi $@
+function svi() {
+  sudo vi $@
 }
-function svim {
-        sudo vim $@
+function svim() {
+  sudo vim $@
 }

@@ -11,31 +11,35 @@ source $matrix/randomz/fileline.sh
 
 if [ ${#@} -gt 0 ]; then
 
-while getopts ":zebaAnirsl:LxuU:h" opt; do
-	case $opt in
-		z) reseed    ;;
-		e) NO_CR=1    ;;
-		a) alphalower  ;;
-		A) alphaupper  ;;
-		n) randomwrapper  ;;
-		i) rangewrapper '0 9' ;;
-		x) rangewrapper '0 100' ;;
-		r) rangewrapper $OPTARG ;;
-		u) urandomwrapper ;;
-		U) urandombelow $OPTARG ;;
-		b) booleanwrapper ;;
-		l) randomline $OPTARG ;;
-		s) shuffle ;;
-		L) lorumipsum ;;
-		h) extend_help
-		   exit 0              ;;
-		* ) die "Could not find task \"$opt\"."
-		   exit 1              ;;
-	esac
-done
+  while getopts ":zebaAnirsl:LxuU:h" opt; do
+    case $opt in
+      z) reseed ;;
+      e) NO_CR=1 ;;
+      a) alphalower ;;
+      A) alphaupper ;;
+      n) randomwrapper ;;
+      i) rangewrapper '0 9' ;;
+      x) rangewrapper '0 100' ;;
+      r) rangewrapper $OPTARG ;;
+      u) urandomwrapper ;;
+      U) urandombelow $OPTARG ;;
+      b) booleanwrapper ;;
+      l) randomline $OPTARG ;;
+      s) shuffle ;;
+      L) lorumipsum ;;
+      h)
+        extend_help
+        exit 0
+        ;;
+      *)
+        die "Could not find task \"$opt\"."
+        exit 1
+        ;;
+    esac
+  done
 
 else
 
-	extend_help
-	exit 1
+  extend_help
+  exit 1
 fi

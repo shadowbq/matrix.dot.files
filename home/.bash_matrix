@@ -44,8 +44,8 @@ check_mr
 ##########################
 # Check for .matrix consistency
 if [ "$matrix_consistency" == true ]; then
-    check_matrix_online
-    check_matrix_local
+  check_matrix_online
+  check_matrix_local
 fi
 
 ##########################

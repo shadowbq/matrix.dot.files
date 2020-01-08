@@ -4,25 +4,25 @@
 # shellcheck shell=bash
 #############################
 
-function load_ssh_keys {
+function load_ssh_keys() {
   if [ "$(type -t go_strict_ssh)" == "function" ]; then
-    if $STRICT_SSH ; then
+    if $STRICT_SSH; then
       go_strict_ssh
     fi
   fi
-  
+
   ssh-add >/dev/null 2>&1
   ssh-add -l >/dev/null 2>&1
 
   if [ $? -eq 0 ]; then
-   echo_notify "Keys successfully imported."
+    echo_notify "Keys successfully imported."
   else
-   echo_err "No SSH Keys Imported."
+    echo_err "No SSH Keys Imported."
   fi
 }
 
 # SSH Strict Modes correction script
-function strict_ssh_set {
+function strict_ssh_set() {
   chmod 700 "$HOME"/.ssh/.
   touch "$HOME"/.ssh/authorized_keys
   touch "$HOME"/.ssh/known_hosts
@@ -32,5 +32,5 @@ function strict_ssh_set {
   own "$HOME"/.ssh/.
   own "$HOME"/.ssh/config
   own "$HOME"/.ssh/known_hosts
-  own "$HOME"/.ssh/authorized_keys 
+  own "$HOME"/.ssh/authorized_keys
 }

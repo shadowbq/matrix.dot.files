@@ -7,11 +7,10 @@
 # past this point for scp and rcp, and it's important to refrain from
 # outputting anything in those cases.
 
-if [[ $- != *i* ]] ; then
-        # Shell is non-interactive.  Be done now!
-        return
+if [[ $- != *i* ]]; then
+  # Shell is non-interactive.  Be done now!
+  return
 fi
-
 
 #############################
 # User specific aliases and functions
@@ -27,5 +26,5 @@ export VISUAL="$editor"
 export STRICT_SSH=false
 
 export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"                   # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion" # This loads nvm bash_completion

@@ -1,18 +1,18 @@
 #############################
-# matrix 
+# matrix
 ## ## ## ## ##
 # shellcheck shell=bash
 #############################
 
-function check_matrix_online {
+function check_matrix_online() {
   inet_test
   if [ $? -eq 0 ]; then
 
     command -v git >/dev/null 2>&1
     if [ $? -eq 0 ]; then
 
-      head=`git --git-dir="$HOME"/.homesick/repos/matrix.dot.files/.git rev-parse HEAD`
-      remote=`git --git-dir="$HOME"/.homesick/repos/matrix.dot.files/.git ls-remote origin -h refs/heads/master |cut -f1`
+      head=$(git --git-dir="$HOME"/.homesick/repos/matrix.dot.files/.git rev-parse HEAD)
+      remote=$(git --git-dir="$HOME"/.homesick/repos/matrix.dot.files/.git ls-remote origin -h refs/heads/master | cut -f1)
 
       if [ "$head" != "$remote" ]; then
         echo_err ".matrix is outdated, run 'homesick pull matrix.dot.files'"
@@ -24,19 +24,19 @@ function check_matrix_online {
   else
     echo_warn "No internet connection."
   fi
-  
+
 }
 
-function check_matrix_local {
+function check_matrix_local() {
   command -v homesick >/dev/null 2>&1
   if [ $? -eq 0 ]; then
-    matrix_status=`homesick status matrix.dot.files`
+    matrix_status=$(homesick status matrix.dot.files)
     if [[ "$matrix_status" =~ "nothing to commit" ]]; then
       echo -n ""
     else
       echo -e "$matrix_status"
     fi
-  else 
+  else
     echo_warn "Unable to validate .matrix local (missing:homesick/git) (possible/rvm failure)"
   fi
 }

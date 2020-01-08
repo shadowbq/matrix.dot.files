@@ -4,17 +4,17 @@
 # shellcheck shell=bash
 #############################
 
-function xpull_assign {
+function xpull_assign() {
 
   if [ -x "$(command -v wget)" ]; then
-    XPULL_TOOL='wget --no-check-certificate -O -' 
-    XPULL_TOOL_SILENT='wget --no-check-certificate -q -O -' 
+    XPULL_TOOL='wget --no-check-certificate -O -'
+    XPULL_TOOL_SILENT='wget --no-check-certificate -q -O -'
   elif [ -x "$(command -v curl)" ]; then
-    XPULL_TOOL='curl -L -k' 
-    XPULL_TOOL_SILENT='curl -L -k -s' 
+    XPULL_TOOL='curl -L -k'
+    XPULL_TOOL_SILENT='curl -L -k -s'
   elif [ -x "$(command -v fetch)" ]; then
-    XPULL_TOOL='fetch -a -o -' 
-    XPULL_TOOL_SILENT='fetch -a -q -o -' 
+    XPULL_TOOL='fetch -a -o -'
+    XPULL_TOOL_SILENT='fetch -a -q -o -'
   else
     echo_err "Error. Could not find a compatable xpull tool"
   fi

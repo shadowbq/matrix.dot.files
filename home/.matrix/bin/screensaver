@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Really Nice bash matrix screensaver 
+# Really Nice bash matrix screensaver
 
 #                                    1                           8
 #                                                            8              2
@@ -17,6 +17,6 @@
 #       7   4             9            5
 #               778                                   8                        9
 #        9                                                 2      2
+## Broken macos
 
-
-tr -c "[:digit:]" " " < /dev/urandom | dd cbs=$COLUMNS conv=unblock | GREP_COLOR="1;32" grep --color "[^ ]"
+tr -c "[:digit:]" " " </dev/urandom | dd cbs=$COLUMNS conv=unblock | GREP_COLOR="1;32" grep --color "[^ ]"

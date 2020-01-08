@@ -2,8 +2,8 @@
 # History Control
 
 # HISTSIZE is the number of lines or commands that are stored in memory in a history list while your bash session is ongoing.
-# HISTFILESIZE is the number of lines or commands that 
-#     (a) are allowed in the history file at startup time of a session, and 
+# HISTFILESIZE is the number of lines or commands that
+#     (a) are allowed in the history file at startup time of a session, and
 #     (b) are stored in the history file at the end of your bash session for use in future sessions.
 
 export HISTCONTROL=ignoredups:erasedups:ignorespace
@@ -16,7 +16,7 @@ shopt -s histappend
 ## Heavy handed shared terminal bash history
 # export PROMPT_COMMAND="history -a; history -c; history -r; $PROMPT_COMMAND"
 
-function incognito {
+function incognito() {
   # set +o history to turn it off, and set -o history to turn it on
   set +o history
   unset HISTFILE

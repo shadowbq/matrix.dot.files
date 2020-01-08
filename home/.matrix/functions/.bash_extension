@@ -1,42 +1,60 @@
 #############################
-# Load all bash files with filename ending with '_functions' 
-# 
+# Load all bash files with filename ending with '_functions'
+#
 # These files are loaded at shell login. (use .matrix/lib for runtime)
 ## ## ## ## ##
 # shellcheck shell=bash disable=SC1090
 #############################
 
 # Use as an STDERR reporter
-function echo_warn { echo -ne "${YELLOW}"; cat <<< "$@" 1>&2; echo -ne "${NORMAL}";}
-function echo_err { echo -ne "${RED}"; cat <<< "$@" 1>&2; echo -ne "${NORMAL}";}
-function echo_notify { echo -ne "${GREEN}"; cat <<< "$@" 1>&2; echo -ne "${NORMAL}";}
-function echo_info { echo -ne "${BLUE}"; cat <<< "$@" 1>&2; echo -ne "${NORMAL}";}
-function echo_debug { 
-        if [ -z $MATRIX_DEBUG ]; then
-                echo -ne "${GRAY}"; cat <<< "$@" 1>&2; echo -ne "${NORMAL}";
-        fi
+function echo_warn() {
+  echo -ne "${YELLOW}"
+  cat <<<"$@" 1>&2
+  echo -ne "${NORMAL}"
+}
+function echo_err() {
+  echo -ne "${RED}"
+  cat <<<"$@" 1>&2
+  echo -ne "${NORMAL}"
+}
+function echo_notify() {
+  echo -ne "${GREEN}"
+  cat <<<"$@" 1>&2
+  echo -ne "${NORMAL}"
+}
+function echo_info() {
+  echo -ne "${BLUE}"
+  cat <<<"$@" 1>&2
+  echo -ne "${NORMAL}"
+}
+function echo_debug() {
+  if [ -z $MATRIX_DEBUG ]; then
+    echo -ne "${GRAY}"
+    cat <<<"$@" 1>&2
+    echo -ne "${NORMAL}"
+  fi
 }
 
-function matrix_loader {
-        local loader 
-        loader=$1
-        if [ -f "$HOME"/.matrix/${loader}/.bash_extension ]; then
-          source "$HOME"/.matrix/${loader}/.bash_extension
-        else
-          echo_err "matrix .bash_extension not found for ${loader}."
-        fi
+function matrix_loader() {
+  local loader
+  loader=$1
+  if [ -f "$HOME"/.matrix/${loader}/.bash_extension ]; then
+    source "$HOME"/.matrix/${loader}/.bash_extension
+  else
+    echo_err "matrix .bash_extension not found for ${loader}."
+  fi
 
-        if [ -f "$HOME"/.matrix/${loader}/.bash_aliases ]; then
-          source "$HOME"/.matrix/${loader}/.bash_aliases
-        fi
+  if [ -f "$HOME"/.matrix/${loader}/.bash_aliases ]; then
+    source "$HOME"/.matrix/${loader}/.bash_aliases
+  fi
 
-        if [ -d "$HOME"/.matrix/${loader}/bin ]; then
-          PATH=$PATH:"$HOME"/.matrix/${loader}/bin
-          export PATH
-        fi
+  if [ -d "$HOME"/.matrix/${loader}/bin ]; then
+    PATH=$PATH:"$HOME"/.matrix/${loader}/bin
+    export PATH
+  fi
 }
 
 files=$(find $HOME/.matrix/functions/*_functions -type f 2>/dev/null)
 for file in ${files}; do
-        source ${file}
+  source ${file}
 done

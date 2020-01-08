@@ -1,15 +1,15 @@
 #############################
-# Check for GNU GPLV3 Coreutilities 
-# 
+# Check for GNU GPLV3 Coreutilities
+#
 ## ## ## ## ##
 # shellcheck shell=bash
 #############################
 
-function check_coreutil {
+function check_coreutil() {
 
   #bc usage: 0 if the relation is false and 1 if the relation is true.
 
-  sortver=$(sort --version|head -1|grep -Eo '[0-9]+[\.][0-9]+'|head -1)
+  sortver=$(sort --version | head -1 | grep -Eo '[0-9]+[\.][0-9]+' | head -1)
   if [ $(echo "${sortver} > 6.0" | bc) -eq 1 ]; then
     export MODERNCOREUTILS=true
   else
@@ -19,7 +19,7 @@ function check_coreutil {
       export BREWCORE=true
       gsort=$(command -v gsort)
       # shellcheck disable=SC2010 (we want the symlink output)
-      foo=$(ls -la "$gsort" |grep -o "$gsort.*")
+      foo=$(ls -la "$gsort" | grep -o "$gsort.*")
       echo_debug "GPLV3 gnu-coreutils: $foo"
       # gsortver=$(gsort --version|head -1|grep -Eo '[0-9]+[\.][0-9]+'|head -1)
       # echo 'GSort version: ' $gsortver

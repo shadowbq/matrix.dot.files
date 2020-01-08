@@ -4,12 +4,11 @@
 # shellcheck shell=bash
 #############################
 
-function check_mr {
-	command -v mr >/dev/null 2>&1
- 
-	if [ $? -eq 1 ]; then
-	   echo_warn " MR git bundle manager is missing. Install 'mr'. "
-	   echo_warn " Run: 'cd ~ && mr -j5 update ' "
-	fi
-}  
+function check_mr() {
+  command -v mr >/dev/null 2>&1
 
+  if [ $? -eq 1 ]; then
+    echo_warn " MR git bundle manager is missing. Install 'mr'. "
+    echo_warn " Run: 'cd ~ && mr -j5 update ' "
+  fi
+}
