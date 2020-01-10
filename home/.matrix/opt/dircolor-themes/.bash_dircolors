@@ -12,3 +12,9 @@ if [ "$TERM" != "dumb" ]; then
             eval `dircolors -b /etc/DIR_COLORS`
     fi
 fi
+
+
+# Notes: 
+# https://www.gnu.org/software/coreutils/manual/html_node/dircolors-invocation.html
+# https://unix.stackexchange.com/questions/91937/mac-os-x-dircolors-not-found
+# https://unix.stackexchange.com/questions/94299/dircolors-modify-color-settings-globaly

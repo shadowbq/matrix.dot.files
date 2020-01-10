@@ -4,6 +4,10 @@
 # execution parameters and has boilerplate code for stuff common to most
 # scripts.
 
+# References
+# https://web.archive.org/web/20180825140830/http://abhipandey.com/2016/03/getopt-vs-getopts/
+# https://web.archive.org/web/20181102031652/https://sookocheff.com/post/bash/parsing-bash-script-arguments-with-shopts/
+
 # Set execution parameters:
 # -e: Exit immediately if a command exits with a non-zero status.
 # -u: Treat unset variables as an error when substituting.
