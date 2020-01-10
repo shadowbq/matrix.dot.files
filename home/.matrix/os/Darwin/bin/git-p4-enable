@@ -1,0 +1,32 @@
+#!/usr/bin/env bash
+
+if [[ ! -x /Applications/p4merge.app/Contents/MacOS/p4merge ]]; then
+  echo_err "p4 not found, exiting"
+  exit 1
+fi
+
+# if git config doesn't come back with a configured toolset.
+
+_rtv=$(git config --get-regexp tool)
+if [[ $? -eq 1 ]]; then
+    # Don't want to interpret variables in the text, use single quotes on 'EOT'
+
+cat <<'EOT' >> ~/.gitconfig
+[diff]
+  tool = sourcetree
+[merge]
+  tool = sourcetree
+[difftool "sourcetree"]
+  cmd = /Applications/p4merge.app/Contents/MacOS/p4merge \"$LOCAL\" \"$REMOTE\"
+  path = 
+[mergetool "sourcetree"]
+  cmd = /Applications/p4merge.app/Contents/MacOS/p4merge \"$BASE\" \"$LOCAL\" \"$REMOTE\" \"$MERGED\"
+  trustExitCode = true
+EOT
+
+    echo "p4merge app added to .gitconfig as sourcetree. use it: 'git mergetool' & 'git difftool'"
+    echo "Consider updating the -gui as well."
+else
+    git config --get-regexp tool
+fi
+

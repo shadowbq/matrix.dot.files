@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+source "$HOME"/.matrix/functions/.bash_errors
+
+echo_err 'NO DMIDECODE, Use system_profiler'
+echo 'Ex: "system_profiler SPHardwareDataType -json |jq ."'
+
+if [[ $(command -v jq) ]]; then
+    system_profiler SPHardwareDataType -json | jq .
+fi
+exit 1

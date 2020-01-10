@@ -6,34 +6,7 @@
 # shellcheck shell=bash disable=SC1090
 #############################
 
-# Use as an STDERR reporter
-function echo_warn() {
-  echo -ne "${YELLOW}"
-  cat <<<"$@" 1>&2
-  echo -ne "${NORMAL}"
-}
-function echo_err() {
-  echo -ne "${RED}"
-  cat <<<"$@" 1>&2
-  echo -ne "${NORMAL}"
-}
-function echo_notify() {
-  echo -ne "${GREEN}"
-  cat <<<"$@" 1>&2
-  echo -ne "${NORMAL}"
-}
-function echo_info() {
-  echo -ne "${BLUE}"
-  cat <<<"$@" 1>&2
-  echo -ne "${NORMAL}"
-}
-function echo_debug() {
-  if [ -z $MATRIX_DEBUG ]; then
-    echo -ne "${GRAY}"
-    cat <<<"$@" 1>&2
-    echo -ne "${NORMAL}"
-  fi
-}
+source "$HOME"/.matrix/functions/.bash_errors
 
 function matrix_loader() {
   local loader

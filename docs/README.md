@@ -1,4 +1,4 @@
-# The Opinion:
+# The Opinion
 
 *dot.matrix uses `bash`. I prefer 4.x and above! I prefer GNU Coreutils with GPLv3 (moderncore). I rarely use `sh`*
 
@@ -12,7 +12,7 @@ I prefer fancy and colorful output when possible.
 
 I prefer shell scripts that don't require python, ruby, node, etc.
 
-I agree with many concepts in https://google.github.io/styleguide/shell.xml but not all.
+I agree with many concepts in https://google.github.io/styleguide/shell.xml but not all, see refer to `README.bash.md` for style guide.
 
 ## Binaries
 
@@ -31,6 +31,8 @@ Explain hard code with:
 
 ## Bash Styles
 
+Refer to `README.bash.md` for style guide.
+
 Please use shellcheck https://github.com/koalaman/shellcheck
 
 ```shell
@@ -39,18 +41,7 @@ Please use shellcheck https://github.com/koalaman/shellcheck
 
 Ref: https://github.com/koalaman/shellcheck/wiki/SC2148
 
-### Bash Functions
-
-`function echo_warn() {}` or `function echo_warn {}`
-
-Opinion: Do Not use parenthesis, and do use "function" keyword.
-The function keyword is extraneous when "()" is present after the function name, but enhances quick identification of functions.
-
-Bowing to `shfmt` tool wanting () even if there is a `function`. This is an not an actual historical track but one which came from portability merging.
-
-* https://github.com/mvdan/sh/blob/e3d6f0b10cf97c613f8ff79bcf84809d5ad7c05a/syntax/parser_test.go#L1495
-
-### Bash 
+### Bash
 
 #### Command Substitution
 

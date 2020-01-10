@@ -12,28 +12,47 @@
 #              exited with a non-zero status
 set -euo pipefail
 
-# Command-line argument parsing is done here:
+function usage() {
+      echo "Usage:"
+      echo "    command -a                    command with a option true."
+      echo "    command -b value              comand with b arg set to 'value'."
+      exit 1
+}
 
+[ $# -eq 0 ] && usage
+
+# Command-line argument parsing is done here:
 # default args are '-a', '-b ARG'
-ARGS="ab:"
+_GETOPTS="ab:"
 
 # set the default argument values here
 ARG_A=false
 ARG_B="defaults for -b"
 
 # set
-while getopts "${ARGS}" opts; do
+while getopts "${_GETOPTS}" opts; do
     case "${opts}" in
         a)
             ARG_A=true
             ;;
         b)
-            ARG_B=${OPTARG}
+            ARG_B="${OPTARG}"
             ;;
-        ?)
-            exit 1
+        : )
+            echo "Invalid option: ${OPTARG} requires an argument" 1>&2
+            ;;
+        [h?] | * )
+            usage
+            ;;    
     esac
 done
 
-echo $ARG_A
-echo $ARG_B
+echo "$ARG_A"
+echo "$ARG_B"
+
+shift $((OPTIND-1))
+
+echo "Remaining arguments:"
+for arg; do 
+    echo '--> '"\`$arg'" ; 
+done

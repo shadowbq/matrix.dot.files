@@ -66,9 +66,9 @@ function check_first_bash_copmpletion
 
 function check_first_vim {
     if [ -d "$HOME"/.vim/bundle/Vundle.vim ]; then
-        echo_info "Found Vundle..."
+        echo_notify "Found .vim config Vundle..."
         if [ -d "$HOME"/.vim/bundle/vim-airline ]; then
-            echo_info "Vundle plugins likely found."
+            echo_notify "Vundle plugins likely found."
         else
             echo_warn "Need to install VIM Vundle bundles: 'vim +PluginInstall +qall'"
         fi 

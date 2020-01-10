@@ -2,7 +2,9 @@
 #
 # References: http://mywiki.wooledge.org/BashGuide/Practices#Bash_Tests
 #             http://mywiki.wooledge.org/BashFAQ/031
-# 
+#             https://riptutorial.com/bash
+#             https://riptutorial.com/bash/example/2476/file-type-tests
+
 # dot.matrix opinionated testing.
 # dot.matix is for userspace consistancy, not service consistancy. dot.matrix isn't needed for alpine or coreos.  
 #
@@ -58,9 +60,24 @@ function my-tests-3() {
 }
 
 function my-tests-4() {
+  # https://blog.fpmurphy.com/2012/09/difference-between-and-in-shell-scripts.html
   # use double brackets over double parenthesis as there is no shell expansion with double parenthesis.
   [[ '1 + 1' -eq 2 ]] $(echo "this works." >&2) : echo 'bar'
 }
+
+# OSX seems to ship with 3.2 (released in 2007), but anything like Ubuntu will 
+# have shipped with a more recent version of Bash (4.1) since at least 10.04.
+#
+# https://github.com/sstephenson/bats/issues/49
+#
+# Bash 4.1-alpha "fixed" this in 2009 changelog:
+# The [[ and (( commands are now subject to the setting of `set -e' and the ERR trap.
+
+echo_notify "testing bash ${BASH_VERSION}"
+[ "${BASH_VERSINFO:-0}" -ge 4 ] || echo_warn "Bash still 3.x or lower"
+echo "Minor: ${BASH_VERSINFO[1]}"
+for ((i=0; i<=5; i++)); do echo "BASH_VERSINFO[$i] = ${BASH_VERSINFO[$i]}"; done
+
 
 # Run the tests
 my-tests-1

@@ -40,6 +40,20 @@ Powerline has a number of configurations:
 
 DOCS: https://powerline.readthedocs.io/en/master/configuration.html
 
+### Powerline Fonts
+
+```shell
+#Debian / Ubuntu Install Help
+pip install powerline-status
+apt install fonts-powerline
+```
+
+https://github.com/abertsch/Menlo-for-Powerline
+
+Powerline for the VSCODE Terminal
+
+https://dev.to/mattstratton/making-powerline-work-in-visual-studio-code-terminal-1m7
+
 ### For Quick Customization:
 
 If you want to modify some file you can create `~/.config/powerline` directory and put modifications there: all configuration files are merged with each other.

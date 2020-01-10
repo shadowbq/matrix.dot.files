@@ -141,12 +141,3 @@ Other .file(s) that can enhance the unified experience
 
 For More help please the `/docs` directory/..
 
-docs/README.rmate.md  
-docs/README.proxied.md  
-docs/README.macos.md  
-docs/README.ack.md  
-docs/README.secrets.md  
-docs/README.powerline.md  
-docs/README.styles.md  
-docs/README.randomz.md  
-docs/README.vim.md  

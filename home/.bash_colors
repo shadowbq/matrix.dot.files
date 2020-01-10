@@ -38,3 +38,15 @@ function showcolors {
 	echo -e "$GRAY GRAY $PINK PINK $LIME LIME $YELLOW YELLOW $BLUE BLUE"
 	echo -e "$MAGENTA MAGENTA $BCYAN BCYAN $WHITE WHITE$NC"
 }
+
+: '
+# background colors
+local BGBLACK="\[\033[40m\]"  # black
+local BGRED="\[\033[41m\]"  # red
+local BGGREEN="\[\033[42m\]"  # green
+local BGBROWN="\[\033[43m\]"  # yellow
+local BGNAVY="\[\033[44m\]"  # blue
+local BGPRUPLE="\[\033[45m\]"  # magenta
+local BGCYAN="\[\033[46m\]"  # cyan
+local BGSILVER="\[\033[47m\]"  # white
+'

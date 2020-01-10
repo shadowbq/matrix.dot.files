@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+# OSX / macos 
+# Catalina Supported 2020. 
+
+system_profiler -json SPApplicationsDataType | jq '.SPApplicationsDataType[]._name' |sed 's/\"//g' |sort -u
