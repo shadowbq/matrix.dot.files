@@ -50,3 +50,11 @@ function docker-shell {
 function docker-remove-dangling-images {
   docker rmi $(docker images --filter "dangling=true" -q --no-trunc)
 }
+
+function powerline-kubernetes-toggle() {
+    if [[ $RENDER_POWERLINE_KUBERNETES = "NO" ]]; then
+      export RENDER_POWERLINE_KUBERNETES=YES
+    else
+      export RENDER_POWERLINE_KUBERNETES=NO
+    fi
+}

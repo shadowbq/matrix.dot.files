@@ -1,0 +1,32 @@
+From 1db215312ca4fffb858a05fb3dc069c32ac3ea85 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Rodrigo=20Arg=C3=BCello=20Flores?= <rodrigo@kkvesper.jp>
+Date: Fri, 10 May 2019 16:34:10 +0900
+Subject: [PATCH] Fix kubernetes-py import
+
+---
+ powerkube/__init__.py   | 2 +-
+ tests/test_powerkube.py | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/powerkube/__init__.py b/powerkube/__init__.py
+index af2bfec..d33dfc8 100644
+--- a/powerkube/__init__.py
++++ b/powerkube/__init__.py
+@@ -1,4 +1,4 @@
+-import kubernetes
++import kubernetes_py as kubernetes
+ from powerline.theme import requires_segment_info
+ 
+ _KUBE_SYMBOL = u'\U00002388 '
+diff --git a/tests/test_powerkube.py b/tests/test_powerkube.py
+index c51f1f4..86ff486 100644
+--- a/tests/test_powerkube.py
++++ b/tests/test_powerkube.py
+@@ -1,6 +1,6 @@
+ import logging
+ 
+-import kubernetes
++import kubernetes_py as kubernetes
+ import pytest
+ 
+ import powerkube as pk

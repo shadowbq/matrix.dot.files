@@ -11,6 +11,23 @@ function check_powerline_requirements {
   pip show psutil -q >/dev/null 2>&1 || { echo_warn "[POWERLINE WARNING] No python pip psutil Found."; }
 }
 
+function check_powerline_addon {
+   # https://github.com/powerline/powerline
+   pip show powerline-status -q >/dev/null 2>&1 || { echo_warn "[POWERLINE WARNING] No python pip powerline-status Found."; }
+
+   # https://github.com/zcmarine/powerkube
+   pip show powerkube -q >/dev/null 2>&1 || { echo_warn "[POWERLINE WARNING] No python pip powerkube Found."; }
+
+   # https://github.com/jaspernbrouwer/powerline-gitstatus
+   # powerline git-status is enabled in the theme dot.matrix so it works ootb.
+   # $HOME/.config/powerline/colorschemes/default.json
+   # $HOME/.config/powerline/colorschemes/matrix.json
+   # $HOME/.config/powerline/themes/shell/__main__.json
+   # $HOME/.config/powerline/themes/shell/matrix.json 
+   pip show powerline-gitstatus -q >/dev/null 2>&1 || { echo_warn "[POWERLINE WARNING] No python pip powerline-gitstatus Found."; }
+}
+
+
 function check_powerline {
   if [[ -n $matrix_ext_powerline ]]; then
     command -v powerline-daemon >/dev/null 2>&1

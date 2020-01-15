@@ -11,3 +11,8 @@ function own() {
   OWNER_GROUP=$(id -g -n)
   sudo chown -R "${OWNER_USER}:${OWNER_GROUP}" "${1:-.}"
 }
+
+# echo the PWD subdirectory only "/user/home/me" #=> "me"
+function pwsd() {
+  echo "${PWD##*/}"
+}

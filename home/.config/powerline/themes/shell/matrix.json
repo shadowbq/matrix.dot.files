@@ -42,6 +42,14 @@
 				"priority": 40
 			},
 			{
+				"function": "powerkube_fork.context",
+				"priority": 30,
+				"args": {"show_cluster": true,
+					 "show_namespace": true,
+					 "show_user": true,
+					 "alert_namespaces": ["kubeaddons", "infra-prod"]}
+			},
+			{
 				"function": "powerline.segments.shell.cwd",
 				"priority": 10
 			},

@@ -6,6 +6,16 @@ It breaks.. so much.. local compilation, and the security restrictions are all o
 
 Reference: https://stackoverflow.com/questions/58278260/cant-compile-a-c-program-on-a-mac-after-upgrading-to-catalina-10-15/58278392#58278392
 
+## Opt
+
+### Sublime3 Keymaps
+
+Settings and keymaps are stored within both packed and unpacked packages. Those can be overruled/extended by saving them to `$HOME/Library/Application Support/Sublime Text 3/Packages/User/.`
+
+The file is available in opt
+
+`home/.matrix/os/Darwin/opt/Default (OSX).sublime-keymap`
+
 ## Installation help
 
 ### ffmpeg (circa 2019)

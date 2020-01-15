@@ -65,6 +65,11 @@
 		"gitstatus_changed":         { "fg": "mediumorange",    "bg": "gray2", "attrs": [] },
 		"gitstatus_untracked":       { "fg": "brightestorange", "bg": "gray2", "attrs": [] },
 		"gitstatus_stashed":         { "fg": "darkblue",        "bg": "gray2", "attrs": [] },
-		"gitstatus:divider":         { "fg": "gray8",           "bg": "gray2", "attrs": [] }
+		"gitstatus:divider":         { "fg": "gray8",           "bg": "gray2", "attrs": [] },
+		"kubernetes_cluster":         { "fg": "white", "bg": "gray6",     "attrs": [] },
+		"kubernetes_namespace":       { "fg": "white", "bg": "gray8",     "attrs": [] },
+		"context": { "fg": "white", "bg": "gray6", "attrs": [] },
+	    "kubernetes_namespace:alert": { "fg": "white", "bg": "brightred", "attrs": [] },
+	    "kubernetes_user":            { "fg": "white", "bg": "gray9",     "attrs": [] }
 	}
 }
