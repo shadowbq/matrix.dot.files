@@ -1,0 +1,133 @@
+#############################
+# Security Functions for dot_matrix
+## ## ## ## ##
+# shellcheck shell=bash
+#############################
+
+#alias secrets_load='eval $(cat ~/.bash_encrypted |base64 -d |gpg --decrypt 2> /dev/null)'
+#alias secrets_load='eval $(secrets_decrypt ~/.bash_encrypted)'
+function secrets_decrypt() {
+  if [[ ! -f "${1}" ]]; then
+    echo_err "secrets files ${1} does not existz"
+  fi
+  cat "$1" |base64 -d |gpg --decrypt 2> /dev/null
+}
+
+# In base64 encoding, the character set is [A-Z, a-z, 0-9, and + /]. If the rest length is less than 4, the string is padded with '=' characters.
+
+#
+# USER INTERACTION -------------------------------------------------------------
+#
+
+# matrix_ask_to_continue message
+#
+# Asks the user - using the given message - to either hit 'y/Y' to continue or
+# 'n/N' to cancel the script.
+#
+# Example:
+# matrix_ask_to_continue "Do you want to delete the given file?"
+#
+# On yes (y/Y), the function just returns; on no (n/N), it prints a confirmative
+# message to the screen and exits with return code 1 by calling `echo_err`.
+#
+function matrix_ask_to_continue {
+  local msg=${1}
+  local waitingforanswer=true
+  while ${waitingforanswer}; do
+    read -p "${msg} (hit 'y/Y' to continue, 'n/N' to cancel) " -n 1 ynanswer
+    case ${ynanswer} in
+      [Yy] ) waitingforanswer=false; break;;
+      [Nn] ) echo ""; echo_err "Operation cancelled as requested!";;
+      *    ) echo ""; echo "Please answer either yes (y/Y) or no (n/N).";;
+    esac
+  done
+  echo ""
+}
+
+# matrix_ask_for_password variable_name prompt
+#
+# Asks the user for her password and stores the password in a read-only
+# variable with the given name.
+#
+# The user is asked with the given message prompt. Note that the given prompt
+# will be complemented with string ": ".
+#
+# This function does not echo nor completely hides the input but echos the
+# asterisk symbol ('*') for each given character. Furthermore, it allows to
+# delete any number of entered characters by hitting the backspace key. The
+# input is concluded by hitting the enter key.
+#
+# Example:
+# matrix_ask_for_password "THEPWD" "Please enter your password"
+#
+# See: http://stackoverflow.com/a/24600839/66981
+#
+function matrix_ask_for_password {
+  local VARIABLE_NAME=${1}
+  local MESSAGE=${2}
+
+  echo -n "${MESSAGE}: "
+  stty -echo
+  local CHARCOUNT=0
+  local PROMPT=''
+  local CHAR=''
+  local PASSWORD=''
+  while IFS= read -p "${PROMPT}" -r -s -n 1 CHAR
+  do
+    # Enter -> accept password
+    if [[ ${CHAR} == $'\0' ]] ; then
+      break
+    fi
+    # Backspace -> delete last char
+    if [[ ${CHAR} == $'\177' ]] ; then
+      if [ ${CHARCOUNT} -gt 0 ] ; then
+        CHARCOUNT=$((CHARCOUNT-1))
+        PROMPT=$'\b \b'
+        PASSWORD="${PASSWORD%?}"
+      else
+        PROMPT=''
+      fi
+    # All other cases -> read last char
+    else
+      CHARCOUNT=$((CHARCOUNT+1))
+      PROMPT='*'
+      PASSWORD+="${CHAR}"
+    fi
+  done
+  stty echo
+  readonly ${VARIABLE_NAME}=${PASSWORD}
+  echo
+}
+
+# matrix_ask_for_password_twice variable_name prompt
+#
+# Asks the user for her password twice. If the two inputs match, the given
+# password will be stored in a read-only variable with the given name;
+# otherwise, it exits with return code 1 by calling `echo_err`.
+#
+# The user is asked with the given message prompt. Note that the given prompt
+# will be complemented with string ": " at the first time and with
+# " (again): " at the second time.
+#
+# This function basically calls `matrix_ask_for_password` twice and compares the
+# two given passwords. If they match, the password will be stored; otherwise,
+# the functions exits by calling `echo_err`.
+#
+# Example:
+# matrix_ask_for_password_twice "THEPWD" "Please enter your password"
+#
+function matrix_ask_for_password_twice {
+  local VARIABLE_NAME=${1}
+  local MESSAGE=${2}
+  local VARIABLE_NAME_1="${VARIABLE_NAME}_1"
+  local VARIABLE_NAME_2="${VARIABLE_NAME}_2"
+
+  matrix_ask_for_password "${VARIABLE_NAME_1}" "${MESSAGE}"
+  matrix_ask_for_password "${VARIABLE_NAME_2}" "${MESSAGE} (again)"
+
+  if [ "${!VARIABLE_NAME_1}" != "${!VARIABLE_NAME_2}" ] ; then
+    echo_err "Error: password mismatch"
+  fi
+
+  readonly ${VARIABLE_NAME}="${!VARIABLE_NAME_2}"
+}

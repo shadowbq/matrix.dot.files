@@ -1,0 +1,35 @@
+#!/usr/bin/env bash
+
+function _release_exists(){
+    local pass
+    pass="false"
+    for f in /etc/*-release; do
+
+        ## Check if the glob gets expanded to existing files.
+        ## If not, f here will be exactly the pattern above
+        ## and the exists test will evaluate to false.
+        pass=$([ -e "$f" ]) && "true"
+
+        ## This is all we needed to know, so we can break after the first iteration
+        break
+    done 
+    echo $pass
+}
+
+arch=$(uname -m)
+kernel=$(uname -r)
+if [ -n "$(command -v lsb_release)" ]; then
+	distroname=$(lsb_release -s -d)
+elif [ -f "/etc/os-release" ]; then
+	distroname=$(grep PRETTY_NAME /etc/os-release | sed 's/PRETTY_NAME=//g' | tr -d '="')
+elif [ -f "/etc/debian_version" ]; then
+	distroname="Debian $(cat /etc/debian_version)"
+elif [ -f "/etc/redhat-release" ]; then
+	distroname=$(cat /etc/redhat-release)
+elif [ _release_exists == "true" ]; then
+	distroname=$(cat /etc/*-release)    
+else
+	distroname="$(uname -s) $(uname -r)"
+fi
+
+echo "${distroname}"

@@ -1,6 +1,8 @@
 #############################
 # Color Definitions(non-exported) used for .matrix loader
-
+#
+# Terminal Color FAQ: https://gist.github.com/XVilka/8346728
+#
 export BLACK='\033[0;30m'
 export RED='\033[0;31m'
 export GREEN='\033[0;32m'
@@ -37,6 +39,10 @@ function showcolors {
 	echo -e "$NAVY NAVY $PURPLE PURPLE $CYAN CYAN $SILVER SILVER"
 	echo -e "$GRAY GRAY $PINK PINK $LIME LIME $YELLOW YELLOW $BLUE BLUE"
 	echo -e "$MAGENTA MAGENTA $BCYAN BCYAN $WHITE WHITE$NC"
+}
+# $ showcolor "FF0088" "61E931" "1256E2"
+function showcolor() {
+    perl -e 'foreach $a(@ARGV){print "\e[48;2;".join(";",unpack("C*",pack("H*",$a)))."m \e[49m "};print "\n"' "$@"
 }
 
 : '

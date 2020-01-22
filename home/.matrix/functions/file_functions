@@ -16,3 +16,12 @@ function own() {
 function pwsd() {
   echo "${PWD##*/}"
 }
+
+# if symlink, readlink returns not empty string (the symlink target)
+# if string is not empty, test exits w/ 0 (normal)
+#
+# if non symlink, readlink returns empty string
+# if string is empty, test exits w/ 1 (error)
+function is_symlink() {
+  test "$(readlink "${1}")";
+}

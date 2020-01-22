@@ -30,9 +30,30 @@
 				"priority": 20,
 				"before": "⩜ ",
                 "args": {
-                    "variable": "AWS_PROFILE"
+                    "variable": "XXX_TEST_ENV"
                 }
-            },
+			},
+			{
+				"function": "powerline_inject.context",
+				"priority": 30,
+				"args": {
+					"show_env": false,
+					"env_list": ["AWS_EPOCH", "AWS_PROFILE"],
+					"before": "⩜ ", 
+					"env_highlighter": "powerline_inject"
+				}
+			},
+			{
+				"function": "powerline_inject.context",
+				"name": "github",
+				"priority": 30,
+				"args": {
+					"show_env": false,
+					"env_list": ["GITHUB_TOKEN"],
+					"before": "🔑 ", 
+					"env_highlighter": "powerline_inject_bold"
+				}
+			},
 			{
 				"function": "powerline.segments.common.env.virtualenv",
 				"priority": 50
@@ -44,10 +65,12 @@
 			{
 				"function": "powerkube_fork.context",
 				"priority": 30,
-				"args": {"show_cluster": true,
-					 "show_namespace": true,
-					 "show_user": true,
-					 "alert_namespaces": ["kubeaddons", "infra-prod"]}
+				"args": {
+					"show_cluster": true,
+					"show_namespace": true,
+					"show_user": true,
+					"alert_namespaces": ["kubeaddons", "infra-prod"]
+				}
 			},
 			{
 				"function": "powerline.segments.shell.cwd",

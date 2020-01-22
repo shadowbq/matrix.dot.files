@@ -24,3 +24,7 @@ function incognito() {
   echo_debug "Do not use passwords on the cli, as the process can be viewed globally. Use ENV"
   echo_debug "Use: \`history -d <number>\` where <number> is the entry number to remove the entry."
 }
+
+function hist_pwd () {
+    export HISTFILE="$(pwd)/.bash_history"
+}

@@ -1,6 +1,10 @@
 #!/usr/bin/env bash
-# To use in a shell (to automatically unset AWS_PROFILE): 
+# To use in a shell (to automatically unset AWS_PROFILE, and set a AWS_EPOCH TTL): 
 # alias aws-login-status='eval $(aws-test-authentication)'
+
+# ExitCode: 255 - Authentication Failure
+# ExitCode: 0 - Authentication Success
+
 
 # Note: eval in the example alias will not propagate the exit code
 # https://unix.stackexchange.com/q/414740/104660
@@ -10,31 +14,50 @@
 
 # If its been over 200 seconds check AWS SaaS creds
 
+function _check_aws_sts() {
+    aws sts get-caller-identity > /dev/null 2>&1
+    return $?
+}
+
+function _clear_env() {
+    echo "unset -v AWS_PROFILE && unset -v AWS_EPOCH"
+    exit 255
+}
+
+epoch=$(date +%s)
+retVal=100 # Continue with some default
+
 if [[ -n "${AWS_PROFILE}" ]]; then
     if [ "$1" = '--raw' ]; then
         aws sts get-caller-identity
+        retVal=$?
     else
-        epoch=$(date +%s)
         if [[ -n "${AWS_EPOCH}" ]]; then
             if (( AWS_EPOCH+60 < epoch )); then
-                aws sts get-caller-identity > /dev/null 2>&1
+                _check_aws_sts
                 retVal=$?
                 #echo "#checked aws sts (($AWS_EPOCH+60))"
             else 
-                retVal=0
+                retVal=101 # Not Checking / Too Soon 
             fi
         else 
-            aws sts get-caller-identity > /dev/null 2>&1
+            _check_aws_sts
             retVal=$?
         fi     
-        if [ $retVal -eq 255 ]; then 
-            echo "unset -v AWS_PROFILE && unset -v AWS_EPOCH"; exit 255
+
+        if [ $retVal -eq 130 ]; then # 130 - Interupted AWS CLI, Retry
+            _check_aws_sts
+            retVal=$?
+        elif [ ! $retVal -eq 0 ] && [ ! $retVal -eq 101 ]; then # 1,2,255 AWS CLI errors
+            _clear_env
         fi
-        if [ $retVal -eq 1 ]; then 
-            echo "unset -v AWS_PROFILE && unset -v AWS_EPOCH"; exit 255
-        fi
-        echo "export AWS_EPOCH='$epoch'"; exit 0
+    fi
+    
+    # Reset EPOCH only on check not on 101 clock bypass
+    if [ $retVal -eq 0 ]; then 
+       echo "export AWS_EPOCH='$epoch'"
+       exit 0
     fi
 else 
-  exit 255
+  _clear_env
 fi

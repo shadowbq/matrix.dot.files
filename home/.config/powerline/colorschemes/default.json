@@ -68,8 +68,10 @@
 		"gitstatus:divider":         { "fg": "gray8",           "bg": "gray2", "attrs": [] },
 		"kubernetes_cluster":         { "fg": "white", "bg": "gray6",     "attrs": [] },
 		"kubernetes_namespace":       { "fg": "white", "bg": "gray8",     "attrs": [] },
-		"context": { "fg": "white", "bg": "gray6", "attrs": [] },
+		"context":                    { "fg": "white", "bg": "gray6", "attrs": [] },
 	    "kubernetes_namespace:alert": { "fg": "white", "bg": "brightred", "attrs": [] },
-	    "kubernetes_user":            { "fg": "white", "bg": "gray9",     "attrs": [] }
+		"kubernetes_user":            { "fg": "white", "bg": "gray9",     "attrs": [] },
+		"powerline_inject":           { "fg": "white", "bg": "one:lightblack", "attrs": [] },
+		"powerline_inject_bold":      { "fg": "white", "bg": "gray2", "attrs": [] }
 	}
 }

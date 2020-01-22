@@ -1,0 +1,27 @@
+#############################
+# String Manipulations
+# This is fine for BASH v3 
+# But in a few implementations, including GNU tr, that only works for single-byte characters (so in UTF-8 locales, only on ASCII letters).
+## ## ## ## ##
+# shellcheck shell=bash
+#############################
+
+# jake jones
+function downcase() {
+    tr '[:upper:]' '[:lower:]'
+}
+
+# JAKE JONES
+function upcase() {
+    tr '[:lower:]' '[:upper:]'
+}
+
+# Jake Jones
+function titleize() {
+   awk '{for (i=1; i<=NF; ++i) { $i=toupper(substr($i,1,1)) tolower(substr($i,2)); } print }'
+}
+
+# Jake jones
+function capitalize() {
+  awk '{print toupper(substr($0,1,1)) tolower(substr($0,2)) }'
+}
