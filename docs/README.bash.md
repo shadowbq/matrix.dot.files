@@ -84,6 +84,16 @@ IFS=$'\n\t'
 
 Setting IFS (Internal Field Separator) to `$'\n\t'` means that word splitting will happen only on newlines and tab characters. This very often produces useful splitting behavior. By default, bash sets this to `$' \n\t'` - space, newline, tab - which is eager.
 
+#### Debug CI/CD mode:
+
+Harsh binding and `-x` (`set -o xtrace`) added for debug printing
+
+```bash
+#!/bin/bash
+set -euxo pipefail
+IFS=$'\n\t'
+```
+
 See: [Unofficial bash strict mode](http://redsymbol.net/articles/unofficial-bash-strict-mode/)
 
 ### Brace expansion
@@ -516,11 +526,15 @@ done
 
 ### Set Options
 
-Counterintuitive: `set -flag` enables, while `set +flag` disables  
+Counter-intuitive: `set -flag` enables, while `set +flag` disables  
 
 ```bash
 set -e            # instructs bash to immediately exit on failure
 set -u            # immediately exit on undefined/unbound variables ( set $someVar="" or  ${someVar:-} )
+set -v            # Display shell input lines as they are read.
+set -n            # Read commands but do not execute them. This may be used to check a shell script for syntax errors.
+set -x            # Display commands and their arguments as they are executed.
+
 set -o noclobber  # Avoid overlay files (echo "hi" > foo)
 set -o errexit    # (-e) Used to exit upon error, avoiding cascading errors
 set -o pipefail   # Unveils hidden failures
@@ -607,17 +621,21 @@ pwd # still in first directory
 ### Redirection
 
 ```bash
-python hello.py > output.txt   # stdout to (file)
-python hello.py >> output.txt  # stdout to (file), append
-python hello.py 2> error.log   # stderr to (file)
-python hello.py 2>&1           # stderr to stdout
-python hello.py 2>/dev/null    # stderr to (null)
-python hello.py &>/dev/null    # stdout and stderr to (null)
+hello.py > output.txt   # stdout to (file)
+hello.py >> output.txt  # stdout to (file), append
+hello.py 2> error.log   # stderr to (file)
+hello.py 2>&1           # stderr to stdout
+hello.py 2>/dev/null    # stderr to (null)
+hello.py &>/dev/null    # stdout and stderr to (dev/null)
+foo.py >/dev/null 2>&1  # stdout and stderr to (dev/null)
+
+stderr_echo.py 2>&1 | grep my_err #stderr to stdout, grep my_err from stdout
 ```
 
 ```bash
 python hello.py < foo.txt      # feed foo.txt to stdin for python
 ```
+
 
 ### Inspecting commands
 
