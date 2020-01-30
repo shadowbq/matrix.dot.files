@@ -1,0 +1,71 @@
+#!/usr/bin/env bash
+# shellcheck shell=bash
+# 
+# Licensed MIT/BSD copyright 2020: shadowbq
+# Homepage: https://github.com/shadowbq/git-private
+#
+# Example usage: 
+#  export GITHUB_TOKEN=${GITHUB_TOKEN} 
+#  git-private "${git_tag}" myorg private-repo "${filename}" "${archive:?}/${filename}"
+# 
+#  - or less secure -
+#
+#  GITHUB_TOKEN=ABCDEFGHIJ0123456789 git-private v0.0.1 myorg private-repo foo.tar.gz /var/tmp/foo.tar.gz
+#
+set -euo pipefail
+IFS=$'\n\t'
+
+command -v jq >/dev/null 2>&1
+if [[ $? -eq 1 ]]; then
+  echo "jq missing, please install."
+  exit 1
+fi
+
+command -v curl >/dev/null 2>&1
+if [[ $? -eq 1 ]]; then
+  echo "curl missing, please install."
+  exit 1
+fi
+
+readonly gh_oauth_token=${GITHUB_TOKEN:-}
+if [[ -z ${gh_oauth_token} ]]; then 
+  echo "ENV:GITHUB_TOKEN is not set, you must pass it on the CLI or set it in your ENV"
+  exit 1
+fi
+
+readonly git_tag="${1:-}"
+readonly gh_repo_owner="${2:-}"
+readonly gh_repo_name="${3:-}"
+readonly release_asset_filename="${4:-}"
+readonly output_path="${5:-release_asset_filename}"
+
+gh_tag_id=$(curl --silent --show-error \
+                     --no-buffer \
+                     --header "Authorization: token $gh_oauth_token" \
+                     --request GET \
+                     "https://api.github.com/repos/$gh_repo_owner/$gh_repo_name/releases" \
+                     | jq --raw-output ".[] \
+                     | select(.tag_name==\"$git_tag\").id")
+
+download_url=$(curl --silent --show-error \
+                    --no-buffer \
+                    --header "Authorization: token $gh_oauth_token" \
+                    --header "Accept: application/vnd.github.v3.raw" \
+                    --location \
+                    --request GET \
+                    "https://api.github.com/repos/$gh_repo_owner/$gh_repo_name/releases/$gh_tag_id" \
+                    | jq --raw-output ".assets[] \
+                    | select(.name==\"$release_asset_filename\").url")
+
+redirect_url=$(curl --silent --no-buffer --show-error \
+          --header "Authorization: token $gh_oauth_token" \
+          --header "Accept: application/octet-stream" \
+          --request GET \
+          --write-out "%{redirect_url}" \
+          "$download_url")
+
+curl --silent --no-buffer --show-error \
+          --header "Accept: application/octet-stream" \
+          --output "$output_path" \
+          --request GET \
+          "$redirect_url"

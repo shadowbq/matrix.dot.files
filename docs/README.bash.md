@@ -96,12 +96,15 @@ IFS=$'\n\t'
 
 See: [Unofficial bash strict mode](http://redsymbol.net/articles/unofficial-bash-strict-mode/)
 
+[Futher Reading with TRAPS](https://vaneyckt.io/posts/safer_bash_scripts_with_set_euxo_pipefail/)
+
 ### Brace expansion
 
 ```bash
 echo {A,B}.js
 ```
-
+| Code | Description |
+| --- | --- |
 | `{A,B}` | Same as `A B` |
 | `{A,B}.js` | Same as `A.js B.js` |
 | `{1..5}` | Same as `1 2 3 4 5` |
@@ -121,6 +124,8 @@ echo ${name::2}     #=> "Jo" (slicing)
 echo ${name::-1}    #=> "Joh" (slicing)
 echo ${name:(-1)}   #=> "n" (slicing from right)
 echo ${name:(-2):1} #=> "h" (slicing from right)
+echo ${name:1}      #=> "ohn" strip the J
+if [[ ${name:0:1} =~ [jJ] ]] ; then name="${name:1}"; fi #=> if first letter matches j or J strip the J from $name and store "ohn". (useful for v for version tags v1.0.1, etc)
 ```
 
 ```bash
@@ -477,6 +482,22 @@ for i in "${arrayName[@]}"; do
 done
 ```
 
+### Array Contains
+
+```bash
+if [[ " ${array[@]} " =~ " ${value} " ]]; then
+    # whatever you want to do when arr contains value
+fi
+
+if [[ ! " ${array[@]} " =~ " ${value} " ]]; then
+    # whatever you want to do when arr doesn't contain value
+fi
+```
+
+**Note**: `IFS` space settings can lead to false positives: <https://stackoverflow.com/a/15394738/1569557>
+
+
+
 ## Dictionaries
 
 ### Defining
@@ -562,6 +583,8 @@ matches.
 
 ### Commands
 
+| Code | Description |
+| --- | --- |
 | `history` | Show history |
 | `shopt -s histverify` | Don't execute expanded result immediately |
 

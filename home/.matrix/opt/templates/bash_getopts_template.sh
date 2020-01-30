@@ -17,9 +17,9 @@
 set -euo pipefail
 
 function usage() {
-      echo "Usage:"
-      echo "    command -a                    command with a option true."
-      echo "    command -b value              comand with b arg set to 'value'."
+      echo "Usage $(basename ${0}):"
+      echo "    -a                    command with a option true."
+      echo "    -b value              comand with b arg set to 'value'."
       exit 1
 }
 
