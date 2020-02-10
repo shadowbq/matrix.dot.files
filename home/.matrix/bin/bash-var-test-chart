@@ -4,17 +4,16 @@
 # for http://stackoverflow.com/q/3869072
 # designed to fit an 80 character terminal
 
-dw=5    # description column width
-w=6     # table column width
+dw=6    # description column width
+w=8     # table column width
 
 t () { printf '%-*s' "$w" " true"; }
 f () { [[ $? == 1 ]] && printf '%-*s' "$w" " false" || printf '%-*s' "$w" " -err-"; }
 
 o=/dev/null
-
-echo '     | 1a    2a    3a    4a    5a    6a   | 1b    2b    3b    4b    5b    6b'
-echo '     | [     ["    [-n   [-n"  [-z   [-z" | [[    [["   [[-n  [[-n" [[-z  [[-z"'
-echo '-----+------------------------------------+------------------------------------'
+echo ' Bash Test Results'
+echo '      | [       [ "     [ -n    [ -n "  [ -z    [ -z " | [[      [[ "    [[ -n   [[ -n " [[ -z   [[ -z "'
+echo '------+------------------------------------------------+------------------------------------------------'
 
 while read -r d t
 do

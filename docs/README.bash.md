@@ -89,7 +89,7 @@ Setting IFS (Internal Field Separator) to `$'\n\t'` means that word splitting wi
 Harsh binding and `-x` (`set -o xtrace`) added for debug printing
 
 ```bash
-#!/bin/bash
+#!/usr/local/bin/env bash
 set -euxo pipefail
 IFS=$'\n\t'
 ```
@@ -139,7 +139,7 @@ length=2
 echo ${name:0:length}  #=> "Jo"
 ```
 
-See: [Parameter expansion](http://wiki.bash-hackers.org/syntax/pe)
+See: [Parameter expansion](http://wiki.bash-hackers.org/syntax/pe) [GNU Expansion](https://www.gnu.org/software/bash/manual/html_node/Shell-Parameter-Expansion.html)
 
 ```bash
 STR="/path/to/foo.cpp"
@@ -285,6 +285,26 @@ while true; do
 done
 ```
 
+### Break / Continue
+
+The `break` command is used to exit from any loop, like the `while` and the `until` loops.  
+
+The `continue` command to stop executing the remaining commands inside a loop without exiting the loop.  
+
+```bash
+for number in 10 11 12 13 14 15; do
+  if [[ $number -eq 11 ]]; then
+      continue
+  elif [[ $number -eq 14 ]]; then
+      break
+  fi
+  echo "Number: $number"
+done
+#=> 10 12 13
+```
+
+
+
 ## Functions
 
 `function echo_warn() {}` or `function echo_warn {}`
@@ -409,6 +429,14 @@ fi
 ```
 
 ```bash
+# Chained
+[[ -n $myvar ]] && echo 'true the var exists' || echo 'false if does not exists'
+[[ -z $myvar ]] && echo 'true it is null' || echo 'false is not null'
+[[ $myvar = '' ]] && echo true is empty || echo 'false is not empty'
+[[ $myvar = 'something' ]] && echo 'true matches string' || echo 'false does not match string'
+```
+
+```bash
 # Combinations
 if [[ X ]] && [[ Y ]]; then
   ...
@@ -436,6 +464,34 @@ if [[ -e "file.txt" ]]; then
   echo "file exists"
 fi
 ```
+
+### Truth Chart of Bash Tests
+
+```bash
+      | [       [ "     [ -n    [ -n "  [ -z    [ -z " | [[      [[ "    [[ -n   [[ -n " [[ -z   [[ -z "
+------+------------------------------------------------+------------------------------------------------
+unset | false   false   true    false   true    true   | false   false   false   false   true    true
+null  | false   false   true    false   true    true   | false   false   false   false   true    true
+space | false   true    true    true    true    false  | true    true    true    true    false   false
+zero  | true    true    true    true    false   false  | true    true    true    true    false   false
+digit | true    true    true    true    false   false  | true    true    true    true    false   false
+char  | true    true    true    true    false   false  | true    true    true    true    false   false
+hyphn | true    true    true    true    false   false  | true    true    true    true    false   false
+two   | -err-   true    -err-   true    -err-   false  | true    true    true    true    false   false
+part  | -err-   true    -err-   true    -err-   false  | true    true    true    true    false   false
+Tstr  | true    true    -err-   true    -err-   false  | true    true    true    true    false   false
+Fsym  | false   true    -err-   true    -err-   false  | true    true    true    true    false   false
+T=    | true    true    -err-   true    -err-   false  | true    true    true    true    false   false
+F=    | false   true    -err-   true    -err-   false  | true    true    true    true    false   false
+T!=   | true    true    -err-   true    -err-   false  | true    true    true    true    false   false
+F!=   | false   true    -err-   true    -err-   false  | true    true    true    true    false   false
+Teq   | true    true    -err-   true    -err-   false  | true    true    true    true    false   false
+Feq   | false   true    -err-   true    -err-   false  | true    true    true    true    false   false
+Tne   | true    true    -err-   true    -err-   false  | true    true    true    true    false   false
+Fne   | false   true    -err-   true    -err-   false  | true    true    true    true    false   false
+```
+
+**Note:** `bash-var-test-chart` will print this output. 
 
 ## Arrays
 
@@ -698,11 +754,37 @@ case "$1" in
 esac
 ```
 
+Case switch on file mime-type using `file` tool.
+
+```bash
+for file in *; do
+    case $(file --mime-type -b "$file") in
+        image/*g)        ... ;;
+        text/plain)      ... ;;
+        application/xml) ... ;;
+        application/zip) ... ;;
+        *)               ... ;;
+    esac
+done
+```
+
+Similar `if/else/fi` example .. (truncated)
+
+```bash
+if [[ $(file --mime-type -b "$file") == image/*g ]]; then
+...
+elif [[ $(file --mime-type -b "$file") == text/plain ]]; then 
+...
+fi 
+```
+
 ### Source relative
 
 ```bash
 source "${0%/*}/../share/foo.sh"
 ```
+
+**Note**: "The single `.` source pattern is very hard to grep."
 
 ### printf
 
@@ -836,6 +918,22 @@ if [[ " $file_content " =~ $regex ]] # please note the space before and after th
 fi
 ```
 
+## Use of Sed and Awk
+
+**Note:** `sed` and `gsed` across the gplv2 (macos) and gplv3 (linux,homebrew) have many regex match differences, but if you are careful you can use them. 
+
+We can use variables in `sed` using double quotes:
+
+```bash
+sed -i "s/$var/r_str/g" file_name
+```
+
+If you have a slash `/` in the variable then use different separator, like below:
+
+```bash
+sed -i "s|$var|r_str|g" file_name
+```
+
 ## Templates
 
 ### getopts
@@ -843,6 +941,8 @@ fi
 See the getopts template for commands
 
 `.matrix/opt/templates/bash_getopts_template.sh`
+
+Reference: [Parsing getopts](https://sookocheff.com/post/bash/parsing-bash-script-arguments-with-shopts/) & Why [getopts and not getopt](http://abhipandey.com/2016/03/getopt-vs-getopts/).
 
 ### Tests
 
@@ -922,7 +1022,7 @@ Shells should reference external knownledge when available on sources like:
 ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ##
 ```
 
-* Stack Overflow
+* Stack Overflow - Use SO url shortener
 * Explain Shell
 * git repo / github repo referenced from with licence.
 * Rando Dudes tutorial
