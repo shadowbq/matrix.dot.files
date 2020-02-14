@@ -82,7 +82,7 @@ set -euo pipefail
 IFS=$'\n\t'
 ```
 
-Setting IFS (Internal Field Separator) to `$'\n\t'` means that word splitting will happen only on newlines and tab characters. This very often produces useful splitting behavior. By default, bash sets this to `$' \n\t'` - space, newline, tab - which is eager.
+Setting IFS (Internal Field Separator) to `$'\n\t'` means that word splitting will happen only on newlines and tab characters. This very often produces useful splitting behavior. By default, bash sets this to `$' \n\t'` - space, newline, tab - which is too eager.
 
 #### Debug CI/CD mode:
 

@@ -73,7 +73,7 @@ The Matrix has a few dependencies if you are going to use it.
 
 * Sane setups with gplv3-coreutils and brew on macos
 * Ruby, RVM and a set of GEMs
-* VI with Vundle 
+* VI with Vundle
 * TMUX with TPM bundles with Powerline Python3
 * NPM with Node NVM
 * Bash with Airline (slimmer Powerline option)
@@ -81,7 +81,6 @@ The Matrix has a few dependencies if you are going to use it.
 Run the matrix dependency checker to get a good start on ensuring a SANE environment
 
 `.matrix/install/check_matrix_dependencies`
-
 
 ## File Hierarchy
 
@@ -127,7 +126,7 @@ Local files for ENV changes that are excluded from unified profile (SECRETS)
 .gitignore-global
 ```
 
-Standardized .git configs 
+Standardized .git configs
 
 ```shell
 .irbrc
@@ -137,7 +136,6 @@ Standardized .git configs
 
 Other .file(s) that can enhance the unified experience
 
-## More Help 
+## More Help
 
 For More help please the `/docs` directory/..
-
