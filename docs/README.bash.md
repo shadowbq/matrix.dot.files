@@ -129,12 +129,6 @@ if [[ ${name:0:1} =~ [jJ] ]] ; then name="${name:1}"; fi #=> if first letter mat
 ```
 
 ```bash
-echo ${food:-Cake}     #=> $food or default to "Cake" if $food undefined.
-fruit=${food:-Apple}   #=> fruit is assigned $food or default to "Apple" if $food undefined.
-empty_string=${some_undefined_var:-} #=> To make the default an empty string, use ${VARNAME:-}
-```
-
-```bash
 length=2
 echo ${name:0:length}  #=> "Jo"
 ```
@@ -234,6 +228,33 @@ echo ${STR^^}  #=> "HELLO WORLD!" (all uppercase)
 | `${FOO:?message}`    | Show error message and exit if `$FOO` is not set |
 
 The `:` is optional (eg, `${FOO=word}` works)
+
+```bash
+echo ${food:-Cake}     #=> $food or default to "Cake" if $food undefined.
+fruit=${food:-Apple}   #=> fruit is assigned $food or default to "Apple" if $food undefined.
+empty_string=${some_undefined_var:-} #=> To make the default an empty string, use ${VARNAME:-}
+```
+
+### MetaAccess to Variable Names
+
+```shell
+${!prefix*}
+${!prefix@}
+```
+
+Expands to the names of variables whose names begin with prefix, separated by the first character of the `IFS` special variable. When ‘@’ is used and the expansion appears within double quotes, each variable name expands to a separate word. Note the difference as there is no use of the `bracket`.
+
+```shell
+for var in ${!myprefix@}; do
+  # print variables like myprefixStore1, myprefixStore2, myprefixFoo  
+  printf "%s%q\n" "$var: " "${!var}"
+done
+>> myprefixStore1: Woot
+>> myprefixStore2: Baz
+>> myprefixFoo: Bat
+```
+
+Note: This does ***not*** register arrays and dictionary with `declare`, so accessing arrays is tricky.
 
 ## Loops
 
@@ -942,6 +963,8 @@ See the getopts template for commands
 
 `.matrix/opt/templates/bash_getopts_template.sh`
 
+Best explaination <https://www.computerhope.com/unix/bash/getopts.htm>
+
 Reference: [Parsing getopts](https://sookocheff.com/post/bash/parsing-bash-script-arguments-with-shopts/) & Why [getopts and not getopt](http://abhipandey.com/2016/03/getopt-vs-getopts/).
 
 ### Tests
@@ -957,6 +980,52 @@ $> type foo >/dev/null 2>&1 || { echo >&2 "I require foo but it's not installed.
 if [[ $(command -v jq) ]]; then
   echo "jq is available"
 fi
+```
+
+## Bash Unit Test
+
+### Shellcheck
+
+Shellcheck is a bash style, and bestpractice linter. Use it extensively.
+
+<https://github.com/koalaman/shellcheck> 
+
+### Precommit
+
+The use of precommit with shellcheck is highly recommended.
+
+```yaml
+- repo: https://github.com/jumanjihouse/pre-commit-hooks
+  rev: 1.11.2
+  hooks:
+  - id: shellcheck
+    stages: [commit]
+    args: ["-e", "SC1091"]
+```
+
+### Bats
+
+<https://github.com/ztombol/bats-docs>
+
+<https://github.com/jasonkarns/bats-assert-1>
+
+```shell
+bats "${_PROJECT_ROOT}/test/test_main.bats" 3>&1
+```
+
+```shell
+load 'bats-support/load.bash'
+load 'bats-assert/load.bash'
+load 'bats-file/load.bash'
+
+_PROJECT_ROOT=${_PROJECT_ROOT:?}
+generic_help='Usage myapp'
+
+@test "show generic help" {
+  cd $_PROJECT_ROOT
+  run ./myapp
+  assert_output -p "$generic_help"
+}
 ```
 
 ## Bash Notations

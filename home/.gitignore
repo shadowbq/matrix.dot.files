@@ -47,6 +47,7 @@
 .ssh/authorized_key*
 .ssh/id*
 .ssh/*.key
+.ssh.*.pub
 .ssh/*id*
 .ssh/github*
 .ssh/known*

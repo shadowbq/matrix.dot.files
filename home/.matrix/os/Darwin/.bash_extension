@@ -77,3 +77,11 @@ fi
 ##########################
 # Deal with Java
 # export JAVA_HOME=`/usr/libexec/java_home -v 1.7`
+
+##########################
+# Bash Completion HomeBrew
+# Hack to force it 
+export BASH_COMPLETION_COMPAT_DIR="/usr/local/etc/bash_completion.d"
+if [ -f /usr/local/Cellar/bash-completion/1.3_3/etc/bash_completion ]; then
+. /usr/local/Cellar/bash-completion/1.3_3/etc/bash_completion
+fi 
