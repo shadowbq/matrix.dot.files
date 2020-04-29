@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+# Works well with kubectl-config-cleanup
+# https://github.com/B23admin/kubectl-config-cleanup
+touch ~/.kube/config.swap
+mv ~/.kube/config ~/.kube/config.swap.tmp
+mv ~/.kube/config.swap ~/.kube/config
+mv ~/.kube/config.swap.tmp ~/.kube/config.swap

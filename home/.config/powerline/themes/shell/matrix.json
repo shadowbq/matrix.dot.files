@@ -25,15 +25,6 @@
                 }
 			},
 			{
-                "function": "powerline.segments.common.env.environment",
-				"name": "aws",
-				"priority": 20,
-				"before": "⩜ ",
-                "args": {
-                    "variable": "XXX_TEST_ENV"
-                }
-			},
-			{
 				"function": "powerline_inject.context",
 				"priority": 30,
 				"args": {

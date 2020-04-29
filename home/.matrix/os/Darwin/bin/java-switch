@@ -1,0 +1,6 @@
+echo "Attempting to switch java versions"
+# https://github.com/AdoptOpenJDK/homebrew-openjdk
+version=$1
+export JAVA_HOME=$(/usr/libexec/java_home -v"$version");
+java -version
+/usr/libexec/java_home -V
