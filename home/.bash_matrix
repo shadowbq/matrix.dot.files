@@ -23,7 +23,7 @@ cd "$HOME"
 [ "$matrix_ext_ruby" == true ] && matrix_loader "extensions/ruby"
 [ "$matrix_ext_nodejs" == true ] && matrix_loader "extensions/nodejs"
 [ "$matrix_ext_go" == true ] && matrix_loader "extensions/go"
-[ "$matrix_ext_completions" == true ] && matrix_loader "extensions/completions"
+[ "$matrix_ext_completion" == true ] && matrix_loader "extensions/completions"
 [ "$matrix_ext_powerline" == true ] && matrix_loader "extensions/powerline"
 [ "$matrix_ext_gcc" == true ] && matrix_loader "extensions/gcc"
 [ "$matrix_ext_docker" == true ] && matrix_loader "extensions/docker"
@@ -50,5 +50,6 @@ fi
 
 ##########################
 # Additional non-global Configs/Function calls can go into ~/.bash_local
-# such as 'extended_completions'
+# such as 'completions_extended'
 cd $callback_pwd
+completions_extended

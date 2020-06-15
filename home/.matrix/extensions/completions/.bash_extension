@@ -13,8 +13,8 @@
 if ! shopt -oq posix; then
   if [ -f /usr/share/bash-completion/bash_completion ]; then
     . /usr/share/bash-completion/bash_completion
-  elif [ -f /usr/local/etc/bash_completion ];then 
-    . /usr/local/etc/bash_completion  
+  elif [ -f /usr/local/etc/bash_completion ]; then
+    . /usr/local/etc/bash_completion
   elif [ -f /etc/bash_completion ]; then
     . /etc/bash_completion
   elif [ -f /usr/local/etc/profile.d/bash_completion.sh ]; then
@@ -23,18 +23,20 @@ if ! shopt -oq posix; then
 fi
 
 ## Matrix Completions
-
-source "$HOME"/.matrix/completions/ssh_hosts_completion
+cnt_ssh=$(complete -p | grep -c '_ssh ')
+if [ "$cnt_ssh" -gt 0 ]; then
+  source "$HOME"/.matrix/extensions/completions/ssh_hosts_completion
+fi
 
 ## Additional functions that can be called for splat inclusions in .bash_local
 
-function extended_completions {
+function completions_extended() {
   source "$HOME"/.matrix/extensions/completions/git_completion
   complete -C "$HOME"/.matrix/extensions/completions/rake_completion -o default rake
   complete -C "$HOME"/.matrix/extensions/completions/capistrano_completion -o default ca
 }
 
-function all_bash_completions {
+function completions_all() {
 
   # Set the following to the location of the matrix completion dir.
   : ${MATRIX_COMPLETION_DIR:="$HOME"/.matrix/extensions/completions}
@@ -44,12 +46,10 @@ function all_bash_completions {
   _blacklist_glob='@(acroread.sh)'
   MATRIX_COMPLETION_DIR
   if [[ -d $MATRIX_COMPLETION_DIR && -r $MATRIX_COMPLETION_DIR && -x $MATRIX_COMPLETION_DIR ]]; then
-      for i in $(LC_ALL=C command ls "$MATRIX_COMPLETION_DIR"); do
-          i=$MATRIX_COMPLETION_DIR/$i
-          [[ ${i##*/} != @($_backup_glob|Makefile*|$_blacklist_glob) && -f $i && -r $i ]] && . "$i"
-      done
+    for i in $(LC_ALL=C command ls "$MATRIX_COMPLETION_DIR"); do
+      i=$MATRIX_COMPLETION_DIR/$i
+      [[ ${i##*/} != @($_backup_glob|Makefile*|$_blacklist_glob) && -f $i && -r $i ]] && . "$i"
+    done
   fi
   unset i _blacklist_glob
 }
-
-
