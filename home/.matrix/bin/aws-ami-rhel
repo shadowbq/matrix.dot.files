@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+# https://access.redhat.com/solutions/15356
+# SPEL owner 701759196663
+#  for AWS GovCloud, use --region us-gov-west-1 and --owners 219670896067
+#aws ec2 describe-images --owners 309956199498 --query 'sort_by(Images, &CreationDate)[*].[CreationDate,Name,ImageId]' --filters "Name=name,Values=RHEL-7*" --region us-east-1 --output table
+#aws ec2 describe-images --owners 309956199498 --query 'sort_by(Images, &CreationDate)[*].[CreationDate,Name,ImageId]' --filters "Name=name,Values=RHEL-8*" --region us-east-1 --output table
+#aws ec2 describe-images --owners 219670896067 --query 'sort_by(Images, &CreationDate)[*].[CreationDate,Name,ImageId]' --filters "Name=name,Values=RHEL*" --region us-gov-west-1 --output table
+aws ec2 describe-images --owners 701759196663 --query 'sort_by(Images, &CreationDate)[*].[CreationDate,Name,ImageId]' --filters "Name=name,Values=spel*" --region us-east-1 --output table
