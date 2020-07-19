@@ -1,6 +1,15 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 import os
 import sys
+
+import importlib.util
+xx_spec = importlib.util.find_spec("pyftpdlib")
+found = xx_spec is not None
+
+if found == False:
+  print("Missing pyftpdlib, use pip to install it")
+  sys.exit() 
+
 from pyftpdlib import servers
 from pyftpdlib.handlers import FTPHandler
 from pyftpdlib.authorizers import DummyAuthorizer

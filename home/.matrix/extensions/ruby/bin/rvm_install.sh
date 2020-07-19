@@ -1,4 +1,4 @@
-#!/bin/env bash
+#!/usr/bin/env bash
 
 #Single User Install into ~/.rvm
 curl -kL get.rvm.io | bash -s stable
