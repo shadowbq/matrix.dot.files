@@ -1,3 +1,4 @@
+" Install all the VUNDLE pluings by 'check_matrix_dependencies func:check_first_vim'
 set nocompatible              " be iMproved, required
 filetype off                  " required
 
