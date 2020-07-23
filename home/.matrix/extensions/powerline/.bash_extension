@@ -1,19 +1,39 @@
 # powerline-status
 
 ## Debian / Ubuntu Install Help
-# pip install powerline-status
-# apt install fonts-powerline
-
+## apt install fonts-powerline
 
 function check_powerline_requirements {
   command -v socat >/dev/null 2>&1 || { echo_warn "[POWERLINE WARNING] No socat found."; }
   command -v pip >/dev/null 2>&1 || { echo_warn "[POWERLINE WARNING] No python pip found."; }
-  pip show psutil -q >/dev/null 2>&1 || { echo_warn "[POWERLINE WARNING] No python pip psutil Found."; }
+  command -v pipx >/dev/null 2>&1 
+  if [ $? -ne 0 ]; then 
+    check_pip_powerline
+  else 
+    check_pipx_powerline
+  fi
 }
 
-function check_powerline_addon {
-   # https://github.com/powerline/powerline
-   pip show powerline-status -q >/dev/null 2>&1 || { echo_warn "[POWERLINE WARNING] No python pip powerline-status Found."; }
+function check_pip_powerline {
+  pip show psutil -q >/dev/null 2>&1 || { echo_warn "[POWERLINE WARNING] No python pip psutil Found."; }
+  # check_pip_powerline_addon
+  POWERLINE_REPO_ROOT=$(pip show powerline-status |ack "Location:(.*)" --output '$1')
+  export POWERLINE_REPO_ROOT
+}
+
+function check_pipx_powerline {
+  # pipx install powerline-status
+  # pipx inject powerline-status psuti
+  # pipx inject powerline-status powerline-gitstatus
+  # pipx inject powerline-status powerline-inject
+  POWERLINE_REPO_ROOT=~/.local/pipx/venvs/powerline-status/lib/python3.8/site-packages/
+  export POWERLINE_REPO_ROOT
+}
+
+
+function check_pip_powerline_addon {
+   # https://github.com/d2iq-shadowbq/powerline-inject
+   pip show powerline-inject -q >/dev/null 2>&1 || { echo_warn "[POWERLINE WARNING] No python pip powerline-inject Found."; }
 
    # https://github.com/zcmarine/powerkube
    pip show powerkube -q >/dev/null 2>&1 || { echo_warn "[POWERLINE WARNING] No python pip powerkube Found."; }
@@ -36,8 +56,6 @@ function check_powerline {
       powerline-daemon -q
       POWERLINE_BASH_CONTINUATION=1
       POWERLINE_BASH_SELECT=1
-      POWERLINE_REPO_ROOT=$(pip show powerline-status |ack "Location:(.*)" --output '$1')
-      export POWERLINE_REPO_ROOT
       . $POWERLINE_REPO_ROOT/powerline/bindings/bash/powerline.sh
     else
       { echo_err "[ERROR] Powerline is not found, but enabled."; }
