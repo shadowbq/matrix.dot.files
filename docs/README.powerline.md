@@ -1,18 +1,76 @@
 # Powerline
 
-Enable Powerline in bash:
+Powerline is a great statusline plugin for the shell and used in matrix.dot.files.
 
-* https://powerline.readthedocs.io/en/latest/usage/shell-prompts.html#bash-prompt
+* Extensible and feature rich, written in Python. 
+* It also supports prompts and statuslines in several Linux utilities and tools.
+* It has configurations and decorator colors developed using JSON.
+* Fast and lightweight, with daemon support, which provides even more better performance
 
 Enabled by Default in .matrix: `home/.matrix/powerline/.bash_extension`
 
 **`check_powerline` is called which also enables it**
 
-## Install extras
+Additional Functions:
 
-https://github.com/jaspernbrouwer/powerline-gitstatus
+Matrix function: `check_powerline_requirements`
+Matrix function: `check_pip_powerline`
+Matrix function: `check_pipx_powerline`
 
-## Loaded?
+## Install 
+
+### Fonts
+
+Powerline requires some special font symbols so we recommend using particular fonts in terminal configuration.
+
+There are many patched fonts that can be used: 
+
+* https://github.com/powerline/fonts
+* https://github.com/abertsch/Menlo-for-Powerline
+  
+OSX:
+
+So in your iterm for osx use `menlo for powerline` or `monaco`.
+
+Debian / BSD:
+
+Install `apt install fonts-powerline`
+
+### PIP way (legacy method)
+
+If you are installing directly onto your python env.
+
+```shell
+pip install psutil
+pip install powerline-status
+pip install powerline-gitstatus
+pip install powerline-inject
+# pip install powerkube-fork
+```
+
+### PIPX way: (preferred 2020)
+
+If you want to install powerline via `pipx` here are the commands:
+
+```shell
+pipx install powerline-status
+pipx inject powerline-status psutil
+pipx inject powerline-status powerline-gitstatus
+pipx inject powerline-status powerline-inject
+```
+
+## Theme & ColorScheme
+
+numerous addons are enabled like `powerline git-status` in the theme dot.matrix so it works out of the box.
+
+```shell
+$HOME/.config/powerline/colorschemes/default.json
+$HOME/.config/powerline/colorschemes/matrix.json
+$HOME/.config/powerline/themes/shell/__main__.json
+$HOME/.config/powerline/themes/shell/matrix.json 
+```
+
+## Is Powerline-status Daemon Running and Loaded?
 
 Is powerline loaded in bash?
 
@@ -34,27 +92,21 @@ If its not loaded ..
 -bash: type: _powerline_return: not found
 ```
 
-## Configuration
+## Customizations beyond Matrix.dot.files
+
+### Configuration
 
 Powerline has a number of configurations: 
 
 DOCS: https://powerline.readthedocs.io/en/master/configuration.html
 
-### Powerline Fonts
-
-```shell
-#Debian / Ubuntu Install Help
-pip install powerline-status
-apt install fonts-powerline
-```
-
-https://github.com/abertsch/Menlo-for-Powerline
+#### VSCode Terminal
 
 Powerline for the VSCODE Terminal
 
 https://dev.to/mattstratton/making-powerline-work-in-visual-studio-code-terminal-1m7
 
-### For Quick Customization:
+### For Quick Customization
 
 If you want to modify some file you can create `~/.config/powerline` directory and put modifications there: all configuration files are merged with each other.
 
@@ -97,11 +149,13 @@ Reference: https://powerline.readthedocs.io/en/latest/configuration.html#quick-g
 
 Each extension (vim, tmux, etc.) has its own theme, and they are located in `config directory/themes/extension/default.json.` 
 
-### Bash:
+### Bash
+
+Path representative of pip installed through 3.7 non-system
 
 `/usr/local/lib/python3.7/site-packages/powerline/bindings/bash/powerline.sh`
 
-### TMUX:
+### TMUX
 
 `/usr/local/lib/python3.7/site-packages/powerline/bindings/tmux/powerline.conf`
 
@@ -212,3 +266,9 @@ status-style fg=colour231,bg=colour233
 $>  tmux show-options -g -s set-clipboard
 set-clipboard external
 ```
+
+## Reference
+
+* https://powerline.readthedocs.io/en/latest/usage/shell-prompts.html#bash-prompt
+* https://github.com/d2iq-shadowbq/powerline-inject
+* https://github.com/jaspernbrouwer/powerline-gitstatus
