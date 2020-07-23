@@ -60,6 +60,28 @@ pipx install pyenv-doctor
 pipx install poetry
 ```
 
-## Reference:
+## Building Python Packages for publication
+
+You might want to build and publish to pypi. 
+
+```shell
+pip install setupext-janitor
+pip install wheel
+pipx install twine
+```
+
+View Implementation Examples:
+
+* https://raw.githubusercontent.com/d2iq-shadowbq/powerkube-fork/v0.2.1/setup.py
+* https://raw.githubusercontent.com/d2iq-shadowbq/powerkube-fork/v0.2.1/Makefile
+
+Publish using twine via makefile:
+
+```shell
+make clean
+make upload
+```
+
+## Reference
 
 * https://realpython.com/intro-to-pyenv/
