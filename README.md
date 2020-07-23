@@ -2,7 +2,7 @@
 
 Enter the matrix of dot files. 
 
-[![asciicast](docs/matrix_asciinema.png)](https://asciinema.org/a/9scvu667GH2hCvO1aAlPl1cww?autoplay=1)
+[![asciicast](docs/meta/matrix_asciinema.png)](https://asciinema.org/a/9scvu667GH2hCvO1aAlPl1cww?autoplay=1)
 
 The core concept is to have a unified modern experience across all POSIX systems.
 

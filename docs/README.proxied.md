@@ -1,10 +1,26 @@
 # Proxied
 
+There are a few well known things to enable proxies, but frankly its still a mess in the POSIX world.
+
+```shell
+export NO_PROXY=127.0.0.1,169.254.169.254,localhost
+export HTTP_PROXY=http://my.proxy.location:6124
+export HTTPS_PROXY=$HTTP_PROXY
+```
+
+Set your proxy in the `.matrix_config` and enable the helper extension.
+
+```shell
+export matrix_ext_proxy=true
+export globalurl_proxy="proxyUsername:proxyPassword@proxy.server.com:port"
+```
+
 ## Existing Approaches
 
 There are a number of existing pieces to this puzzle, none of them ideal...
 
 ### Environment variables
+
 There is a long-standing expectation that, especially for command-line tools, one can set environment variables such as http_proxy and https_proxy, to use a specific proxy. This has a number of disadvantages — it is a static configuration which cannot change as network connectivity changes (i.e. moving from one network to another, joining a VPN), and there is no way to reference a more complicated configuration which is expressed with a PAC file.
 
 ### Tinyproxy for upstream local use
@@ -29,6 +45,7 @@ But the Branch is 4yrs old https://github.com/andyetitmoves/tinyproxy/tree/libpr
 * https://github.com/andyetitmoves/homebrew-public/blob/master/Formula/tinyproxy-libproxy.rb
 
 ### libproxy
+
 Libproxy is designed to offer a simple API to applications to answer the what proxy? question. It has numerous back ends for obtaining information — including doing the WPAD lookup for itself, as well as looking in the GNOME configuration or honouring the environment variables, amongst other methods not mentioned here.
 
 One of the big disadvantages of libproxy is that it loads a JavaScript interpreter for itself behind the scenes, into every process which uses a PAC file. **It also re-downloads the PAC file for each request**. Many existing applications already have libproxy support, including glib-networking, which goes to the trouble of spawning its own 'glib-pacrunner' process to work around some of the problems mentioned above. (In addition to its implementation issues, libproxy is also not a great API; it has no way of signaling an error to the caller; if it can't determine the proxy settings for whatever reason, it just silently ignores the problem and assumes no proxy is needed.)
@@ -38,6 +55,7 @@ One of the big disadvantages of libproxy is that it loads a JavaScript interpret
 * https://formulae.brew.sh/formula/libproxy
 
 ### GNOME proxy configuration
+
 At `org.gnome.system.proxy`, GNOME keeps its own proxy settings. This can handle PAC files, but still has the problem that it is system-wide, and does not adjust according to the currently-connected network(s). Additionally, the user's proxy settings aren't visible to root processes, so things like yum won't pick up these settings.
 
 Obviously this doesn't work for macos, and there is more than one gnome.system now in linux.

@@ -3,7 +3,7 @@
 # version 0.0.1-alpha 
 ## ## ## ## 
 # Set your globalurl_proxy in the `.matrix_config`
-# globalurl_proxy = "proxyUsername:proxyPassword@proxy.server.com:port"
+# export globalurl_proxy="proxyUsername:proxyPassword@proxy.server.com:port"
 #
 ## ## ## ## 
 #

@@ -1,6 +1,6 @@
 # VIM
 
-The `dot.matrix` has two components for VIM. 
+The `dot.matrix` has two components for VIM.
 
 * VIM matrix ext bash functions that provide symlinks
 * Homebrew `.vim` symlink with Vundle plugins
@@ -22,7 +22,10 @@ When you install a new shell for dot.matrix it will ask to install all the plugi
 This is checked in `check_matrix_dependencies func:check_first_vim`
 
 ### Vundle Plugin List
-```
+
+What I prefer as my `vim` plugin list, included in matrix.dot.files.
+
+```vim
 Plugin 'VundleVim/Vundle.vim'
 Plugin 'scrooloose/nerdtree'
 Plugin 'scrooloose/syntastic'
@@ -39,7 +42,7 @@ Plugin 'towolf/vim-helm'
 
 ### Vim Airline
 
-vim-airline is essentially a fork of powerline, but slimmed down and built specifically for ViM. This repo is configured to use powerline fonts. 
+`vim-airline` is essentially a fork of `powerline`, but slimmed down and built specifically for ViM. This repo is configured to use powerline fonts. 
 
 Base16 Theme is used by airline.
 
