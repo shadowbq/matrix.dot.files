@@ -1,4 +1,4 @@
-# Python 
+# Python
 
 Python can be a complete mess as overtime 2.7 to 3.x has seen many tool turnovers:
 
@@ -24,14 +24,14 @@ Homebrew will jerk around your python and completely destroy your pips and libs 
 
 ## Observe installed versions
 
-```
+```shell
 pyenv versions
 * system (set by /Users/smacgregor/.pyenv/version)
 ```
 
 ## Install a Sane Python 
 
-```
+```shell
 pyenv install 3.8.4
 pyenv global 3.8.4
 ```
@@ -44,7 +44,7 @@ python -m pip install pipx
 
 ## Enable Pyenv-doctor
 
-```
+```shell
 pipx install pyenv-doctor
 ```
 
@@ -54,9 +54,7 @@ pipx install pyenv-doctor
 
 `poetry` will also detect if you are inside a `virtualenv` and install the packages accordingly. So, poetry can be installed globally and used everywhere.
 
-* https://python-poetry.org/docs/cli/
-
-```
+```shell
 pipx install poetry
 ```
 
@@ -82,6 +80,17 @@ make clean
 make upload
 ```
 
+## Build Python Packages with Poetry
+
+```shell
+poetry init # creating your pyproject.toml config
+poetry build
+poetry publish
+```
+
 ## Reference
 
 * https://realpython.com/intro-to-pyenv/
+* https://realpython.com/pypi-publish-python-package/#poetry
+* https://python-poetry.org/
+* https://python-poetry.org/docs/cli/
