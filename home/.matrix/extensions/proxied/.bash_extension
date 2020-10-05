@@ -42,7 +42,14 @@ function wget_proxy {
 }
 
 function proxy_set {
-    export {http,https,ftp}_proxy="$globalurl_proxy"
+    export HTTP_PROXY="$globalurl_proxy"
+    export {HTTPS,FTP}_PROXY="$HTTP_PROXY"
+    export {http,https,ftp}_proxy="$HTTP_PROXY"
+    export NO_PROXY=127.0.0.1,169.254.169.254,localhost
+    export no_proxy=$NO_PROXY
+    export noProxy=$NO_PROXY
+    export noproxy=$NO_PROXY
+    
     # git config --global http.sslVerify false
     git config --global http.proxy "http://$globalurl_proxy"
     git config --global https.proxy "https://$globalurl_proxy"
@@ -52,6 +59,9 @@ function proxy_set {
 
 function proxy_unset {
     unset {http,https,ftp}_proxy
+    unset {HTTP,HTTPS,FTP}_PROXY
+    unset {no_p,nop,noP}roxy
+    unset NO_PROXY
     git proxyclear
     strict_ssl_set
     sed -i '/^use_proxy/,$d' ~/.wgetrc

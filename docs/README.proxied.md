@@ -2,7 +2,19 @@
 
 There are a few well known things to enable proxies, but frankly its still a mess in the POSIX world.
 
+* reference: https://unix.stackexchange.com/questions/212894/whats-the-right-format-for-the-http-proxy-environment-variable-caps-or-no-ca
+
+Set your proxy in the `.matrix_config` and enable the helper extension (home/.matrix/extensions/proxied/.bash_extension).
+
 ```shell
+export matrix_ext_proxy=true
+export globalurl_proxy="proxyUsername:proxyPassword@proxy.server.com:port"
+```
+
+Automatic configuration if you load the `proxied extension` in matrix.dot.files:
+
+```shell
+## Configured from the proxied extension automatically
 export NO_PROXY=127.0.0.1,169.254.169.254,localhost
 export no_proxy=$NO_PROXY
 export noProxy=$NO_PROXY
@@ -20,23 +32,17 @@ export SOCKS_PROXY=$socks_proxy
 
 Some clients support the `no_proxy` environment variable that specifies a set of domains for which the proxy should not be consulted
 
-Set your proxy in the `.matrix_config` and enable the helper extension.
 
-```shell
-export matrix_ext_proxy=true
-export globalurl_proxy="proxyUsername:proxyPassword@proxy.server.com:port"
-```
-
-## Additional Application proxies
+## Additional Application proxies configured for you
 
 ```shell
 git config — global http.proxy $HTTP_PROXY
 git config — global https.proxy $HTTP_PROXY
 ```
 
-### git over SSH
+### git over SSH 
 
-Add the following to your `~/.ssh/config` file:
+This is an example, and one is packaged into the config that ships. Add the following to your `~/.ssh/config` file:
 
 ```
 host github.com
@@ -57,26 +63,14 @@ export no_proxy=.svc,10.0.0.0/8,172.16.0.0/12,192.168.0.0/16,`hostname`,localhos
 
 ## On-Off
 
-Source a file like this.. 
+`proxy_set` - Set all these proxies based on the global proxy config
 
-```shell
-enableproxy() {
- ....
-}
-disableproxy() {
-unset HTTP_PROXY
-unset HTTPS_PROXY
-unset http_proxy
-unset https_proxy
-unset socks_proxy
-unset NO_PROXY
-unset noProxy
-unset all_proxy
-}
-enableproxy
-```
+`proxy_unset` - remove all the proxies configured as best as we can.
 
-## Existing Approaches
+`proxy-show` - show what is configured to use proxies as best as we can.
+
+
+## Existing Alternative Approaches
 
 There are a number of existing pieces to this puzzle, none of them ideal...
 
