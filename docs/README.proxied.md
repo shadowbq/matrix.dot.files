@@ -1,18 +1,79 @@
-# Proxied
+# Proxied - General proxy settings for many applications
 
 There are a few well known things to enable proxies, but frankly its still a mess in the POSIX world.
 
 ```shell
 export NO_PROXY=127.0.0.1,169.254.169.254,localhost
+export no_proxy=$NO_PROXY
+export noProxy=$NO_PROXY
+export noproxy=$NO_PROXY
 export HTTP_PROXY=http://my.proxy.location:6124
 export HTTPS_PROXY=$HTTP_PROXY
+export http_proxy=$HTTP_PROXY
+export https_proxy=$HTTPS_PROXY
+
+export ftp_proxy=http://<YOUR.FTP-PROXY.URL:PORT>
+export socks_proxy=http://<YOUR.SOCKS-PROXY.URL:PORT>
+export FTP_PROXY=$ftp_proxy
+export SOCKS_PROXY=$socks_proxy
 ```
+
+Some clients support the `no_proxy` environment variable that specifies a set of domains for which the proxy should not be consulted
 
 Set your proxy in the `.matrix_config` and enable the helper extension.
 
 ```shell
 export matrix_ext_proxy=true
 export globalurl_proxy="proxyUsername:proxyPassword@proxy.server.com:port"
+```
+
+## Additional Application proxies
+
+```shell
+git config — global http.proxy $HTTP_PROXY
+git config — global https.proxy $HTTP_PROXY
+```
+
+### git over SSH
+
+Add the following to your `~/.ssh/config` file:
+
+```
+host github.com
+     port 22
+     user git
+     ProxyCommand connect-proxy -S <YOUR.SSH-PROXY.URL:PORT> %h %p
+```
+
+### kubeadmin (k8s)
+
+`kubeadm` commands specifically use these shell variables for proxy configuration. Ensure they are set your running terminal before running kubeadm commands.
+
+```
+export http_proxy=http://proxy.example.com:80
+export https_proxy=http://proxy.example.com:443
+export no_proxy=.svc,10.0.0.0/8,172.16.0.0/12,192.168.0.0/16,`hostname`,localhost
+```
+
+## On-Off
+
+Source a file like this.. 
+
+```shell
+enableproxy() {
+ ....
+}
+disableproxy() {
+unset HTTP_PROXY
+unset HTTPS_PROXY
+unset http_proxy
+unset https_proxy
+unset socks_proxy
+unset NO_PROXY
+unset noProxy
+unset all_proxy
+}
+enableproxy
 ```
 
 ## Existing Approaches
