@@ -57,11 +57,23 @@ function proxy_set {
     strict_ssl_unset
 }
 
+function proxy_socks_set {
+    if [  -z "$globalurl_proxy" ]; then 
+        echo_warn "Proxy Configuration loading.."
+        echo_warn "$globalurl_proxy"
+
+        export all_proxy="socks5://${socks_proxy}/"
+        export ALL_PROXY="socks5://${socks_proxy}/"
+    else
+        #shellcheck disable=SC2016
+        echo_error 'no "$socks_proxy" configuration found in ".matrix_config".'
+    fi
+}
+
 function proxy_unset {
-    unset {http,https,ftp}_proxy
-    unset {HTTP,HTTPS,FTP}_PROXY
-    unset {no_p,nop,noP}roxy
-    unset NO_PROXY
+    unset {all,no,http,https,ftp}_proxy
+    unset {ALL,NO,HTTP,HTTPS,FTP}_PROXY
+    unset noProxy
     git proxyclear
     strict_ssl_set
     sed -i '/^use_proxy/,$d' ~/.wgetrc
