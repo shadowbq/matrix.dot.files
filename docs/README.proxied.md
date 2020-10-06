@@ -12,6 +12,9 @@ export globalurl_proxy="proxyUsername:proxyPassword@proxy.server.com:port"
 # (optional) export socks_proxy="socks.server.com:1080"
 # (optional) export ignore_proxy="127.0.0.1,169.254.169.254,localhost" <- default
 # (optional) export ignore_proxy="$ignore_proxy,169.254.169.123,localhost.localdomain"
+
+# (optional) enable the proxy on login
+# proxy_set 
 ```
 
 Automatic configuration if you load the `proxied extension` in matrix.dot.files:
@@ -70,7 +73,7 @@ export no_proxy=.svc,10.0.0.0/8,172.16.0.0/12,192.168.0.0/16,`hostname`,localhos
 
 `proxy_unset` - remove all the proxies configured as best as we can.
 
-`proxy-show` - show what is configured to use proxies as best as we can.
+`proxy_show` - show what is configured to use proxies as best as we can.
 
 
 ## Existing Alternative Approaches
