@@ -9,6 +9,9 @@ Set your proxy in the `.matrix_config` and enable the helper extension (home/.ma
 ```shell
 export matrix_ext_proxy=true
 export globalurl_proxy="proxyUsername:proxyPassword@proxy.server.com:port"
+# (optional) export socks_proxy="socks.server.com:1080"
+# (optional) export ignore_proxy="127.0.0.1,169.254.169.254,localhost" <- default
+# (optional) export ignore_proxy="$ignore_proxy,169.254.169.123,localhost.localdomain"
 ```
 
 Automatic configuration if you load the `proxied extension` in matrix.dot.files:

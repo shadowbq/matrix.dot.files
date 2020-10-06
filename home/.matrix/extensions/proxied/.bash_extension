@@ -4,7 +4,8 @@
 ## ## ## ## 
 # Set your globalurl_proxy in the `.matrix_config`
 # export globalurl_proxy="proxyUsername:proxyPassword@proxy.server.com:port"
-#
+# (optional) export socks_proxy="socks.server.com:1080"
+# (optional) export ignore_proxy="127.0.0.1,169.254.169.254,localhost"
 ## ## ## ## 
 #
 # README: docs/README.proxied.md
@@ -25,6 +26,7 @@ if [  -z "$globalurl_proxy" ]; then
     if [ -x "$path_to_corkscrew" ]; then
         echo_notify "Corkscrew found."
     fi
+    ignore_proxy="127.0.0.1,169.254.169.254,localhost"
 else 
     echo_error "'matrix proxied extension' loaded without setting \$globalurl_proxy"
 fi 
