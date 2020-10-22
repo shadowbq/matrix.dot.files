@@ -12,6 +12,7 @@
 [core]
 	excludesfile = ~/.gitignore_global
 	editor = /usr/bin/vim
+	ignorecase = false
 [alias]
 	st = status
 	ci = commit
