@@ -1,14 +1,14 @@
 [user]
-	name = d2iq-shadowbq
-	email = smacgregor@d2iq.com
+	name = shadowbq
+	email = shadowbq@gmail.com
 [color]
 	branch = auto
 	diff = auto
 	interactive = auto
 	status = auto
 [github]
-	user = d2iq-shadowbq
-	email = smacgregor@d2iq.com
+	user = shadowbq
+	email = shadowbq@gmail.com
 [core]
 	excludesfile = ~/.gitignore_global
 	editor = /usr/bin/vim
