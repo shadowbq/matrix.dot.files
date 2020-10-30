@@ -3,7 +3,7 @@
 ## How to install Node and NVM
 
 ```shell
-curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh | bash
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.36.0/install.sh | bash
 ```
 
 Restart your shell.
