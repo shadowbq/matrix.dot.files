@@ -162,9 +162,11 @@ Copy the key to the other machine ( scp is your friend)
 
 `scp ~/.ssh/my-gpg-private-key.asc target:~/.ssh/.`
 
+### Register an Existing Key
+
 To import the key on the *target-server*, run `gpg --import ~/.ssh/my-gpg-private-key.asc`.
 
-#### Ensure they are now trusted
+#### Trust the newly Imported key
 
 Ensure the keys are correct by observing the ID with LONG format:
 
@@ -193,20 +195,33 @@ Please decide how far you trust this user to correctly verify other users' keys
   m = back to the main menu
 
 Your decision? 5
+Do you really want to set this key to ultimate trust? (y/N) y
 gpg> save
 ```
 
-## ENV from KEYCHAIN
+Validate it is now `ultimate` trust.
+
+`gpg --keyid-format 0xLONG -k`
+
+```
+uid [ ultimate ] User < user@useremail.com >
+```
+
+## Alternatives
+
+### Using ENV from OSX-KEYCHAIN / Linux D-Bus Services
+
+Sorah/ENVchain allows you to secure credential environment variables to your secure vault, and set to environment variables only when you called explicitly.
 
 sorah/envchain - https://github.com/sorah/envchain
 
-envchain - set environment variables with macOS keychain or D-Bus secret service
+envchain - supports macOS keychain or D-Bus secret service (gnome-keyring) 
 
-## Bad: LUKS / Container
+### Bad: LUKS / Container
 
 Mount it and unmount it into a FS. 
 
-## Worst Option: Unsecure File Fault 
+### Worst Option: Unsecure File Fault 
 
 Source it from `.bash_local`, and in linux give it SELINUX labels.
 (http://blog.siphos.be/2015/07/restricting-even-root-access-to-a-folder/)
@@ -216,6 +231,6 @@ $> ls -lZ .bash_local
 -rw-------. 1 scottmacgregor  root system_u:object_r:secrets_log_t 60 Dec 27 14:53 .bash_local
 ```
 
-## Not an Option
+### Not an Option
 
 Do something really stupid!
