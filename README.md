@@ -77,7 +77,7 @@ Read the Docs, as they are very helpful in getting unstuck, or installed correct
 docs/README.md - Navigating the DOCS
 ```
 
-Installation and Setup Guides for the extentions
+Installation and Setup Guides for the extensions
 
 ```
 docs/README.bash.md
@@ -127,21 +127,17 @@ Run the matrix dependency checker to get a good start on ensuring a SANE environ
 .bash_profile
 ```
 
-bash_profile is the primary universal include directive file that autoloads .matrix directives 
+bash_profile is the primary universal include directive file that autoloads dot.matrix directives 
 
 ### Matrix
+
+bash_matrix defines what additional include directives to load from the matrix (configure your load out here)
 
 ```shell
 .bash_matrix
 ```
 
-bash_matrix defines what additional include directives to load from the matrix (configure your load out here)
-
-```shell
-.matrix
-```
-
-matrixdirectory holds all additional plugins 
+`.matrix` directory holds all additional plugins 
 
 * OS specific - load paths, bins, aliases, advisors
               - (./Darwin/.bash_extensions)
@@ -149,21 +145,25 @@ matrixdirectory holds all additional plugins
 * Rubygems in bundler format that improve experience
 * Additional functions, environment needs, and mockups
 
+
 ### Other Files
 
+Additional actions on the Universal Profile
+
 ```shell
-.bashrc
-.bash_logout
+.bashrc           # NOTE: Bashrc are loaded by .bash_profile!
+.bash_logout      # Performed during logout.
 ```
 
-Local files for ENV changes that are excluded from unified profile (SECRETS)
+
+Standardized `.git` configs and shortcuts
 
 ```shell
 .gitconfig
 .gitignore-global
 ```
 
-Standardized .git configs
+Other .file(s) that can enhance the unified experience
 
 ```shell
 .irbrc
@@ -171,8 +171,18 @@ Standardized .git configs
 .....(others)
 ```
 
-Other .file(s) that can enhance the unified experience
+## Other Directories
+
+There are some additional directories symlinked in to assist in application normalization
+
+```
+.config
+.parallel
+.vim
+```
 
 ## More Help
 
-For More help please the `/docs` directory/..
+* For More help please the `/docs` directory/..
+* File an Issue on GITHUB
+* Ask on StackHUB
