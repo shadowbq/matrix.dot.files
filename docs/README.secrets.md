@@ -8,7 +8,32 @@ We should never store unecrypted secrets on our machines.
 
 Store secrets as ENVs on a file (`.bash_secrets`) that can be sourced from Bash, but dont write the file to the harddrive. Instead write it encrypted as (` ~/.bash_encrypted`) and decrypt in memory and source it as needed.
 
-## Load Secrets from an Encrypted file
+## Usage
+
+
+## Setup
+
+### Install GPG and Init
+
+Install the GPG client
+
+```
+# (macosx) brew install gpg
+# (linux) apt/yum install gpg
+# (bsd) ... gpg
+```
+
+Init GPG
+
+```
+gpg --list-keys
+gpg: directory '/Users/smacgregor/.gnupg' created
+gpg: keybox '/Users/smacgregor/.gnupg/pubring.kbx' created
+gpg: /Users/smacgregor/.gnupg/trustdb.gpg: trustdb created
+```
+
+### Load Secrets from an Encrypted file (Manual Way)
+
 Given that you have a GPG KEY `0123456789ABCDEF0123456789ABCDEF`:
 
 ```
