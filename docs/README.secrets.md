@@ -107,7 +107,7 @@ else
 
 <s>` gpg --no-tty --batch --passphrase "$GPG_PASSPHRASE" --pinentry-mode loopback --output secrets.env --decrypt ~/.bash_secrets `</s>
 
-### Load Secrets from an Encrypted file (Manual Way)
+### Make New Secrets Securely using RAMDisks
 
 Given that you have a GPG KEY `0123456789ABCDEF0123456789ABCDEF`:
 
