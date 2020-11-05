@@ -143,7 +143,9 @@ umount $HOME/tmpfs
 macos_ramdisk umount $HOME/tmpfs
 ```
 
-Decrypt and load into current `tty` ENV.
+### Manual Loading of Secrets
+
+As an alternative to `secrets-load`,  you can manually decrypt and load into current `tty` ENV.
 
 ```
 $> # alias secrets-load='eval $(cat ~/.bash_encrypted |base64 -d |gpg --decrypt 2> /dev/null)' 
