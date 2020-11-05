@@ -2,9 +2,9 @@
 
 We should never store unecrypted secrets on our machines. 
 
-**This is bad®.**
+**Storing unencrypted ENV in a file is bad idea®.**
 
-## The IDEA
+## The Good IDEA
 
 Store secrets as ENVs on a file (`.bash_secrets`) that can be sourced from Bash, but dont write the file to the harddrive. Instead write it encrypted as (` ~/.bash_encrypted`) and decrypt in memory and source it as needed.
 
