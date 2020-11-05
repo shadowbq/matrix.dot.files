@@ -67,6 +67,43 @@ Secure files like these are ignored from the repo in the `.gitignore`
 .ssh/id*
 ```
 
+## The Docs
+
+Read the Docs, as they are very helpful in getting unstuck, or installed correctly in each section.
+
+```
+./README.md - The site README
+
+docs/README.md - Navigating the DOCS
+```
+
+Installation and Setup Guides for the extentions
+
+```
+docs/README.bash.md
+docs/README.go.md
+docs/README.nodejs.md
+docs/README.os.bsd.md
+docs/README.os.linux.md
+docs/README.os.macos.md
+docs/README.os.win10.md
+docs/README.powerline.md
+docs/README.proxied.md
+docs/README.python.md
+docs/README.ruby.md
+docs/README.secrets.md
+docs/README.vim.md
+```
+
+Additional tools included that don't include instructions
+
+```
+docs/tools/README.ack.md
+docs/tools/README.prettyprint.md
+docs/tools/README.randomz.md
+docs/tools/README.rmate.md
+```
+
 ## Dependencies
 
 The Matrix has a few dependencies if you are going to use it.
@@ -80,7 +117,7 @@ The Matrix has a few dependencies if you are going to use it.
 
 Run the matrix dependency checker to get a good start on ensuring a SANE environment
 
-`.matrix/install/check_matrix_dependencies`
+`.matrix/bin/check_matrix_dependencies`
 
 ## File Hierarchy
 
