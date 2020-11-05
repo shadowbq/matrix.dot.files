@@ -1,4 +1,14 @@
-# Load Secrets from an Encrypted file
+# Secrets
+
+We should never store unecrypted secrets on our machines. 
+
+**This is bad®.**
+
+## The IDEA
+
+Store secrets as ENVs on a file (`.bash_secrets`) that can be sourced from Bash, but dont write the file to the harddrive. Instead write it encrypted as (` ~/.bash_encrypted`) and decrypt and source it as needed.
+
+## Load Secrets from an Encrypted file
 Given that you have a GPG KEY `0123456789ABCDEF0123456789ABCDEF`:
 
 ```
