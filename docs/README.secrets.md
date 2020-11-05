@@ -77,18 +77,20 @@ $> eval $(cat ~/.bash_encrypted |base64 -d |gpg --decrypt 2> /dev/null)
 
 ### Set your pin entry method (required):
 
-You will need a pin entry application
+You will need a pin entry application *that works(looking at you mac)*
 
-Example: `apt|brew|yum install pinentry-tty` *[Install Help](https://superuser.com/questions/520980/how-to-force-gpg-to-use-console-mode-pinentry-to-prompt-for-passwords)
+* `brew install pinentry-mac` 
+* `apt install pinentry-tty`
+* `yum install pinentry-tty`
+
+* [Install Help](https://superuser.com/questions/520980/how-to-force-gpg-to-use-console-mode-pinentry-to-prompt-for-passwords)
 
 ```shell
-ls -la /usr/bin/pinentry*
-ls: /usr/bin/pinentry*: No such file or directory
-macos$> ls -la /usr/local/bin/pinentry*
-lrwxr-xr-x  1 scottmacgregor  admin  39 Oct 28 21:21 /usr/local/bin/pinentry -> ../Cellar/pinentry/1.1.0_1/bin/pinentry
-lrwxr-xr-x  1 scottmacgregor  admin  46 Oct 28 21:21 /usr/local/bin/pinentry-curses -> ../Cellar/pinentry/1.1.0_1/bin/pinentry-curses
-lrwxr-xr-x  1 scottmacgregor  admin  45 Dec 28 13:26 /usr/local/bin/pinentry-mac -> ../Cellar/pinentry-mac/0.9.4/bin/pinentry-mac
-lrwxr-xr-x  1 scottmacgregor  admin  43 Oct 28 21:21 /usr/local/bin/pinentry-tty -> ../Cellar/pinentry/1.1.0_1/bin/pinentry-tty
+ls -la /usr/*/bin/pinentry*
+lrwxr-xr-x  1 smacgregor  admin  39 Nov  5 09:15 /usr/local/bin/pinentry -> ../Cellar/pinentry/1.1.0_1/bin/pinentry
+lrwxr-xr-x  1 smacgregor  admin  46 Nov  5 09:15 /usr/local/bin/pinentry-curses -> ../Cellar/pinentry/1.1.0_1/bin/pinentry-curses
+lrwxr-xr-x  1 smacgregor  admin  45 Nov  5 09:31 /usr/local/bin/pinentry-mac -> ../Cellar/pinentry-mac/0.9.4/bin/pinentry-mac
+lrwxr-xr-x  1 smacgregor  admin  43 Nov  5 09:15 /usr/local/bin/pinentry-tty -> ../Cellar/pinentry/1.1.0_1/bin/pinentry-tty
 ```
 
 A pure cli experience on servers
@@ -119,7 +121,17 @@ gpg-connect-agent reloadagent /bye
 
 Note (This was seen as require at least on **macos**): 
 
-`export GPG_TTY=$(tty)` to my `~/.bashrc`
+`dot.matrix` should have solved the GPG_TTY issue, but if need it add it manually
+
+```
+env |grep GPG
+GPG_TTY=/dev/ttys001
+```
+
+else 
+
+`export GPG_TTY=$(tty)` to my `~/.bash_local`
+
 
 *** PLEASE DO NOT DO THIS.. To kick the can *** 
 
