@@ -4,14 +4,13 @@
 # shellcheck shell=bash
 #############################
 
-#alias secrets_load='eval $(cat ~/.bash_encrypted |base64 -d |gpg --decrypt 2> /dev/null)'
-#alias secrets_load='eval $(secrets_decrypt ~/.bash_encrypted)'
-function secrets_decrypt() {
+function _secrets_decrypt() {
   if [[ ! -f "${1}" ]]; then
     echo_err "secrets files ${1} does not existz"
   fi
   cat "$1" |base64 -d |gpg --decrypt 2> /dev/null
 }
+alias secrets_load='eval $(_secrets_decrypt ~/.bash_encrypted)'
 
 # In base64 encoding, the character set is [A-Z, a-z, 0-9, and + /]. If the rest length is less than 4, the string is padded with '=' characters.
 
