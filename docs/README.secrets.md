@@ -2,7 +2,7 @@
 
 We should never store unecrypted secrets on our machines. 
 
-**Storing unencrypted ENV in a file is bad idea®.**
+**Storing unencrypted Secret ENVs in a file is bad idea®.**
 
 ## The Good IDEA
 
