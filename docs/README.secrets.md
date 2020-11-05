@@ -63,20 +63,19 @@ lrwxr-xr-x  1 smacgregor  admin  45 Nov  5 09:31 /usr/local/bin/pinentry-mac -> 
 lrwxr-xr-x  1 smacgregor  admin  43 Nov  5 09:15 /usr/local/bin/pinentry-tty -> ../Cellar/pinentry/1.1.0_1/bin/pinentry-tty
 ```
 
-A pure cli experience on servers
+A pure cli experience on servers or terminal
 
 ```
 echo "pinentry-program /usr/bin/pinentry-tty" >> ~/.gnupg/gpg-agent.conf
 ```
 
-For *debian/ubuntu* 
+For *debian/ubuntu* you *MUST* update the alternatives
 
 ```
 sudo update-alternatives --config pinentry
-gpg-connect-agent reloadagent /bye
 ```
 
-For *macos/OSX* you can use a GUI/popup which also works with `keychain`
+For *macos/OSX* you can *ALTERNATIVELY* use a GUI/popup which also works with `keychain`
 
 ```
 brew install pinentry-mac
@@ -86,7 +85,7 @@ echo "pinentry-program /usr/local/bin/pinentry-mac" >> ~/.gnupg/gpg-agent.conf
 Reload the GPG Agent (or killit to force a restart)
 ```
 gpg-connect-agent reloadagent /bye
-# killall gpg-agent
+# `killall gpg-agent` if that not working correctly
 ```
 
 Note (This was seen as require at least on **macos**): 
@@ -102,10 +101,6 @@ else
 
 `export GPG_TTY=$(tty)` to my `~/.bash_local`
 
-
-*** PLEASE DO NOT DO THIS.. To kick the can *** 
-
-<s>` gpg --no-tty --batch --passphrase "$GPG_PASSPHRASE" --pinentry-mode loopback --output secrets.env --decrypt ~/.bash_secrets `</s>
 
 ### Make New Secrets Securely using RAMDisks
 
