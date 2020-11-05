@@ -10,6 +10,18 @@ Store secrets as ENVs on a file (`.bash_secrets`) that can be sourced from Bash,
 
 ## Usage
 
+```
+$> env |grep -i SECRET_TOKEN
+$> secrets-load
+Please enter the passphrase to unlock the OpenPGP secret key:
+"scott macgregor <shadowbq@gmail.com>"
+2048-bit RSA key, ID 0123456789ABCDEF,
+created 2019-12-28 (main key ID 0123456789ABCDEF).
+
+Passphrase:
+$> env |grep -i SECRET_TOKEN
+SECRET_TOKEN=abcdefg12345678ZYXWV
+```
 
 ## Setup
 
@@ -32,48 +44,6 @@ gpg: keybox '/Users/smacgregor/.gnupg/pubring.kbx' created
 gpg: /Users/smacgregor/.gnupg/trustdb.gpg: trustdb created
 ```
 
-### Load Secrets from an Encrypted file (Manual Way)
-
-Given that you have a GPG KEY `0123456789ABCDEF0123456789ABCDEF`:
-
-```
-$> gpg --list-keys
-/Users/scottmacgregor/.gnupg/pubring.kbx
-----------------------------------------
-pub   rsa2048 2019-12-28 [SC] [expires: 2021-12-27]
-      0123456789ABCDEF0123456789ABCDEF
-uid           [ultimate] scott macgregor <shadowbq@gmail.com>
-sub   rsa2048 2019-12-28 [E] [expires: 2021-12-27]
-```
-
-Encrypt a bash script with contents: `export SECRET_TOKEN=abcdefg12345678ZYXWV` securely into `.bash_encrypted`
-
-```
-# Make your Linux secrets securely 
-mkdir -p $HOME/tmpfs
-mount -t tmpfs -o size=512m ramfs $HOME/tmpfs
-# Make your MacOS secrets securely (macos_ramdisk is in .matrix/Darwin/bin)
-macos_ramdisk mount
-```
-
-```
-vi $HOME/tmpfs/.bash_secrets
-[..Write.Secrets.here..]
-cat $HOME/tmpfs/.bash_secrets | gpg --encrypt -r 0123456789ABCDEF0123456789ABCDEF --armor |base64 > ~/.bash_encrypted
-```
-
-```
-# Wipe secrets ( Nuke: https://unix.stackexchange.com/a/271870/104660)
-umount $HOME/tmpfs
-macos_ramdisk umount $HOME/tmpfs
-```
-
-Decrypt and load into current `tty` ENV.
-
-```
-$> # alias secrets-load='eval $(cat ~/.bash_encrypted |base64 -d |gpg --decrypt 2> /dev/null)' 
-$> eval $(cat ~/.bash_encrypted |base64 -d |gpg --decrypt 2> /dev/null)
-```
 
 ### Set your pin entry method (required):
 
@@ -137,18 +107,47 @@ else
 
 <s>` gpg --no-tty --batch --passphrase "$GPG_PASSPHRASE" --pinentry-mode loopback --output secrets.env --decrypt ~/.bash_secrets `</s>
 
-### Example:
-```
-$> env |grep -i SECRET_TOKEN
-$> secrets-load
-Please enter the passphrase to unlock the OpenPGP secret key:
-"scott macgregor <shadowbq@gmail.com>"
-2048-bit RSA key, ID 0123456789ABCDEF,
-created 2019-12-28 (main key ID 0123456789ABCDEF).
+### Load Secrets from an Encrypted file (Manual Way)
 
-Passphrase:
-$> env |grep -i SECRET_TOKEN
-SECRET_TOKEN=abcdefg12345678ZYXWV
+Given that you have a GPG KEY `0123456789ABCDEF0123456789ABCDEF`:
+
+```
+$> gpg --list-keys
+/Users/scottmacgregor/.gnupg/pubring.kbx
+----------------------------------------
+pub   rsa2048 2019-12-28 [SC] [expires: 2021-12-27]
+      0123456789ABCDEF0123456789ABCDEF
+uid           [ultimate] scott macgregor <shadowbq@gmail.com>
+sub   rsa2048 2019-12-28 [E] [expires: 2021-12-27]
+```
+
+Encrypt a bash script with contents: `export SECRET_TOKEN=abcdefg12345678ZYXWV` securely into `.bash_encrypted`
+
+```
+# Make your Linux secrets securely 
+mkdir -p $HOME/tmpfs
+mount -t tmpfs -o size=512m ramfs $HOME/tmpfs
+# Make your MacOS secrets securely (macos_ramdisk is in .matrix/Darwin/bin)
+macos_ramdisk mount
+```
+
+```
+vi $HOME/tmpfs/.bash_secrets
+[..Write.Secrets.here..]
+cat $HOME/tmpfs/.bash_secrets | gpg --encrypt -r 0123456789ABCDEF0123456789ABCDEF --armor |base64 > ~/.bash_encrypted
+```
+
+```
+# Wipe secrets ( Nuke: https://unix.stackexchange.com/a/271870/104660)
+umount $HOME/tmpfs
+macos_ramdisk umount $HOME/tmpfs
+```
+
+Decrypt and load into current `tty` ENV.
+
+```
+$> # alias secrets-load='eval $(cat ~/.bash_encrypted |base64 -d |gpg --decrypt 2> /dev/null)' 
+$> eval $(cat ~/.bash_encrypted |base64 -d |gpg --decrypt 2> /dev/null)
 ```
 
 ### Working with your GPG Keys in more than one location.
