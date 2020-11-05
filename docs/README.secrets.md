@@ -10,6 +10,8 @@ Store secrets as ENVs on a file (`.bash_secrets`) that can be sourced from Bash,
 
 It is implemented as an alias `secrets_load` which evals bash function `_secrets_decrypt` on the `~/.bash_encrypted` file using gpg keys that are pin secured.
 
+Source: `.matrix/functions/security_functions`
+
 ## Usage
 
 ```
