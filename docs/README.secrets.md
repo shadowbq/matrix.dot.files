@@ -6,15 +6,15 @@ We should never store unecrypted secrets on our machines.
 
 ## The Good IDEA
 
-Store secrets as ENVs on a file (`.bash_secrets`) that can be sourced from Bash, but don;t write the file to the harddrive. Instead write it encrypted as (` ~/.bash_encrypted`) and decrypt in memory and source it as needed.
+Store secrets as ENVs on a file (`.bash_secrets`) that can be sourced from Bash, but don't write the file to the harddrive. Instead write it RSA 2048 encrypted then Base64 as (` ~/.bash_encrypted`) and decrypt in memory and source it as needed.
 
-It is implemented as an alias `secrets-load` which evals bash function `_secrets-decrypt` on the `~/.bash_encrypted` file using gpg keys that are pin secured.
+It is implemented as an alias `secrets_load` which evals bash function `_secrets_decrypt` on the `~/.bash_encrypted` file using gpg keys that are pin secured.
 
 ## Usage
 
 ```
 $> env |grep -i SECRET_TOKEN
-$> secrets-load
+$> secrets_load
 Please enter the passphrase to unlock the OpenPGP secret key:
 "scott macgregor <shadowbq@gmail.com>"
 2048-bit RSA key, ID 0123456789ABCDEF,
@@ -142,10 +142,9 @@ macos_ramdisk umount $HOME/tmpfs
 
 ### Manual Loading of Secrets
 
-As an alternative to `secrets-load`,  you can manually decrypt and load into current `tty` ENV.
+As an alternative to `secrets_load`,  you can manually decrypt and load into current `tty` ENV.
 
-```
-$> # alias secrets-load='eval $(cat ~/.bash_encrypted |base64 -d |gpg --decrypt 2> /dev/null)' 
+``` 
 $> eval $(cat ~/.bash_encrypted |base64 -d |gpg --decrypt 2> /dev/null)
 ```
 
