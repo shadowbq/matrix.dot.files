@@ -1,7 +1,12 @@
 #!/usr/bin/env bash
+if [[ $# -lt 1 ]]; then
+  search="."
+else
+  search="$1"
+fi 
 path_to_executable=$(which pygmentize)
 if [ -x "$path_to_executable" ] ; then
-  find $1 -maxdepth 1 -type l -ls |  tr -s '[:blank:]' ' '| cut -f 11- -d ' ' |sort -u | pygmentize -O style=monokai -l "$HOME/.matrix/extensions/python/lib/custom_lexar.py" -x
+  find $search -maxdepth 1 -type l -ls |  tr -s '[:blank:]' ' '| cut -f 11- -d ' ' |sort -u | pygmentize -O style=monokai -l "$HOME/.matrix/extensions/python/lib/custom_lexar.py" -x
 else
-  find $1 -maxdepth 1 -type l -ls |  tr -s '[:blank:]' ' '| cut -f 11- -d ' ' |sort -u
+  find $search -maxdepth 1 -type l -ls |  tr -s '[:blank:]' ' '| cut -f 11- -d ' ' |sort -u
 fi
