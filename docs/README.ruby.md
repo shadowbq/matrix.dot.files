@@ -1,6 +1,14 @@
 # Ruby
 
-Ruby can 2.x has seen tool turnovers, but we keep to `RVM` and `bundler`.
+## Is there a Ruby virtual manager?
+
+Yes, and its preferred setup is `RVM` already enabled in the ruby extension.
+
+```shell
+export PATH="$PATH:$HOME/.rvm/bin"                                   # Add RVM to PATH for scripting
+[[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
+```
+* Note: During the install of RVM we `export rvm_ignore_dotfiles=yes` to ensure non-duplicate instructions.
 
 ## Setup
 
@@ -10,13 +18,58 @@ What do you need to install?
 * bundler
 * required gems
 
-## Is there a Ruby virtual manager?
+### RVM Setup
 
-Yes, and its preferred setup is `RVM` already enabled in the ruby extension.
+#### OSX 
+
+Install RVM on OSX requires some handholding
 
 ```shell
-export PATH="$PATH:$HOME/.rvm/bin"                                   # Add RVM to PATH for scripting
-[[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
+echo "disable-ipv6" > ~/.gnupg/dirmngr.conf
+gpgconf --kill all
+gpg --keyserver pool.sks-keyservers.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3 7D2BAF1CF37B13E2069D6956105BD0E739499BDB
+export rvm_ignore_dotfiles=yes
+\curl -sSL https://get.rvm.io | bash -s stable --ruby
+```
+
+* GPG in OSX forces IPv6 but fails to resolve, so we disable this junk in gpg.
+
+### Installing Required Gems
+
+#### Bundler:
+
+You need install bundler (if your RVM did not install it, or if you are going to use system rubies)
+
+`sudo gem install bundler`
+
+#### Matrix.Dot Gems
+
+Use bundler gem command `bundle` to install from the matrix.dot gems `Gemfile`
+
+```shell
+cd ~/.matrix/extensions/ruby/ 
+sudo bundle install
+```
+
+## Managing Default
+
+If you want to use system by default (sometimes in OSX), and not use RVM you can do this. You might also do this if you installed the matrix.dot. gems into the system ruby.
+
+```
+rvm alias delete default
+rvm use system
+```
+
+## Volatility of Ruby
+
+Ruby 2.x has seen tool turnovers, but we keep to `RVM` and `bundler`.
+
+### OSX Warning
+
+```
+WARNING: This version of ruby is included in macOS for compatibility with legacy software.
+In future versions of macOS the ruby runtime will not be available by
+default, and may require you to install an additional package.
 ```
 
 ## What you get in RCs for Ruby
