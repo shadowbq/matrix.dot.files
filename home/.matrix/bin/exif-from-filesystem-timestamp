@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+for i in ./*.JPG; do
+  exiv2 -k -M"set Exif.Photo.DateTimeOriginal `stat -f "%Sm" -t "%Y:%m:%d %H:%M:%S" $i`" $i
+  echo "$i"
+done
