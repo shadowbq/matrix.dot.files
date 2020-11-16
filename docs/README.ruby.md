@@ -32,7 +32,7 @@ export rvm_ignore_dotfiles=yes
 \curl -sSL https://get.rvm.io | bash -s stable --ruby
 ```
 
-* GPG in OSX forces IPv6 but fails to resolve, so we disable this junk in gpg.
+* Note: GPG in OSX forces IPv6 but fails to resolve, so we disable this junk in gpg.
 
 ### Installing Required Gems
 
@@ -60,6 +60,8 @@ rvm alias delete default
 rvm use system
 ```
 
+* Note: OSX - Ruby gem executables endup linking against *similiar* `#!/System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/bin/ruby` if you use system.
+
 ## Volatility of Ruby
 
 Ruby 2.x has seen tool turnovers, but we keep to `RVM` and `bundler`.
@@ -71,6 +73,8 @@ WARNING: This version of ruby is included in macOS for compatibility with legacy
 In future versions of macOS the ruby runtime will not be available by
 default, and may require you to install an additional package.
 ```
+
+This means there will no longer be a system ruby in OSX at somepoint. RVM will be required.
 
 ## What you get in RCs for Ruby
 
