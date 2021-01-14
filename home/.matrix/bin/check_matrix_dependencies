@@ -43,7 +43,7 @@ function check_first_powerline {
     if [ $? -eq 0 ]; then
         command -v socat >/dev/null 2>&1 || { echo_warn "[POWERLINE WARNING] No socat found."; }
         command -v pip >/dev/null 2>&1 || { echo_warn "[POWERLINE WARNING] No python pip found."; }
-        pip show psutil -q >/dev/null 2>&1 || { echo_warn "[POWERLINE WARNING] No python pip psutil Found."; }
+        pip show psutil -q >/dev/null 2>&1 || pipx runpip powerline-status show psutil -q >/dev/null 2>&1 || { echo_warn "[POWERLINE WARNING] No python pip psutil Found."; }
     else
         echo_err "[WARNING] Powerline is not found, but enabled."; 
     fi
@@ -98,9 +98,16 @@ function check_first_tmux {
         echo_notify "tmux found.. "
     fi
 
-    command -v reattach-to-user-namespace >/dev/null 2>&1
-    if [ $? -eq 1 ]; then
-        echo_warn "[WARNING] tmux has a dependency 'reattach-to-user-namespace' missing, install it (brew,apt,etc). " 
+    if [[ `uname -s`  == 'Darwin' ]]; then
+      command -v reattach-to-user-namespace >/dev/null 2>&1
+      if [ $? -eq 1 ]; then
+        echo_warn "[WARNING] tmux has a macos dependency 'reattach-to-user-namespace' missing, install it (brew). " 
+      fi
+    else
+      command -v xclip > /dev/null 2>&1
+      if [ $? -eq 1 ]; then
+        echo_warn "[WARNING] tmux has a linux dependency 'xclip' missing, install it (apt,etc). " 
+      fi
     fi
         
     if [ -d "$HOME"/.tmux/plugins/tpm ]; then
