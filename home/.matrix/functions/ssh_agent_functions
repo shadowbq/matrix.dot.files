@@ -30,3 +30,35 @@ function check_ssh_agent() {
     done
   fi
 }
+function _ssh-agent-start() {
+    echo -n "Initializing new SSH agent..."
+    rm -f ${SOCKETFILE}
+    /usr/bin/ssh-agent -a ${SOCKETFILE} | sed 's/^echo/#echo/' > "${SSH_ENV}"
+    chmod 600 ${SOCKETFILE}
+    echo succeeded
+    chmod 600 "${SSH_ENV}"
+    . "${SSH_ENV}" > /dev/null
+    /usr/bin/ssh-add;
+}
+
+# Source SSH settings, if applicable
+
+function ssh-agent-start() {
+
+  SSH_ENV="$HOME/.ssh/agent-environment"
+
+  if [[ -z $SSH_AUTH_SOCK ]]; then
+    SOCKETFILE=~/.ssh/ssh-agent.sock;
+  else
+    SOCKETFILE=${SSH_AUTH_SOCK};
+  fi;
+
+  if [ -f "${SSH_ENV}" ]; then
+    . "${SSH_ENV}" > /dev/null
+    ps -wU ${USER} | grep "${SSH_AGENT_PID}" | grep "[s]sh-agent" > /dev/null || {
+      _ssh-agent-start;
+    }
+  else
+    _ssh-agent-start;
+  fi
+}

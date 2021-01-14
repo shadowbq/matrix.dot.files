@@ -27,6 +27,8 @@ There are many patched fonts that can be used:
 
 * https://github.com/powerline/fonts
 * https://github.com/abertsch/Menlo-for-Powerline
+
+Remember: You need the powerline font on the client renderingi, not the server. (Example: If you are using OSX to connect to a linux machine you need menlo-powerline in your iterm2 config on the macos, not the linux machine.)
   
 OSX:
 
@@ -57,6 +59,19 @@ pipx install powerline-status
 pipx inject powerline-status psutil
 pipx inject powerline-status powerline-gitstatus
 pipx inject powerline-status powerline-inject
+```
+
+## TMUX integration
+
+`~/.tmux.conf` by .matrix needs to be edited to point at where powerline-status really is!
+
+```shell
+# Legacy Python 2.7 with powerline-status
+# source "/usr/local/lib/python2.7/dist-packages/powerline/bindings/tmux/powerline.conf"
+# System Python 3.8 with powerline-status
+# source "/usr/local/lib/python3.8/site-packages/powerline/bindings/tmux/powerline.conf"
+# Pyenv 3.8 with PIPX Install of powerline-status
+source "~/.local/pipx/venvs/powerline-status/lib/python3.8/site-packages/powerline/bindings/tmux/powerline.conf"
 ```
 
 ## Theme & ColorScheme

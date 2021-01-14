@@ -16,11 +16,24 @@ Python can be a complete mess as overtime 2.7 to 3.x has seen many tool turnover
 
 Homebrew will jerk around your python and completely destroy your pips and libs associated during a 3.7->3.8 transition. Be aware.
 
-## Install pyenv 
+## PreRequisites
+
+### Ubuntu Server
+
+```
+sudo apt install build-essential checkinstall
+sudo apt install libreadline-gplv2-dev libncursesw5-dev libssl-dev libsqlite3-dev tk-dev libgdbm-dev libc6-dev libbz2-dev zlibb1g-dev
+sudo apt install libffi-dev 
+```
+
+## Install pyenv to manage Python Versions
+
+```
+# Install PREREQs first
+curl https://pyenv.run | bash
+```
 
 ***Don't use system natives like brew or apt***
-
-`$ curl https://pyenv.run | bash`
 
 ## Observe installed versions
 
@@ -44,8 +57,10 @@ python -m pip install pipx
 
 ## Enable Pyenv-doctor
 
+Note: `pyenv-doctor` may not be available as `pipx/pip`
+
 ```shell
-pipx install pyenv-doctor
+git clone git://github.com/pyenv/pyenv-doctor.git $(pyenv root)/plugins/pyenv-doctor
 ```
 
 ## Enable Poetry

@@ -32,6 +32,7 @@ export matrix_ext_proxy=false
 # (optional) proxy_set
 
 # Enable Default functions
+export matrix_ssh_agent_manage=false
 export matrix_load_ssh_keys=true
 export matrix_load_secrets=false
 

@@ -34,6 +34,7 @@ cd "$HOME"
 # Final .matrix Commands to be executed
 # Defined commonly in .matrix/functions
 
+[ "$matrix_ssh_manage" == true ] && ssh-agent-start
 [ "$matrix_load_ssh_keys" == true ] && load_ssh_keys
 
 xpull_assign

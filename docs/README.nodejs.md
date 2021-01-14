@@ -2,7 +2,10 @@
 
 ## How to install Node and NVM
 
+The `profile` setting disables NVM from modifying the .bashrc
+
 ```shell
+PROFILE='/dev/null'
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.36.0/install.sh | bash
 ```
 

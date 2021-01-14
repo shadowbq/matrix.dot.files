@@ -13,18 +13,19 @@ export PATH=$GOPATH:$GOPATH/bin:$PATH
 
 ## Is there a go virtual manager linked?
 
-NO, but you can setup up `gvm` into matrix.dot.files
+Yes, but you need setup up `gvm` into matrix.dot.files
 
 * https://github.com/moovweb/gvm
 
-Install
+Install Golang Bootstrap 1.4 then build 1.15 and set it default.
 
 ```shell
+GVM_NO_UPDATE_PROFILE=true
 bash < <(curl -s -S -L https://raw.githubusercontent.com/moovweb/gvm/master/binscripts/gvm-installer)
-gvm install go1.4
-gvm use go1.4 --default
+gvm install go1.4 -B
+gvm use go1.4
+export GOROOT_BOOTSTRAP=$GOROOT
+gvm install go1.15
+gvm use go1.15 --default
 ```
 
-You would need to add to `.bash_local`:
-
-`[[ -s "$HOME/.gvm/scripts/gvm" ]] && source "$HOME/.gvm/scripts/gvm"`
