@@ -2,6 +2,12 @@
 
 Very simple extension for Go Lang
 
+## GoLang
+
+golang is a fast moving language that release an update every six months on average. Using `gvm` to manage your golang versions is preferred.
+
+You need to bootstrap golang 1.4 with a binary or c++ developer tool set as all other golangs require golang to compile golang.
+
 ## What does it do?
 
 It exports your gopath, and adds standard home go to your path.
@@ -18,6 +24,8 @@ Yes, but you need setup up `gvm` into matrix.dot.files
 * https://github.com/moovweb/gvm
 
 Install Golang Bootstrap 1.4 then build 1.15 and set it default.
+
+Latest GOLANG: https://golang.org/doc/devel/release.html
 
 ```shell
 GVM_NO_UPDATE_PROFILE=true

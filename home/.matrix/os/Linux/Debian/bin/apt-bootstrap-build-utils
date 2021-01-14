@@ -1,3 +1,4 @@
+
 #!/usr/bin/env bash
 
 apt-get update;
@@ -9,3 +10,26 @@ apt-get install unzip global ctags curl spell strace sysstat tree -y;
 apt-get install libpcre3-dev libssl-dev expat libexpat1-dev libxml2-dev libjpeg8-dev libgif-dev libpng12-dev -y;
 apt-get install daemontools-run -y;
 
+
+apt-get update;
+apt-get upgrade -f -y;
+
+### Basic Build tools
+sudo apt install build-essential -y
+sudo apt install checkinstall -y
+
+### C/C++ advance tools
+sudo apt install autoconf automake -y
+
+### Libraries
+sudo apt install libreadline-gplv2-dev libncursesw5-dev libssl-dev libsqlite3-dev tk-dev libgdbm-dev libc6-dev libbz2-dev -y
+sudo apt install zlib1g-dev -y
+
+### Additional dev tools
+sudo apt install bison m4 socat p7zip-full ctags spell global -y
+
+### Additional security tools
+sudo apt install bmon sysstat tree htop screen strace -y
+
+### FFI Toolchain
+sudo apt install libffi-dev -y

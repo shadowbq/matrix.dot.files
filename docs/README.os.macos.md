@@ -35,7 +35,10 @@ brew install homebrew-ffmpeg/ffmpeg/ffmpeg
 
 ## Iterm 
 
-There are a few itermcolor schemes. Make sure to also set your font if you are using powerline.
+There are a few itermcolor schemes. Make sure to also set your font to a powerline compliant one if you are using powerline.
+
+`.matrix/os/Darwin/opt/*.itermcolors`
+
 
 ## Bins
 

@@ -4,9 +4,11 @@
 
 The `profile` setting disables NVM from modifying the .bashrc
 
+For the latest installer version (https://github.com/nvm-sh/nvm/releases)
+
 ```shell
 PROFILE='/dev/null'
-curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.36.0/install.sh | bash
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.37.2/install.sh | bash
 ```
 
 Restart your shell.

@@ -20,6 +20,13 @@ What do you need to install?
 
 ### RVM Setup
 
+#### Ubuntu, and other Linux 
+
+```shell
+gpg --keyserver hkp://pool.sks-keyservers.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3 7D2BAF1CF37B13E2069D6956105BD0E739499BDB
+curl -sSL https://get.rvm.io |bash -s stable --ruby -- --ignore-dotfiles
+```
+
 #### OSX 
 
 Install RVM on OSX requires some handholding
@@ -29,18 +36,29 @@ echo "disable-ipv6" > ~/.gnupg/dirmngr.conf
 gpgconf --kill all
 gpg --keyserver pool.sks-keyservers.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3 7D2BAF1CF37B13E2069D6956105BD0E739499BDB
 export rvm_ignore_dotfiles=yes
-\curl -sSL https://get.rvm.io | bash -s stable --ruby
+\curl -sSL https://get.rvm.io | bash -s stable --ruby -- --ignore-dotfiles
 ```
 
 * Note: GPG in OSX forces IPv6 but fails to resolve, so we disable this junk in gpg.
 
 ### Installing Required Gems
 
+#### Using RVM
+
+```shell
+rvm
+rvm list
+rvm info
+ruby version
+cd ~/.matrix/extensions/ruby/
+bundle install
+```
+
 #### Bundler:
 
 You need install bundler (if your RVM did not install it, or if you are going to use system rubies)
 
-`sudo gem install bundler`
+`gem install bundler`
 
 #### Matrix.Dot Gems
 
