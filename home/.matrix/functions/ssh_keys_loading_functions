@@ -23,6 +23,10 @@ function load_ssh_keys() {
 
 # SSH Strict Modes correction script
 function strict_ssh_set() {
+  check_settings="$(grep -i StrictModes /etc/ssh/sshd_config | grep -i yes| grep -v '^#')"  
+  if [ $? -ne 0 ]; then
+    echo 'SSH Client StrictModes not enforce by system, but requested by dot.matrix config.'
+  fi
   chmod 700 "$HOME"/.ssh/.
   touch "$HOME"/.ssh/authorized_keys
   touch "$HOME"/.ssh/known_hosts

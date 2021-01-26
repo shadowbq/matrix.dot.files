@@ -31,10 +31,15 @@ export matrix_ext_proxy=false
 # (optional) export ignore_proxy="$ignore_proxy,169.254.169.123,localhost.localdomain"
 # (optional) proxy_set
 
-# Enable Default functions
+
+# Toggle SSH configurations  
+## Let dot.matrix manage the start and stop of the ssh-agent
 export matrix_ssh_agent_manage=false
-export matrix_load_ssh_keys=true
-export matrix_load_secrets=false
+export matrix_ssh_load_keys=true
+export matrix_ssh_enforce_keys_strict=false
+
+# Enable Secrets 
+export matrix_secrets_load=false
 
 # Ensure dot.matrix is current
 export matrix_consistency=true

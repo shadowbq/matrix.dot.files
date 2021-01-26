@@ -161,6 +161,15 @@ BASE=${SRC##*/}   #=> "foo.cpp" (basepath)
 DIR=${SRC%$BASE}  #=> "/path/to/" (dirpath)
 ```
 
+Used with `set -u` for safe printing of possible unset variables.
+
+Recommend the use `:-` over `-` to handle `null` values.
+
+```bash
+echo "variable ${name-}" #=> Expand to '' when name is unset, and the value of name when name has a value.
+echo "variable ${name:-}" #=> Expand to '' when name is either unset or null, and the value of name when name has a value. 
+```
+
 ### Substitution
 
 | Code | Description |
@@ -222,8 +231,9 @@ echo ${STR^^}  #=> "HELLO WORLD!" (all uppercase)
 
 | Code | Description |
 | --- | --- |
-| `${FOO:-val}`        | `$FOO`, or `val` if not set |
-| `${FOO:=val}`        | Set `$FOO` to `val` if not set |
+| `${FOO-val}`        | Use `$FOO`, or `val` if not set |
+| `${FOO:-val}`        | Use `$FOO`, or `val` if not set or null |
+| `${FOO:=val}`        | Set `$FOO` to `val` if not set or null |
 | `${FOO:+val}`        | `val` if `$FOO` is set |
 | `${FOO:?message}`    | Show error message and exit if `$FOO` is not set |
 
@@ -360,6 +370,16 @@ function myfunc() {
 
 ```bash
 result="$(myfunc)"
+```
+
+### Returning early from a function
+
+To end the function stack without exiting shell
+
+Use `return` instead of `exit`. `kill` with interrupt (aka `ctrl-c`) can be caught by bash.
+
+```bash
+kill -INT $$
 ```
 
 ### Raising errors
@@ -759,6 +779,33 @@ traperr() {
 
 set -o errtrace
 trap traperr ERR
+```
+
+When a signal for which a `trap` has been set is received while the shell is waiting for the completion of a utility executing a foreground command, the trap associated with that signal shall not be executed until after the foreground command has completed.
+
+```bash
+#!/bin/bash
+echo "Setting trap"
+trap 'ctrl_c' INT
+function ctrl_c() {
+  echo "CTRL+C pressed"
+  exit
+}
+sleep 1000
+```
+
+This means that `sleep` will need to finish if `ctrl-c` is captured during execution of `sleep`.
+
+Send `kill -INT` (-2) to the process/PID you want to stop, here `sleep` to exit early.
+
+```bash
+ps -f -o pid,ppid,pgid,tty,comm -t pts/1
+  PID  PPID  PGID TT       COMMAND
+ 3460  3447  3460 pts/1    bash
+29087  3460 29087 pts/1     \_ foo.sh
+29120 29087 29087 pts/1         \_ sleep
+
+$ kill -2 -29087
 ```
 
 ### Case/switch
