@@ -23,8 +23,6 @@ export EDITOR="vi"
 export PAGER=less
 export VISUAL="$editor"
 
-export STRICT_SSH=false
-
 PATH="$HOME/.cargo/bin:$PATH"
 PATH=$PATH:"/usr/local/sbin"
 PATH=$PATH:"$HOME"/bin

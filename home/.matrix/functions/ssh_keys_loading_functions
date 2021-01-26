@@ -6,7 +6,7 @@
 
 function load_ssh_keys() {
   if [ "$(type -t strict_ssh_set)" == "function" ]; then
-    if $STRICT_SSH; then
+    if [[ $STRICT_SSH || $matrix_ssh_enforce_keys_strict == "true" ]]; then
       strict_ssh_set
     fi
   fi
