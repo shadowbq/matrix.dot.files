@@ -22,7 +22,8 @@ function check_pip_powerline {
 }
 
 function check_pipx_powerline {
-  POWERLINE_REPO_ROOT=~/.local/pipx/venvs/powerline-status/lib/python3.8/site-packages/
+  [ -d "$HOME/.local/pipx/venvs/powerline-status/lib/python3.8/site-packages/" ] && POWERLINE_REPO_ROOT=~/.local/pipx/venvs/powerline-status/lib/python3.8/site-packages/
+  [ -d "$HOME/.local/pipx/venvs/powerline-status/lib/python3.9/site-packages/" ] && POWERLINE_REPO_ROOT=~/.local/pipx/venvs/powerline-status/lib/python3.9/site-packages/
   export POWERLINE_REPO_ROOT
 }
 
