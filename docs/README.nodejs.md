@@ -37,3 +37,14 @@ For global use, you should be using `NPX` for global bins.
 For project bins only load this in the current directory and you will be able to map node_module bins into your path.
 
 `function npm-do { (PATH=$(npm bin):$PATH; eval $@;) }`
+
+### Don't get confused on with your PATH
+
+```bash
+$ lessc -v
+lessc 4.1.1 (Less Compiler) [JavaScript]
+$ npx lessc -v
+lessc 2.7.1 (Less Compiler) [JavaScript]
+$ npm bin lessc -v
+7.0.3
+```
