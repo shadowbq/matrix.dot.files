@@ -69,4 +69,9 @@ lessc 4.1.1 (Less Compiler) [JavaScript]
 
 ### Note: (common syntax problems)
 
-You see version `7.0.1` or something not looking like `lessc x.x.x (Less Compiler) ..` thats *NOT* lessc, thats node reporting it's version. 
+If you see version outputs like `7.0.1` or something not looking like `lessc x.x.x (Less Compiler) ..` thats *NOT* lessc, thats `node` reporting it's version. 
+
+```
+--ALERT-- npm exec lessc -v
+--ALERT-- 7.0.3
+```
