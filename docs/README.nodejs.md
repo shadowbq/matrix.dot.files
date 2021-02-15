@@ -1,6 +1,6 @@
 # Node-js
 
-## How to install Node and NVM
+## How to install Node with NPM via NVM
 
 The `profile` setting disables NVM from modifying the .bashrc
 
@@ -19,7 +19,7 @@ nvm ls-remote
 nvm use node
 ```
 
-## Is there a NVM virtual manager?
+## Is there a NPM virtual manager?
 
 Yes, and its preferred setup is `NVM` already enabled in the nodejs extension.
 
@@ -29,3 +29,11 @@ export NVM_DIR="$HOME/.nvm"
 ```
 
 It also attempts to load bash_completions and print the current NVM version when present.
+
+## How do I run local bins in the path?
+
+For global use, you should be using `NPX` for global bins. 
+
+For project bins only load this in the current directory and you will be able to map node_module bins into your path.
+
+`function npm-do { (PATH=$(npm bin):$PATH; eval $@;) }`
