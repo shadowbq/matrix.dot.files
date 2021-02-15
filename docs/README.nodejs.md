@@ -32,19 +32,41 @@ It also attempts to load bash_completions and print the current NVM version when
 
 ## How do I run local bins in the path?
 
-For global use, you should be using `NPX` for global bins. 
-
-For project bins only load this in the current directory and you will be able to map node_module bins into your path.
-
-`function npm-do { (PATH=$(npm bin):$PATH; eval $@;) }`
+Dont confuse `pipx` with `npx` as they are not similar.
 
 ### Don't get confused on with your PATH
 
+With a setup like lessc on Global @version 4.1.1
+
+```
+$ ls -la /Users/me/.nvm/versions/node/v15.0.1/bin/lessc
+lrwxr-xr-x  1 me  staff  34 Feb 15 10:54 /Users/me/.nvm/versions/node/v15.0.1/bin/lessc -> ../lib/node_modules/less/bin/lessc
+```
+
+And $PROJECT with lessc @version 2.7.1 
+
+```
+$ ls -la ./node_modules/less/bin/lessc
+-rwxr-xr-x  1 smacgregor  staff  16275 Apr 22  2016 node_modules/less/bin/lessc
+```
+
+You can see how this works.
+
 ```bash
+# Defaults to Global NPM/NVM scope.
 $ lessc -v
 lessc 4.1.1 (Less Compiler) [JavaScript]
+## Works to load in $PROJECT lessc even without quotes, but fails outside of project
 $ npx lessc -v
 lessc 2.7.1 (Less Compiler) [JavaScript]
-$ npm bin lessc -v
-7.0.3
+## Work to load in $PROJECT lessc and needs quotes, then looks at nvm/npm versioned global scope!
+$ npm exec -c 'lessc -v'
+lessc 2.7.1 (Less Compiler) [JavaScript]
+## Work to load in $PROJECT lessc and needs quotes, then looks at true global scope!
+$ npx -c 'lessc -v'
+lessc 4.1.1 (Less Compiler) [JavaScript]
 ```
+
+### Note: (common syntax problems)
+
+You see version `7.0.1` or something not looking like `lessc x.x.x (Less Compiler) ..` thats *NOT* lessc, thats node reporting it's version. 
