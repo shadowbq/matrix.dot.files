@@ -73,36 +73,44 @@ Read the Docs, as they are very helpful in getting unstuck, or installed correct
 
 ```
 ./README.md - The site README
-
-docs/README.md - Navigating the DOCS
 ```
+### The Developers Opinion  
 
-Installation and Setup Guides for the extensions
+[README - Opinion](docs/README.md)  
 
-```
-docs/README.bash.md
-docs/README.go.md
-docs/README.nodejs.md
-docs/README.os.bsd.md
-docs/README.os.linux.md
-docs/README.os.macos.md
-docs/README.os.win10.md
-docs/README.powerline.md
-docs/README.proxied.md
-docs/README.python.md
-docs/README.ruby.md
-docs/README.secrets.md
-docs/README.vim.md
-```
+### Operating Systems - Installation and Setup Guides for the extensions  
 
-Additional tools included that don't include instructions
+[README - BSD](docs/README.os.bsd.md)  
+[README - LINUX](docs/README.os.linux.md)  
+[README - MacOS](docs/README.os.macos.md)  
+[README - Win10](docs/README.os.win10.md)  
 
-```
-docs/tools/README.ack.md
-docs/tools/README.prettyprint.md
-docs/tools/README.randomz.md
-docs/tools/README.rmate.md
-```
+### Languages - Installation and Setup Guides for the extensions  
+
+[README - GoLang](docs/README.go.md)  
+[README - Node.js](docs/README.nodejs.md)  
+[README - Python](docs/README.python.md)  
+[README - Ruby](docs/README.ruby.md)  
+
+### Best Practices  
+
+[README - Bash](docs/README.bash.md)  
+
+### Controls - Installation and Setup Guides for the extensions  
+
+[README - Security](docs/README.security.md)  
+[README - TMUX](docs/README.tmux.md)  
+[README - VIM](docs/README.vim.md)  
+[README - Powerline](docs/README.powerline.md)  
+[README - Proxies](docs/README.proxied.md)  
+[README - Secrets](docs/README.secrets.md)  
+
+### Additional 3rd Tools Manuals  
+
+[README - ACK](docs/tools/README.ack.md)  
+[README - PrettyPrint](docs/tools/README.prettyprint.md)  
+[README - RANDOMZ](docs/tools/README.randomz.md)  
+[README - RMATE](docs/tools/README.rmate.md)  
 
 ## Dependencies
 
