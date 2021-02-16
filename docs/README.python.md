@@ -1,20 +1,20 @@
 # Python
 
-Python can be a complete mess as overtime 2.7 to 3.x has seen many tool turnovers:
+Python can be a complete mess. Overtime py 2.7 to py 3.x has seen many tool turnovers so here are my opinions:
 
-* I believe in using the system python as little as possible.
-* I believe in using a method for python similar but to identical for ruby and node.
-* In 2020 I assume a 3.x system python for prep exists. 
-* I use pyenv to shim in python 3.8.x as global
-* I use pipx to install matrix.dot.file bins and inject libs that are python based like powerline-status into a venv.
-* I use pip to install global libraries that aren't bin based.
-* I use poetry to manage sandbox projects.
-* I NO longer use python2.x as assumed base therefor - virtualenvwrapper & virtualenv are gone.
-* I NO longer use virtualenv-burrito as virtualenvwrapper is no longer used. (served py2.x well farewell)
+* I believe in using the os-distro system python as little as possible.
+* I believe in using a method for python similar but not identical for ruby and node.
+* In 2020, I assume a py 3.x os-distro system python for preparing overlays exist. 
+* I use `pyenv` to shim in py 3.8.x as global
+* I use `pipx` to install matrix.dot.file bins and inject libs that are python based like `powerline-status` into a `venv`.
+* I use `pip` to install global libraries that aren't bin based.
+* I use `poetry` to manage sandbox projects.
+* I NO longer use py 2.x as the assumed os-distro therefor - `virtualenvwrapper` & `virtualenv` are gone.
+* I NO longer use `virtualenv-burrito` as `virtualenvwrapper` is no longer used. (it served py 2.x very well, farewell)
 
 ## Import note on Homebrew
 
-Homebrew will jerk around your python and completely destroy your pips and libs associated during a 3.7->3.8 transition. Be aware.
+Homebrew will jerk around your python and completely destroy your pips and libs associated during a 3.X->3.X+1 transition. Be aware!
 
 ## PreRequisites
 
