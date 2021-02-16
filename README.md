@@ -2,7 +2,7 @@
 
 Enter the matrix of dot files. 
 
-[![matrix-screenshot](docs/meta/matrix-screenshot.png)
+[![matrix-screenshot](docs/meta/matrix-screenshot.png)](README.md)
 
 The core concept is to have a unified modern experience across all POSIX systems.
 
