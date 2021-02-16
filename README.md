@@ -1,10 +1,20 @@
 # matrix.dot.files
 
-Enter the matrix of dot files. 
+A Unified Modern *Bash* Experience Across All POSIX Systems.
+
+Enter the matrix of dot files. - [Since May 25, 2012](https://github.com/shadowbq/matrix.dot.files/tree/b98643c87094edf3807368c7e765df1fcc350d2d)
 
 [![matrix-screenshot](docs/meta/matrix-screenshot.png)](README.md)
 
-The core concept is to have a unified modern experience across all POSIX systems.
+## Highlights
+
+* Native `bash 3.x/4.x` supported shell.
+* Language versions managers like RVM/PYENV/GVM/NVM 
+* Security with SSH Agents, GPG Env Secrets, and Proxies
+* Essential out of the box tooling like GIT, TMUX, VIM.
+* Colors and Themes with Powerline and TPM.
+* Docker aware, and K8s tooling
+* Sanity checks for Bash GNU gpl2 tools, built in bash functions, and matrix update consistency.
 
 ## Hooking into the matrix
 
