@@ -120,3 +120,18 @@ C-Space x       Kill the active pane
 C-Space z       Zoom the active pane
 ...
 ```
+
+## OSX - PASTE Buffer issues
+
+There is line in the config to handle this
+
+```shell
+# ~/.tmux.conf
+set-option -g default-command "reattach-to-user-namespace -l $SHELL"
+```
+
+You may also likely need to *Allow terminal application access to paste buffer* in iTERM2 profile.
+
+Read more here: https://github.com/tmux-plugins/tmux-yank#requirements
+
+
