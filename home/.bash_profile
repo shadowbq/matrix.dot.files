@@ -72,4 +72,4 @@ fi
 
 ###########################
 # Last User specific environment and startup programs
-
+~/.matrix/bin/neofetch
