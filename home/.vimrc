@@ -21,6 +21,7 @@ Plugin 'tpope/vim-fugitive'
 Plugin 'godlygeek/tabular'
 Plugin 'plasticboy/vim-markdown'
 Plugin 'towolf/vim-helm'
+Plugin 'kien/rainbow_parentheses.vim'
 
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
@@ -113,3 +114,10 @@ let g:syntastic_check_on_wq = 0
 
 " syntastic_[filetype]_[subchecker]_args
 let g:syntastic_python_flake8_args = "--ignore=E501"
+
+augroup rainbow_group
+au! VimEnter * nested RainbowParenthesesToggle
+au Syntax * RainbowParenthesesLoadRound
+au Syntax * RainbowParenthesesLoadSquare
+au Syntax * RainbowParenthesesLoadBraces
+augroup end
