@@ -38,6 +38,7 @@ Plugin 'tpope/vim-fugitive'
 Plugin 'godlygeek/tabular'
 Plugin 'plasticboy/vim-markdown'
 Plugin 'towolf/vim-helm'
+Plugin 'kien/rainbow_parentheses.vim'
 ```
 
 ### Vim Airline
