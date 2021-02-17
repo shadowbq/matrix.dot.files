@@ -19,9 +19,19 @@ Tmux is a great terminal emulator that can help you do numerous things
 
 ### Mappings
 
+#### Windows (Tabs)
+
 * Window Selection is `nN` mapped to `next,Previous`
-* Pane Selection is `hjkl` mapped to `Left, Right, Up, Down`
-* Pane Resize is `HJKL` mapped to `+5` on `Left, Right, Up, Down`
+* `c`  create window
+* `w`  list windows
+* `f`  find window
+* `,`  name window
+* `&`  kill window
+
+#### Panes (Visual splits)
+
+* Pane Selection is `hjkl` mapped to `Left, Up, Down, Right`
+* Pane Resize is `HJKL` mapped to `+5` on `Left, Up, Down, Right`
 * Spliting is `|-c=` mapped to `SplitH,SplitV,NewW,Sync`
 
 ## TPM Plugins
