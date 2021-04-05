@@ -9,7 +9,7 @@ Enter the matrix of dot files. - [Since May 25, 2012](https://github.com/shadowb
 ## Highlights
 
 * Native `bash 3.x/4.x` supported shell.
-* Language versions managers like RVM/PYENV/GVM/NVM 
+* Language versions managers like RVM/PYENV/GVM/NVM
 * Security with SSH Agents, GPG Env Secrets, and Proxies
 * Essential out of the box tooling like GIT, TMUX, VIM.
 * Colors and Themes with Powerline and TPM.
@@ -81,9 +81,10 @@ Secure files like these are ignored from the repo in the `.gitignore`
 
 Read the Docs, as they are very helpful in getting unstuck, or installed correctly in each section.
 
-```
+```markdown
 ./README.md - The site README
 ```
+
 ### The Developers Opinion  
 
 [README - Opinion](docs/README.md)  
@@ -145,7 +146,7 @@ Run the matrix dependency checker to get a good start on ensuring a SANE environ
 .bash_profile
 ```
 
-bash_profile is the primary universal include directive file that autoloads dot.matrix directives 
+bash_profile is the primary universal include directive file that autoloads dot.matrix directives
 
 ### Matrix
 
@@ -155,14 +156,13 @@ bash_matrix defines what additional include directives to load from the matrix (
 .bash_matrix
 ```
 
-`.matrix` directory holds all additional plugins 
+`.matrix` directory holds all additional plugins
 
 * OS specific - load paths, bins, aliases, advisors
               - (./Darwin/.bash_extensions)
 * Global bins - cross platform shell scripts (xpull, rmate, ssh-copy-id, epoch, etc.. )
 * Rubygems in bundler format that improve experience
 * Additional functions, environment needs, and mockups
-
 
 ### Other Files
 
@@ -172,7 +172,6 @@ Additional actions on the Universal Profile
 .bashrc           # NOTE: Bashrc are loaded by .bash_profile!
 .bash_logout      # Performed during logout.
 ```
-
 
 Standardized `.git` configs and shortcuts
 
@@ -193,7 +192,7 @@ Other .file(s) that can enhance the unified experience
 
 There are some additional directories symlinked in to assist in application normalization
 
-```
+```shell
 .config
 .parallel
 .vim

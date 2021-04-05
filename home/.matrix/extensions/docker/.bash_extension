@@ -1,4 +1,10 @@
-# Docker 
+###########################
+# Docker / K8s / Containers
+# - MDF extension
+###########################
+# shellcheck shell=bash
+#
+###########################
 
 # Retrieve the tags from the docker hub registry for a specific image
 # 

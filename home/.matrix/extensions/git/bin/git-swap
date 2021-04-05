@@ -1,0 +1,117 @@
+#!/usr/bin/env bash
+# shellcheck shell=bash
+
+### $HOME/.gitusers
+## user1name = shadowbq 
+## user1email = "shadowbq@gmail.com"
+## user2name = foo-shadowbq 
+## user2email = "foo.shadowbq@gmail.com"           
+## user3name = bar-shadowbq 
+## user3email = "bar.shadowbq@gmail.com"           
+
+# ./git swap shadowbq
+# ./git swap shadowbq shadowbq@gmail.com 
+# ./git swap -g shadowbq shadowbq@gmail.com 
+
+show_usage() {
+    echo "usage: ./git swap <.gitusers> "
+    echo "usage: ./git swap <username> <email>"
+    echo ""
+    echo "Switch Local and Save to Config"
+    echo "usage: ./git swap [--new-user1 || -1] <username> <email>"
+    echo "usage: ./git swap [--new-user2 || -2] <username> <email>"
+    echo "usage: ./git swap [--new-user3 || -3] <username> <email>"
+    echo ""
+    echo "Switch Global"
+    echo "usage: ./git swap [--global || -g] <username> <email>"
+}
+tmpfile=$(mktemp /tmp/.gitusers.unix.XXXXXX)
+
+shopt -s extglob
+configfile="$HOME/.gitusers" # set the actual path name of your (DOS or Unix) config file
+touch "${configfile}"
+tr -d '\r' < $configfile > $tmpfile
+while IFS='= ' read -r lhs rhs
+do
+    if [[ ! $lhs =~ ^\ *# && -n $lhs ]]; then
+        rhs="${rhs%%\#*}"    # Del in line right comments
+        rhs="${rhs%%*( )}"   # Del trailing spaces
+        rhs="${rhs%\"*}"     # Del opening string quotes 
+        rhs="${rhs#\"*}"     # Del closing string quotes 
+        declare $lhs="$rhs"
+    fi
+done < $tmpfile
+rm "$tmpfile"
+
+if [ $# -eq 1 ]; then
+    if [ "${1}" = "-h" ] || [ "${1}" = "--help" ]; then
+        show_usage
+        exit 0
+    elif [ "${1}" = "${user1name}" ]; then
+        git config user.name "${user1name}"
+        git config user.email "${user1email}"
+        git config github.user "${user1name}"
+        git config github.email "${user1email}"
+    elif [ "${1}" = "${user2name}" ]; then
+        git config user.name "${user2name}"
+        git config user.email "${user2email}"
+        git config github.user "${user2name}"
+        git config github.email "${user2email}"
+    elif [ "${1}" = "${user3name}" ]; then
+        git config user.name "${user3name}"
+        git config user.email "${user3email}"
+        git config github.user "${user3name}"
+        git config github.email "${user3email}"
+    else
+        echo "Did not find entry for user#name '${1}' in config: '${configfile}'. "
+        show_usage
+        exit 1
+    fi    
+elif [ $# -eq 2 ]; then
+    readonly name="${1:-}"
+    readonly email="${2:-}"
+    git config user.name "${name}"
+    git config user.email "${email}"
+    git config github.user "${name}"
+    git config github.email "${email}"
+elif [ $# -eq 3 ]; then
+    readonly switch="${1}"
+    readonly name="${2:-}"
+    readonly email="${3:-}"
+    if [ "$switch" = "--global" ] || [ "$switch" = "-g" ]; then
+        git config --global user.name "${name}"
+        git config --global user.email "${email}"
+        git config --global github.user "${name}"
+        git config --global github.email "${email}"
+    elif [ "$switch" = "--new-user1" ] || [ "$switch" = "-1" ]; then
+        git config user.name "${name}"
+        git config user.email "${email}"
+        git config github.user "${name}"
+        git config github.email "${email}"
+        echo "user1name=\"${name}\"" >> "${configfile}"
+        echo "user1email=\"${email}\"" >> "${configfile}"
+    elif [ "$switch" = "--new-user2" ] || [ "$switch" = "-2" ]; then
+        git config user.name "${name}"
+        git config user.email "${email}"
+        git config github.user "${name}"
+        git config github.email "${email}"
+        echo "user2name=\"${name}\"" >> "${configfile}"
+        echo "user2email=\"${email}\"" >> "${configfile}"
+    elif [ "$switch" = "--new-user3" ] || [ "$switch" = "-3" ]; then
+        git config user.name "${name}"
+        git config user.email "${email}"
+        git config github.user "${name}"
+        git config github.email "${email}"
+        echo "user3name=\"${name}\"" >> "${configfile}"
+        echo "user3email=\"${email}\"" >> "${configfile}"
+    else
+        show_usage
+        exit 1
+    fi
+    
+else
+    show_usage
+    exit 1
+fi
+
+git whoami

@@ -1,8 +1,9 @@
 #############################
+# Bash MDF Functions library
+#############################
 # Load all bash files with filename ending with '_functions'
-#
 # These files are loaded at shell login. (use .matrix/lib for runtime)
-## ## ## ## ##
+###########################
 # shellcheck shell=bash disable=SC1090
 #############################
 

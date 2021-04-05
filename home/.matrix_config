@@ -6,6 +6,7 @@
 # Enable .matrix extensions
 # Remember these are being set to a command /usr/bin/true || /usr/bin/false not strings. DO NOT QUOTE false.
 
+export matrix_ext_git=true
 export matrix_ext_python=true
 export matrix_ext_ruby=true
 export matrix_ext_nodejs=true

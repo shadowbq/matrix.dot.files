@@ -19,6 +19,7 @@ cd "$HOME"
 # Matrix Plugins configs
 [ "$matrix_ext_history" == true ] && matrix_loader "extensions/history"
 
+[ "$matrix_ext_git" == true ] && matrix_loader "extensions/git"
 [ "$matrix_ext_python" == true ] && matrix_loader "extensions/python"
 [ "$matrix_ext_ruby" == true ] && matrix_loader "extensions/ruby"
 [ "$matrix_ext_nodejs" == true ] && matrix_loader "extensions/nodejs"

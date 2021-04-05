@@ -1,3 +1,11 @@
+###########################
+# Powerline status bar
+# - MDF extension
+###########################
+# shellcheck shell=bash
+#
+###########################
+
 export GOPATH=$HOME/.gopath
 export PATH=$GOPATH:$GOPATH/bin:$PATH
 

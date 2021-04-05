@@ -1,5 +1,6 @@
 ###########################
-# Completion configs to be loaded
+# Bash Completion configs to be loaded
+# - MDF extension
 ###########################
 
 ## Global completions

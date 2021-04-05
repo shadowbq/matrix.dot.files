@@ -1,4 +1,10 @@
+###########################
+# Archives  
+# - MDF extension
+###########################
 # shellcheck shell=bash
+#
+###########################
 
 function extract() {
   if [ -f $1 ]; then

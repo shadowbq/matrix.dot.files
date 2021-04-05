@@ -1,8 +1,9 @@
 #!/usr/bin/env bash
+git config core.ignorecase false
 for i in *; do
-n=`echo $i | tr [:upper:] [:lower:]`
+n=$(echo $i | tr [:upper:] [:lower:])
   if [ $i != $n ]; then
-    # echo -e "$i to $n"
     git mv -f $i $n
   fi
 done
+git status

@@ -1,5 +1,12 @@
+###########################
 # Node JS extension
 # See docs/README.nodejs.md
+# - MDF extension
+###########################
+# shellcheck shell=bash
+#
+###########################
+
 
 export NVM_DIR="$HOME/.nvm" # Add NVM to PATH for scripting
 [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm

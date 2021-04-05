@@ -1,4 +1,10 @@
-# powerline-status
+###########################
+# Powerline status bar
+# - MDF extension
+###########################
+# shellcheck shell=bash
+#
+###########################
 
 ## Debian / Ubuntu Install Help
 ## apt install fonts-powerline

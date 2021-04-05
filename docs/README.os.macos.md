@@ -1,8 +1,8 @@
-# OSX / macOS 
+# OSX / macOS
 
-God help us with Catalina. 
+God help us with Catalina / BigSur.
 
-It breaks.. so much.. local compilation, and the security restrictions are all over userspace.
+It breaks.. so much.. local compilation, and the security restrictions are all over user-space.
 
 Reference: https://stackoverflow.com/questions/58278260/cant-compile-a-c-program-on-a-mac-after-upgrading-to-catalina-10-15/58278392#58278392
 
@@ -18,7 +18,6 @@ Install the home/end key fix for sublime
 $> cp "$HOME/.matrix/os/Darwin/opt/Default (OSX).sublime-keymap" "$HOME/Library/Application Support/Sublime Text 3/Packages/User/."
 ```
 
-
 ## Installation help
 
 ### ffmpeg (circa 2019)
@@ -32,13 +31,11 @@ brew tap homebrew-ffmpeg/ffmpeg
 brew install homebrew-ffmpeg/ffmpeg/ffmpeg
 ```
 
+## Iterm2
 
-## Iterm 
-
-There are a few itermcolor schemes. Make sure to also set your font to a powerline compliant one if you are using powerline.
+There are a few iterm-color schemes. Make sure to also set your font to a powerline compliant one if you are using powerline.
 
 `.matrix/os/Darwin/opt/*.itermcolors`
-
 
 ## Bins
 
@@ -52,6 +49,29 @@ There are a number of different OSX tweaks `SYSTEM_*` that can be run like:
 * don't write DSStores in shares
 * etc
 
+### Fixing `git` XCode Errors on Update
+
+Running `git` after an update, even a minor one in Catalina or BigSur causes issues:
+
+The `xcrun` error:
+
+```shell
+xcrun: error: invalid active developer path (/Library/Developer/CommandLineTools), missing xcrun at: /Library/Developer/CommandLineTools/usr/bin/xcrun
+```
+
+This can be solved often by:
+
+`xcode-select --install`
+
+If that doesn’t work, force it to reset. You’ll need `sudo` access for this one:
+
+`sudo xcode-select --reset`
+
+or by Login or sign up here:
+
+https://developer.apple.com/download/more/
+
+Look for: "Command Line Tools for Xcode 12.x" in the list of downloads Then click the dmg and download.
 
 ### Other useful tools
 
@@ -59,15 +79,17 @@ cli notification disabled
 
 https://github.com/sindresorhus/do-not-disturb-cli
 
-### Disabling Dashboards 
+### Disabling Dashboards
 
 With just a couple of simple terminal commands you can be rid of the Dashboard forever. To get started fire up the Terminal app and type the following into the console.
 
+```shell
     defaults write com.apple.dashboard mcx-disabled -boolean YES
     killall Dock
-
+```
 
 And this is it! Your Dashboard will be gone forever, even when you restart your mac. However if you think you have made a big mistake then you can always undo this by entering the following command at the Terminal and restarting your computer.
 
+```shell
     defaults write com.apple.dashboard mcx-disabled -boolean NO
-
+```
