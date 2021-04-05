@@ -9,6 +9,23 @@ Git is awesome as plugins in the path slip into the main binary completion.
 * Fetch hard get data
 * etc..
 
+## Secrets 
+
+You should use MDF Secrets if you don't / can't use SSH as the git protocol. In 2021 they will obsolete the use of passwords in github for HTTPS access to git repositories.
+
+[README - Secrets](docs/README.secrets.md) - MDF Secrets with GPG and Bash
+
+### Personal access tokens
+ 
+Create an `admin:all` Personal access token in Github.
+
+```
+admin:all — admin:enterprise, admin:gpg_key, admin:org, admin:org_hook, admin:public_key, admin:repo_hook, delete:packages, delete_repo, gist, notifications, repo, user, workflow, write:discussion, write:packages
+```
+
+Save it as MDF Secret and load it via the GPG key method into your shell. Tokens are not passwords that you can set, so using secure mechanism to input the token is very important. 
+
+
 ## Swap Users
 
 `git swap` 
