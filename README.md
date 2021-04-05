@@ -109,6 +109,7 @@ Read the Docs, as they are very helpful in getting unstuck, or installed correct
 
 ### Controls - Installation and Setup Guides for the extensions  
 
+[README - Git](docs/README.git.md)  
 [README - Security](docs/README.security.md)  
 [README - TMUX](docs/README.tmux.md)  
 [README - VIM](docs/README.vim.md)  
