@@ -13,8 +13,17 @@ Git is awesome as plugins in the path slip into the main binary completion.
 
 `git swap` 
 
+Example: Swap to user `shadowbq` in current checked out repo
+
 ```shell
-usage: ./git swap <.gitusers>
+$ git swap shadowbq
+shadowbq <shadowbq@gmail.com>
+```
+
+Example Options:
+
+```shell
+usage: ./git swap <username in ~/.gitusers>
 usage: ./git swap <username> <email>
 
 Switch Local and Save to Config
