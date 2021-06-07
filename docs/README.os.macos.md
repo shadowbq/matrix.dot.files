@@ -1,10 +1,36 @@
 # OSX / macOS
 
-God help us with Catalina / BigSur.
+## Modern OSX
 
-It breaks.. so much.. local compilation, and the security restrictions are all over user-space.
+***God help us with Catalina / BigSur.***
+
+* `ZSH` has become the default standard (BigSur 11.x).
+* GNU-tools GNU2 still is base. (Users need to install coreutils)
+* `GIT` is backed by *XCode* which has to get seperately updated.
+* Security restrictions are all over user-space.
+* `Ruby` is being removed from the BigSur in the future.
+* `Python 2.x` is removed.
 
 Reference: https://stackoverflow.com/questions/58278260/cant-compile-a-c-program-on-a-mac-after-upgrading-to-catalina-10-15/58278392#58278392
+
+### ZSH Notes
+
+Before you get into `matrix.dot.files` and back onto the normal bash terminal, ZSH history is *incomplete* by default. Note some PATHS and history listed here.
+
+```shell
+# ~/.zshrc
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+# Created by `pipx` on 2021-06-02 15:40:55
+export PATH="$PATH:$HOME/.local/bin"
+
+# Created by `pipx` on 2021-06-02 15:40:58
+export PATH="$PATH:$HOME/Library/Python/3.9/bin"
+
+alias history="history 1"
+```
 
 ## Opt
 
@@ -93,3 +119,10 @@ And this is it! Your Dashboard will be gone forever, even when you restart your 
 ```shell
     defaults write com.apple.dashboard mcx-disabled -boolean NO
 ```
+
+
+## Using Natifier to build OSX Apps
+
+Install nativefier via npm.
+
+`nativefier -i ~/Downloads/github-1.png --name "GitHub" --darwin-dark-mode-support --single-instance -f -m --internal-urls "(.*?)" "https://github.com"`
