@@ -121,8 +121,8 @@ And this is it! Your Dashboard will be gone forever, even when you restart your 
 ```
 
 
-## Using Natifier to build OSX Apps
+## Using nativefier to build OSX Apps
 
-Install nativefier via npm.
+Install nativefier via npm. (https://github.com/nativefier/nativefier)
 
 `nativefier -i ~/Downloads/github-1.png --name "GitHub" --darwin-dark-mode-support --single-instance -f -m --internal-urls "(.*?)" "https://github.com"`
