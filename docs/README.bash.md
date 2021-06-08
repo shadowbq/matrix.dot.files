@@ -215,7 +215,9 @@ comment
 | --- | --- |
 | `${#FOO}` | Length of `$FOO` |
 
-### Manipulation
+### StringCase Manipulation
+
+* Note: Bash 4.0 requirements 
 
 ```bash
 STR="HELLO WORLD!"
@@ -223,8 +225,15 @@ echo ${STR,}   #=> "hELLO WORLD!" (lowercase 1st letter)
 echo ${STR,,}  #=> "hello world!" (all lowercase)
 
 STR="hello world!"
-echo ${STR^}   #=> "Hello world!" (uppercase 1st letter)
+echo ${STR^}   #=> "Hello world!" (Capitalize/uppercase 1st letter)
 echo ${STR^^}  #=> "HELLO WORLD!" (all uppercase)
+```
+
+Bash 3.x with `tr`
+
+```
+STR="hello world!"
+echo "$(tr '[:lower:]' '[:upper:]' <<< ${STR:0:1})${STR:1}" #=> "Hello world!" (Capitalize/uppercase 1st letter)
 ```
 
 ### Default values
