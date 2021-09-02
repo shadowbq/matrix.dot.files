@@ -1,4 +1,6 @@
-#/usr/bin/env bash
+#!/usr/bin/env bash
+# Print the IPs bound to the Docker Containers in a PS like format
+# Ref: https://github.com/moby/moby/issues/8786
 
 function docker-ips() {
     docker ps | while read line; do
