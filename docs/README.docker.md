@@ -41,7 +41,7 @@ There are four major areas to consider when reviewing Docker security:
 * loopholes in the container configuration profile, either by default, or when customized by users.
 * the “hardening” security features of the kernel and how they interact with containers.  
   
-`cgroups` are not a sandboxing or isolation technique. Docker is also not a security measure. It's an alternative with less overhead to a VM. a process running as root can break out of its own cgroup and docker container. Docker assumes that programs 'play nice' and that you trust them.
+`cgroups` are not a sandboxing or isolation technique. They provide many useful metrics, but they also help ensure that each container gets its fair share of memory, CPU, disk I/O; and, more importantly, that a single container cannot bring the system down by exhausting one of those resources. Docker is also not a security measure. It's an alternative with less overhead to a VM. a process running as root can break out of its own cgroup and docker container. Docker assumes that programs 'play nice' and that you trust them.
 
 As of Docker 1.10 User Namespaces are supported directly by the docker daemon. This feature allows for the root user in a container to be mapped to a non uid-0 user outside the container, which can help to mitigate the risks of container breakout. This facility is available but not enabled by default.
 
