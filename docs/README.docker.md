@@ -32,7 +32,28 @@ These kind of containers execute a single task, are short lived and maybe be rem
 Docker and Containers have many use-cases including microservices, scheduling with k8s, etc. One very interesting usecase with
 Docker is that it can be utilized to minimize the number of inter-dependencies on the OS. 
 
-Many tools can be used to perform similar use cases: `chroot`, `flatpak`, `appimage`, `snap`, and `containers`.
+### Docker Security
+
+There are four major areas to consider when reviewing Docker security:
+
+* the intrinsic security of the kernel and its support for namespaces and cgroups;
+* the attack surface of the Docker daemon itself;
+* loopholes in the container configuration profile, either by default, or when customized by users.
+* the “hardening” security features of the kernel and how they interact with containers.  
+  
+`cgroups` are not a sandboxing or isolation technique. Docker is also not a security measure. It's an alternative with less overhead to a VM. a process running as root can break out of its own cgroup and docker container. Docker assumes that programs 'play nice' and that you trust them.
+
+As of Docker 1.10 User Namespaces are supported directly by the docker daemon. This feature allows for the root user in a container to be mapped to a non uid-0 user outside the container, which can help to mitigate the risks of container breakout. This facility is available but not enabled by default.
+
+Docker containers are secure; especially if you run your processes as non-privileged users inside the container.
+
+You can add an extra layer of safety by enabling AppArmor, SELinux, GRSEC, or another appropriate hardening system on the host machine running the docker daemon.  
+  
+* https://docs.docker.com/engine/security/  
+  
+## Applications
+  
+Many tools can be used to perform similar use cases: `chroot`, `flatpak`, `appimage`, `snap`.
 
 Docker containers can’t be used everywhere so understanding when to use one of the others is also important.
 
