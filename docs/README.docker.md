@@ -38,10 +38,12 @@ Docker containers can’t be used everywhere so understanding when to use one of
 
 ||Snap|Flatpak|AppImage|
 |---|---|---|---|
-|Backer| Canonical| Fedora | ? |
+|Backer| Canonical| RedHat, Endless | Community |
+|Target Systems|Desktop, Servers, & IoT|Desktop and Limited Server|Desktop and Servers|
 |Android Like Permission Controls Toggles (GUI and CLI)|	Yes	|Yes	|No|
 |Sandboxing Support|	Yes|	Yes|	Yes|
 |Sandboxing Mandatory|	Yes|	Yes|	No|
+|Sandboxing Platforms	|  AppArmor	|Bubblewrap| AppArmor, Firejail, Bubblewrap|
 |Native Theme Support	|Yes (with caveats)|	Yes (with caveats)	|Yes (with caveats)|
 |Support for Bundled Libraries|	Yes|	Yes|	Yes|
 |App Portability|	Yes (with caveats)|	Yes (with caveats)|	Yes|
@@ -53,6 +55,8 @@ Docker containers can’t be used everywhere so understanding when to use one of
 |Chrome OS Support (through Crostini containers)|	Yes|	Yes|	Yes|
 |App Size|	Varies but higher than AppImage|	Varies but higher than AppImage|	Lowest
 |Number of Apps Available in the App Store|	Highest|	Lowest	|Somewhere in-between|
+|Root user required| No | Sometimes | No| 
+|Tooling Required| snapd| flatpak| self-executing|
 
 “... AppImage works perfectly for ‘leaf-node’ desktop applications,” said (Canonical). A leaf-node application is one that doesn’t need to integrate with any other app. Snap was designed more to package apps with dependencies and related applications. “Snaps have a range of capabilities for describing those connections — interfaces, plugs and slots, as well as shared files and so on.”
 
