@@ -42,6 +42,11 @@ function docker-tags {
   ) | cut -d '-' -f 1 | sort --version-sort | uniq;
 }
 
+# Get container id of exiting container
+function dgrep(){
+    docker ps -a | grep "$1" | cut -c1-12 | head -n 1 
+}
+
 # Run a bash shell in the specified container.
 #
 function docker-shell {
@@ -53,8 +58,53 @@ function docker-shell {
   docker exec -it $1 /bin/bash
 }
 
+# bash into an existing container
+function dbash() {
+    docker exec -ti $(dgrep "$1") /bin/bash
+}
+
 function docker-remove-dangling-images {
   docker rmi $(docker images --filter "dangling=true" -q --no-trunc)
+}
+
+# sh into an existing container
+function dsh() {
+    docker exec -ti $(dgrep "$1") /bin/sh
+}
+
+# Execute something in an existing container
+function dex() {
+    docker exec -ti $(dgrep "$1") $2
+}
+
+# Start an existing container
+function dstart(){
+    docker start $(dgrep "$1")
+}
+
+# Stop an existing container
+function dstop(){
+    docker stop $(dgrep "$1")
+}
+
+# Remove an existing container
+function drm(){
+    docker rm $(dgrep "$1")
+}
+
+# Stop and remove an existing container
+function dsrm(){
+    dstop $(dgrep "$1") && drm $(dgrep "$1")
+}
+
+# Remove an existing image
+function dirm(){
+    docker image remove $(dgrep "$1")
+}
+
+# Get logs of an existing container
+function dlog(){
+    docker logs $(dgrep "$1")
 }
 
 function powerline-kubernetes-toggle() {
