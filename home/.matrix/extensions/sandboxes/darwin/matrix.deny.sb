@@ -1,0 +1,4 @@
+(version 1)
+;; Disallow everything by default
+(deny default)
+
