@@ -1,5 +1,7 @@
 # Sandbox
 
+These are application constraining sandboxes that work at kernel namespace levels. These are not malware analysis sandboxes.
+
 ## Linux
 
 * Firejail - Kernel level supported simple sandbox. Works extremely well.
