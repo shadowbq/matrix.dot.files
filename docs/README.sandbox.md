@@ -20,7 +20,9 @@ Ref: https://www.karltarvas.com/2020/10/25/macos-app-sandboxing-via-sandbox-exec
 
 ## Windows
 
-* sandboxie-ng - Reboot of the Sandboxie project. 
+* sandboxie-plus - Reboot of the Sandboxie project. 
+
+Ref: https://github.com/sandboxie-plus/Sandboxie
 
 
 ## eBPF
