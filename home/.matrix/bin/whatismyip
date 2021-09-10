@@ -1,10 +1,19 @@
 #!/usr/bin/env bash
-#EXTERNAL_IP=$($XPULL_TOOL_SILENT "https://www.packetmail.net/myip.php")
 # Alternative URLs
-# curl -s icanhazip.com
-# curl -s http://ifconfig.me
-# curl -s https://ip.appspot.com/
+# curl -s https://ip.appspot.com/ <= Busted 2021
+# curl -s https://www.packetmail.net/myip.php <= Busted 2021
 # via dns -  dig +short myip.opendns.com @resolver1.opendns.com
-EXTERNAL_IP=$(xspull http://checkip.dyndns.org | sed -e 's/^.*Current IP Address: //g' -e 's/<.*$//g')
+
+EXTERNAL_IP=""
+if [[ -z "$EXTERNAL_IP" ]]; then
+  EXTERNAL_IP=$(xspull http://checkip.dyndns.org | sed -e 's/^.*Current IP Address: //g' -e 's/<.*$//g')
+fi
+if [[ -z "$EXTERNAL_IP" ]]; then
+  EXTERNAL_IP=$(xspull http://icanhazip.com)
+fi
+if [[ -z "$EXTERNAL_IP" ]]; then
+  EXTERNAL_IP=$(xspull http://ifconfig.me)
+fi
 export EXTERNAL_IP
+
 echo -e "$EXTERNAL_IP ($(dig -x $EXTERNAL_IP +short))"
