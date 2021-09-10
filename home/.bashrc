@@ -27,4 +27,3 @@ PATH="$HOME/.cargo/bin:$PATH"
 PATH=$PATH:"/usr/local/sbin"
 PATH=$PATH:"$HOME"/bin
 export PATH
-

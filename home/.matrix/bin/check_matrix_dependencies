@@ -1,120 +1,137 @@
 #!/usr/bin/env bash
-function echo_warn()   { echo -ne "${YELLOW}"; cat <<<"$@" 1>&2 ; echo -ne "${NORMAL}"; }
-function echo_err()    { echo -ne "${RED}";    cat <<<"$@" 1>&2 ; echo -ne "${NORMAL}"; }
-function echo_notify() { echo -ne "${GREEN}";  cat <<<"$@" 1>&2 ; echo -ne "${NORMAL}"; }
-function echo_info()   { echo -ne "${BLUE}";   cat <<<"$@" 1>&2 ; echo -ne "${NORMAL}"; }
-function echo_debug()  { echo -ne "${GRAY}";   cat <<<"$@" 1>&2 ; echo -ne "${NORMAL}"; }
+function echo_warn() {
+  echo -ne "${YELLOW}"
+  cat <<<"$@" 1>&2
+  echo -ne "${NORMAL}"
+}
+function echo_err() {
+  echo -ne "${RED}"
+  cat <<<"$@" 1>&2
+  echo -ne "${NORMAL}"
+}
+function echo_notify() {
+  echo -ne "${GREEN}"
+  cat <<<"$@" 1>&2
+  echo -ne "${NORMAL}"
+}
+function echo_info() {
+  echo -ne "${BLUE}"
+  cat <<<"$@" 1>&2
+  echo -ne "${NORMAL}"
+}
+function echo_debug() {
+  echo -ne "${GRAY}"
+  cat <<<"$@" 1>&2
+  echo -ne "${NORMAL}"
+}
 
 function check_first_bundler {
-    command -v bundle >/dev/null 2>&1
- 
-    if [ $? -eq 1 ]; then
-        echo_warn "Bundle gem is missing. Run: 'sudo gem install bundler' "
-        echo_warn "Run: 'cd ~/.matrix/extensions/ruby/ && sudo bundle install' "
-    else
-        [ -f ~/.matrix/extensions/ruby/Gemfile.lock ] || echo_warn "GemFile not reconciled. Run: 'cd ~/.matrix/extensions/ruby/ && sudo bundle install' "
-    fi
+  command -v bundle >/dev/null 2>&1
+  if [ $? -eq 1 ]; then
+    echo_warn "Bundle gem is missing. Run: 'sudo gem install bundler' "
+    echo_warn "Run: 'cd ~/.matrix/extensions/ruby/ && sudo bundle install' "
+  else
+    [ -f ~/.matrix/extensions/ruby/Gemfile.lock ] || echo_warn "GemFile not reconciled. Run: 'cd ~/.matrix/extensions/ruby/ && sudo bundle install' "
+  fi
 }
 
 function check_first_ruby {
-    export PATH="$PATH:$HOME/.rvm/bin" # Add RVM to PATH for scripting                                                                                                                                             
-    [[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
+  export PATH="$PATH:$HOME/.rvm/bin"                                   # Add RVM to PATH for scripting
+  [[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
 
-    command -v ruby >/dev/null 2>&1 
-    if [ $? -eq 1 ]; then
-        echo_warn "[WARNING] No Ruby Found. "
+  command -v ruby >/dev/null 2>&1
+  if [ $? -eq 1 ]; then
+    echo_warn "[WARNING] No Ruby Found. "
+  else
+    if [ "$(type -t rvm)" == "function" ]; then
+      echo -ne "${GREEN}RVM is present => ${NORMAL} "
+      rvm gemdir
+      ruby --version
+      check_first_bundler
     else
-        if [ "`type -t rvm`" == "function" ]; then
-            echo -ne "${GREEN}RVM is present => ${NORMAL} "
-            rvm gemdir
-            ruby --version
-            check_first_bundler
-        else
-            echo_warn "RVM is not present. "
-            ruby --version
-            check_first_bundler
-        fi
+      echo_warn "RVM is not present. "
+      ruby --version
+      check_first_bundler
     fi
+  fi
 }
 
 function check_first_powerline {
   if [[ -n $matrix_ext_powerline ]]; then
     command -v powerline-daemon >/dev/null 2>&1
     if [ $? -eq 0 ]; then
-        command -v socat >/dev/null 2>&1 || { echo_warn "[POWERLINE WARNING] No socat found."; }
-        command -v pip >/dev/null 2>&1 || { echo_warn "[POWERLINE WARNING] No python pip found."; }
-        pip show psutil -q >/dev/null 2>&1 || pipx runpip powerline-status show psutil -q >/dev/null 2>&1 || { echo_warn "[POWERLINE WARNING] No python pip psutil Found."; }
+      command -v socat >/dev/null 2>&1 || { echo_warn "[POWERLINE WARNING] No socat found."; }
+      command -v pip >/dev/null 2>&1 || { echo_warn "[POWERLINE WARNING] No python pip found."; }
+      pip show psutil -q >/dev/null 2>&1 || pipx runpip powerline-status show psutil -q >/dev/null 2>&1 || { echo_warn "[POWERLINE WARNING] No python pip psutil Found."; }
     else
-        echo_err "[WARNING] Powerline is not found, but enabled."; 
+      echo_err "[WARNING] Powerline is not found, but enabled."
     fi
 
   fi
 }
 
 function check_first_nodejs {
-    command -v node >/dev/null 2>&1
-    if [ $? -eq 1 ]; then
-        echo_err "[WARNING] No Native Node(js) Found. "
-    fi
+  command -v node >/dev/null 2>&1
+  if [ $? -eq 1 ]; then
+    echo_err "[WARNING] No Native Node(js) Found. "
+  fi
 }
 
-function check_first_bash_copmpletion
-{
-    [[ "$(type -t _get_comp_words_by_ref)" -eq "function" ]] ||  echo_warn "Bash completion not installed?"
-    # [[ `complete -p |wc -l` -ge 6 ]] ||  echo -e "Seems like bash completion is not sourcing the correct folders"
+function check_first_bash_copmpletion {
+  [[ "$(type -t _get_comp_words_by_ref)" -eq "function" ]] || echo_warn "Bash completion not installed?"
+  # [[ `complete -p |wc -l` -ge 6 ]] ||  echo -e "Seems like bash completion is not sourcing the correct folders"
 }
 
 function check_first_vim {
-    if [ -d "$HOME"/.vim/bundle/Vundle.vim ]; then
-        echo_notify "Found .vim config Vundle..."
-        if [ -d "$HOME"/.vim/bundle/vim-airline ]; then
-            echo_notify "Vundle plugins likely found."
-        else
-            echo_warn "Need to install VIM Vundle bundles: 'vim +PluginInstall +qall'"
-        fi 
+  if [ -d "$HOME"/.vim/bundle/Vundle.vim ]; then
+    echo_notify "Found .vim config Vundle..."
+    if [ -d "$HOME"/.vim/bundle/vim-airline ]; then
+      echo_notify "Vundle plugins likely found."
     else
-        echo_err "Vundle not found for VIM"
-        echo_warn "Run 'git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim'"
-        echo_warn "Need to install VIM Vundle bundles: 'vim +PluginInstall +qall'"
+      echo_warn "Need to install VIM Vundle bundles: 'vim +PluginInstall +qall'"
     fi
+  else
+    echo_err "Vundle not found for VIM"
+    echo_warn "Run 'git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim'"
+    echo_warn "Need to install VIM Vundle bundles: 'vim +PluginInstall +qall'"
+  fi
 }
 
-
 function check_first_mr {
-    command -v mr >/dev/null 2>&1
- 
-    if [ $? -eq 1 ]; then
-        echo_err "[WARNING] MR 'multiple repo' git bundle manager is missing. Install 'mr'. "
-        echo_warn "Run: 'cd ~ && mr -j5 update ' "
-    fi
-}  
+  command -v mr >/dev/null 2>&1
+
+  if [ $? -eq 1 ]; then
+    echo_err "[WARNING] MR 'multiple repo' git bundle manager is missing. Install 'mr'. "
+    echo_warn "Run: 'cd ~ && mr -j5 update ' "
+  fi
+}
 
 function check_first_tmux {
-    command -v tmux >/dev/null 2>&1
- 
-    if [ $? -eq 1 ]; then
-        echo_err "[WARNING] tmux is missing, install it (brew,apt,etc). " 
-    else 
-        echo_notify "tmux found.. "
-    fi
+  command -v tmux >/dev/null 2>&1
 
-    if [[ `uname -s`  == 'Darwin' ]]; then
-      command -v reattach-to-user-namespace >/dev/null 2>&1
-      if [ $? -eq 1 ]; then
-        echo_warn "[WARNING] tmux has a macos dependency 'reattach-to-user-namespace' missing, install it (brew). " 
-      fi
-    else
-      command -v xclip > /dev/null 2>&1
-      if [ $? -eq 1 ]; then
-        echo_warn "[WARNING] tmux has a linux dependency 'xclip' missing, install it (apt,etc). " 
-      fi
+  if [ $? -eq 1 ]; then
+    echo_err "[WARNING] tmux is missing, install it (brew,apt,etc). "
+  else
+    echo_notify "tmux found.. "
+  fi
+
+  if [[ $(uname -s) == 'Darwin' ]]; then
+    command -v reattach-to-user-namespace >/dev/null 2>&1
+    if [ $? -eq 1 ]; then
+      echo_warn "[WARNING] tmux has a macos dependency 'reattach-to-user-namespace' missing, install it (brew). "
     fi
-        
-    if [ -d "$HOME"/.tmux/plugins/tpm ]; then
-        echo_notify "Found tmux TPM"
-    else
-        echo_warn "Install TPM and the plugins 'git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm'"
+  else
+    command -v xclip >/dev/null 2>&1
+    if [ $? -eq 1 ]; then
+      echo_warn "[WARNING] tmux has a linux dependency 'xclip' missing, install it (apt,etc). "
     fi
+  fi
+
+  if [ -d "$HOME"/.tmux/plugins/tpm ]; then
+    echo_notify "Found tmux TPM"
+  else
+    echo_warn "Install TPM and the plugins 'git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm'"
+  fi
 
 }
 

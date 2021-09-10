@@ -8,7 +8,7 @@ Enter the matrix of dot files. - [Since May 25, 2012](https://github.com/shadowb
 
 ## Highlights
 
-* Native `bash 3.x/4.x` supported shell.
+* Native `bash 3.x/4.x/5.x` supported shell.
 * Language versions managers like RVM/PYENV/GVM/NVM
 * Security with SSH Agents, GPG Env Secrets, and Proxies
 * Essential out of the box tooling like GIT, TMUX, VIM.
@@ -109,14 +109,15 @@ Read the Docs, as they are very helpful in getting unstuck, or installed correct
 
 ### Controls - Installation and Setup Guides for the extensions  
 
-[README - Git](docs/README.git.md)  
-[README - Security](docs/README.security.md)  
-[README - TMUX](docs/README.tmux.md)  
-[README - VIM](docs/README.vim.md)  
-[README - Powerline](docs/README.powerline.md)  
-[README - Proxies](docs/README.proxied.md)  
-[README - Secrets](docs/README.secrets.md)  
-
+[README - Git](docs/README.git.md) - Using Git (multi users etc.)  
+[README - TMUX](docs/README.tmux.md) - Using TMUX  
+[README - VIM](docs/README.vim.md) - My vim configurations  
+[README - Powerline](docs/README.powerline.md) - Python's Powerline statusline  
+[README - Proxies](docs/README.proxied.md) - Using Proxies  
+[README - Secrets](docs/README.secrets.md) - Secure shell usage of Secrets  
+[README - Sandboxes](docs/README.sandbox.md) - Application Sandboxing  
+[README - Containers](docs/README.containers.md) - Docker and K8s  
+[README - Security](docs/README.security.md) - General Security Information  
 ### Additional 3rd Tools Manuals  
 
 [README - ACK](docs/tools/README.ack.md)  
@@ -128,12 +129,14 @@ Read the Docs, as they are very helpful in getting unstuck, or installed correct
 
 The Matrix has a few dependencies if you are going to use it.
 
+* Bash
 * Sane setups with gplv3-coreutils and brew on macos
 * Ruby, RVM and a set of GEMs
 * VI with Vundle
 * TMUX with TPM bundles with Powerline Python3
 * NPM with Node NVM
-* Bash with Airline (slimmer Powerline option)
+* Powerline 
+* VIM with Airline (slimmer Powerline option)
 
 Run the matrix dependency checker to get a good start on ensuring a SANE environment
 

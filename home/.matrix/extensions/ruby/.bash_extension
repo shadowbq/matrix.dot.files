@@ -9,10 +9,10 @@ function bundler_check() {
   command -v bundle >/dev/null 2>&1
 
   if [ $? -eq 1 ]; then
-      echo_warn "Bundle gem is missing. Run: 'sudo gem install bundler' "
-      echo_warn "Run: 'cd ~/.matrix/extensions/ruby/ && sudo bundle install' "
+    echo_warn "Bundle gem is missing. Run: 'sudo gem install bundler' "
+    echo_warn "Run: 'cd ~/.matrix/extensions/ruby/ && sudo bundle install' "
   else
-      [ -f ~/.matrix/extensions/ruby/Gemfile.lock ] || echo_warn "GemFile not reconciled. Run: 'cd ~/.matrix/extensions/ruby/ && sudo bundle install' "
+    [ -f ~/.matrix/extensions/ruby/Gemfile.lock ] || echo_warn "GemFile not reconciled. Run: 'cd ~/.matrix/extensions/ruby/ && sudo bundle install' "
   fi
 
 }

@@ -1,16 +1,21 @@
-# Docker
+# Containers
+
+Information about the use of:
+
+* Docker Images
+* K3s/K8s - `kubectl`
+* Linux Application Packers
 
 ## Extension
 
 The extension holds a few docker and k8s helper applications and functions
-
 
 * docker-tags - Finding Docker images with specific tags in docker registry 
 * docker-shell <image> - Common interactive bash in any container
 * docker-remove-dangling-images - Docker rmi dangling=true
 * docker-matrix-stopall - Stop all Service Images
   
-### K8s 
+### K8s
   
 * kubectl-config_swap - kubectl configuraiton switcher
   
@@ -20,8 +25,7 @@ The extension holds a few docker and k8s helper applications and functions
 * Protainer.yaml - Docker Compose for init starting and stoping Portainer.io
 * docker-matrix-portainer-start - Start Portainer.io
 
-  
-## Service Images 
+## Service Images
 
 Traditionally, container images are used for long running processes: services that are run on a server, not influencing the host because they are contained. Web servers, load balancers and databases are good examples of service images. These kind of containers can be easily compared to virtual machines
 
@@ -29,10 +33,12 @@ Traditionally, container images are used for long running processes: services th
 
 These kind of containers execute a single task, are short lived and maybe be removed after use. Examples are compilers (Golang), build tools (Maven), or other batch tooling (ImageMagick).
 
-Docker and Containers have many use-cases including microservices, scheduling with k8s, etc. One very interesting usecase with
-Docker is that it can be utilized to minimize the number of inter-dependencies on the OS. 
+Docker and Containers have many use-cases including micro-services, scheduling with k8s, etc. One very interesting use-case with
+Docker is that it can be utilized to minimize the number of inter-dependencies on the OS.  
 
 ### Docker Security
+
+* [README - Sandboxes](README.sandbox.md)  - Additional information about Sandboxing applications.
 
 There are four major areas to consider when reviewing Docker security:
 
@@ -51,7 +57,7 @@ You can add an extra layer of safety by enabling AppArmor, SELinux, GRSEC, or an
   
 * https://docs.docker.com/engine/security/  
   
-## Applications
+## Linux Application Containers
   
 Many tools can be used to perform similar use cases: `chroot`, `flatpak`, `appimage`, `snap`.
 
@@ -83,7 +89,7 @@ Docker containers can’t be used everywhere so understanding when to use one of
 
 In addition to that, (Canonical) told us that Snap was designed for higher levels of security compared to AppImage, partly because the team working on the mobile phone was focused on security and efficiency, and partly because Snap uses newer kernel capabilities.
 
-### Examples of Executable Wrappers
+### Examples of Executable Image Wrappers
 
 Shell Execution with argv@ wrapper with STDIN 
 

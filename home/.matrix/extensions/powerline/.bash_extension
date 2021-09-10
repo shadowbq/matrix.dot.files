@@ -12,10 +12,10 @@
 function check_powerline_requirements {
   command -v socat >/dev/null 2>&1 || { echo_warn "[POWERLINE WARNING] No socat found."; }
   command -v pip >/dev/null 2>&1 || { echo_warn "[POWERLINE WARNING] No python pip found."; }
-  command -v pipx >/dev/null 2>&1 
-  if [ $? -ne 0 ]; then 
+  command -v pipx >/dev/null 2>&1
+  if [ $? -ne 0 ]; then
     check_pip_powerline
-  else 
+  else
     check_pipx_powerline
   fi
 }
@@ -23,7 +23,7 @@ function check_powerline_requirements {
 function check_pip_powerline {
   pip show psutil -q >/dev/null 2>&1 || { echo_warn "[POWERLINE WARNING] No python pip psutil Found."; }
   # check_pip_powerline_addon
-  POWERLINE_REPO_ROOT=$(pip show powerline-status |ack "Location:(.*)" --output '$1')
+  POWERLINE_REPO_ROOT=$(pip show powerline-status | ack "Location:(.*)" --output '$1')
   export POWERLINE_REPO_ROOT
 }
 
@@ -33,18 +33,15 @@ function check_pipx_powerline {
   export POWERLINE_REPO_ROOT
 }
 
-
 function check_pip_powerline_addon {
-   # https://github.com/d2iq-shadowbq/powerline-inject
-   pip show powerline-inject -q >/dev/null 2>&1 || { echo_warn "[POWERLINE WARNING] No python pip powerline-inject Found."; }
+  # https://github.com/d2iq-shadowbq/powerline-inject
+  pip show powerline-inject -q >/dev/null 2>&1 || { echo_warn "[POWERLINE WARNING] No python pip powerline-inject Found."; }
 
-   # https://github.com/zcmarine/powerkube
-   pip show powerkube -q >/dev/null 2>&1 || { echo_warn "[POWERLINE WARNING] No python pip powerkube Found."; }
+  # https://github.com/zcmarine/powerkube
+  pip show powerkube -q >/dev/null 2>&1 || { echo_warn "[POWERLINE WARNING] No python pip powerkube Found."; }
 
-
-   pip show powerline-gitstatus -q >/dev/null 2>&1 || { echo_warn "[POWERLINE WARNING] No python pip powerline-gitstatus Found."; }
+  pip show powerline-gitstatus -q >/dev/null 2>&1 || { echo_warn "[POWERLINE WARNING] No python pip powerline-gitstatus Found."; }
 }
-
 
 function check_powerline {
   if [[ -n $matrix_ext_powerline ]]; then

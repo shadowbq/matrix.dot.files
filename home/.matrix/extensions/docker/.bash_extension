@@ -7,7 +7,7 @@
 ###########################
 
 # Retrieve the tags from the docker hub registry for a specific image
-# 
+#
 
 command -v docker >/dev/null 2>&1
 if [ $? -eq 1 ]; then
@@ -28,7 +28,7 @@ function docker-tags {
     # Keep looping until the variable URL is empty
     while [ ! -z $url ]; do
       # Every iteration of the loop prints out a single dot to show progress as it got through all the pages (this is inline dot)
-      >&2 echo -n "."
+      echo >&2 -n "."
       # Curl the URL and pipe the output to Python. Python will parse the JSON and print the very first line as the next URL (it will leave it blank if there are no more pages)
       # then continue to loop over the results extracting only the name; all will be stored in a variable called content
       content=$(curl -s $url | python -c 'import sys, json; data = json.load(sys.stdin); print(data.get("next", "") or ""); print("\n".join([x["name"] for x in data["results"]]))')
@@ -36,15 +36,15 @@ function docker-tags {
       url=$(echo "$content" | head -n 1)
       # Print the content without the first line (yes +2 is counter intuitive)
       echo "$content" | tail -n +2
-    done;
+    done
     # Finally break the line of dots
-    >&2 echo
-  ) | cut -d '-' -f 1 | sort --version-sort | uniq;
+    echo >&2
+  ) | cut -d '-' -f 1 | sort --version-sort | uniq
 }
 
 # Get container id of exiting container
-function dgrep(){
-    docker ps -a | grep "$1" | cut -c1-12 | head -n 1 
+function dgrep() {
+  docker ps -a | grep "$1" | cut -c1-12 | head -n 1
 }
 
 # Run a bash shell in the specified container.
@@ -60,7 +60,7 @@ function docker-shell {
 
 # bash into an existing container
 function dbash() {
-    docker exec -ti $(dgrep "$1") /bin/bash
+  docker exec -ti $(dgrep "$1") /bin/bash
 }
 
 function docker-remove-dangling-images {
@@ -69,48 +69,48 @@ function docker-remove-dangling-images {
 
 # sh into an existing container
 function dsh() {
-    docker exec -ti $(dgrep "$1") /bin/sh
+  docker exec -ti $(dgrep "$1") /bin/sh
 }
 
 # Execute something in an existing container
 function dex() {
-    docker exec -ti $(dgrep "$1") $2
+  docker exec -ti $(dgrep "$1") $2
 }
 
 # Start an existing container
-function dstart(){
-    docker start $(dgrep "$1")
+function dstart() {
+  docker start $(dgrep "$1")
 }
 
 # Stop an existing container
-function dstop(){
-    docker stop $(dgrep "$1")
+function dstop() {
+  docker stop $(dgrep "$1")
 }
 
 # Remove an existing container
-function drm(){
-    docker rm $(dgrep "$1")
+function drm() {
+  docker rm $(dgrep "$1")
 }
 
 # Stop and remove an existing container
-function dsrm(){
-    dstop $(dgrep "$1") && drm $(dgrep "$1")
+function dsrm() {
+  dstop $(dgrep "$1") && drm $(dgrep "$1")
 }
 
 # Remove an existing image
-function dirm(){
-    docker image remove $(dgrep "$1")
+function dirm() {
+  docker image remove $(dgrep "$1")
 }
 
 # Get logs of an existing container
-function dlog(){
-    docker logs $(dgrep "$1")
+function dlog() {
+  docker logs $(dgrep "$1")
 }
 
 function powerline-kubernetes-toggle() {
-    if [[ $RENDER_POWERLINE_KUBERNETES = "NO" ]]; then
-      export RENDER_POWERLINE_KUBERNETES=YES
-    else
-      export RENDER_POWERLINE_KUBERNETES=NO
-    fi
+  if [[ $RENDER_POWERLINE_KUBERNETES = "NO" ]]; then
+    export RENDER_POWERLINE_KUBERNETES=YES
+  else
+    export RENDER_POWERLINE_KUBERNETES=NO
+  fi
 }

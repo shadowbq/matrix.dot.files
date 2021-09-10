@@ -4,12 +4,12 @@
 
 ***God help us with Catalina / BigSur.***
 
-* `ZSH` has become the default standard (BigSur 11.x).
+* `ZSH` has become the default standard shell (BigSur 11.x).
 * GNU-tools GNU2 still is base. (Users need to install coreutils)
-* `GIT` is backed by *XCode* which has to get seperately updated.
+* `GIT` is backed by *XCode* which has to get separately updated.
 * Security restrictions are all over user-space.
 * `Ruby` is being removed from the BigSur in the future.
-* `Python 2.x` is removed.
+* `Python 2.x` is removed from the BigSur in the future.
 
 Reference: https://stackoverflow.com/questions/58278260/cant-compile-a-c-program-on-a-mac-after-upgrading-to-catalina-10-15/58278392#58278392
 
