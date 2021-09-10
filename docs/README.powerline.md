@@ -51,6 +51,12 @@ Debian / BSD:
 
 Install `apt|yum|etc.. install fonts-powerline`
 
+Automated Install:
+
+```shell
+git clone https://github.com/powerline/fonts.git --depth=1 && cd fonts && ./install.sh && cd .. && rm -rf fonts
+```
+
 IDE / VSCode Terminal:
 
 Many IDEs may spawn your terminal and you may want to also edit the font here:
