@@ -19,6 +19,8 @@ On a macOS:
 
 Open KeyChain Access (Via spotlight search) → search GitHub → click GitHub → change and save with your new PAT link
 
+![matrix-screenshot](meta/git-keystore-mac.png)
+
 ### Password Obsolete -> Using the Personal Access Tokens 
 
 *Warning*: Tokens have read/write access and should be treated like passwords. If you enter your token into the clone URL when cloning or adding a remote, Git writes it to your .git/config file in plain text, which is a security risk.
