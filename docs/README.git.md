@@ -20,7 +20,6 @@ On a macOS:
 Open KeyChain Access (Via spotlight search) → search GitHub → click GitHub → change and save with your new PAT link
 
 ![matrix-screenshot](meta/git-keystore-mac.png)
-
 ### Password Obsolete -> Using the Personal Access Tokens 
 
 *Warning*: Tokens have read/write access and should be treated like passwords. If you enter your token into the clone URL when cloning or adding a remote, Git writes it to your .git/config file in plain text, which is a security risk.
@@ -52,6 +51,19 @@ admin:all — admin:enterprise, admin:gpg_key, admin:org, admin:org_hook, admin:
 Save it as MDF Secret and load it via the GPG key method into your shell. Tokens are not passwords that you can set, so using secure mechanism to input the token is very important. 
 
 ### Optional: Git Credential Manager Core
+
+Investigate the current credential setting:
+
+```shell
+$> git config --show-origin --get credential.helper
+file:/Users/smacgregor/.gitconfig	osxkeychain
+$> git config --global credential.helper`
+```
+
+Unset if not wanted/needed.
+
+`git config --global --unset credential.helper`
+
 
 [Git Credential Manager Core](https://github.com/microsoft/Git-Credential-Manager-Core) (GCM Core) is another way to store your credentials securely and connect to GitHub over HTTPS. With GCM Core, you don't have to manually [create and store a PAT](/github/authenticating-to-github/creating-a-personal-access-token), as GCM Core manages authentication on your behalf, including 2FA (two-factor authentication).
 
