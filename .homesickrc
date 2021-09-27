@@ -1,0 +1,26 @@
+require 'readline'
+require 'pathname'
+require 'fileutils'
+#require 'os'
+
+puts "Checking Matrix Dependencies"
+unless system 'check_matrix_dependencies'
+  raise "Error launching dependencies script"
+end
+
+#if OS.mac?
+=begin
+  # homebrew installation
+  unless system 'which brew'
+    puts 'Installing homebrew...'
+    unless system 'ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"'
+      raise 'Error installing homebrew.'
+    end
+    puts 'homebrew successfully installed!'
+  else
+    puts 'homebrew already installed.'
+  end
+=end
+#end
+
+puts "done."

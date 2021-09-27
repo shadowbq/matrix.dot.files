@@ -215,7 +215,9 @@ comment
 | --- | --- |
 | `${#FOO}` | Length of `$FOO` |
 
-### Manipulation
+### StringCase Manipulation
+
+* Note: Bash 4.0 requirements 
 
 ```bash
 STR="HELLO WORLD!"
@@ -223,8 +225,15 @@ echo ${STR,}   #=> "hELLO WORLD!" (lowercase 1st letter)
 echo ${STR,,}  #=> "hello world!" (all lowercase)
 
 STR="hello world!"
-echo ${STR^}   #=> "Hello world!" (uppercase 1st letter)
+echo ${STR^}   #=> "Hello world!" (Capitalize/uppercase 1st letter)
 echo ${STR^^}  #=> "HELLO WORLD!" (all uppercase)
+```
+
+Bash 3.x with `tr`
+
+```
+STR="hello world!"
+echo "$(tr '[:lower:]' '[:upper:]' <<< ${STR:0:1})${STR:1}" #=> "Hello world!" (Capitalize/uppercase 1st letter)
 ```
 
 ### Default values
@@ -288,7 +297,7 @@ done
 
 ```bash
 for i in {1..5}; do
-    echo "Welcome $i"
+  echo "Welcome $i"
 done
 ```
 
@@ -296,7 +305,7 @@ done
 
 ```bash
 for i in {5..50..5}; do
-    echo "Welcome $i"
+  echo "Welcome $i"
 done
 ```
 
@@ -325,9 +334,9 @@ The `continue` command to stop executing the remaining commands inside a loop wi
 ```bash
 for number in 10 11 12 13 14 15; do
   if [[ $number -eq 11 ]]; then
-      continue
+    continue
   elif [[ $number -eq 14 ]]; then
-      break
+    break
   fi
   echo "Number: $number"
 done
@@ -351,7 +360,7 @@ Bowing to `shfmt` tool wanting () even if there is a `function`. This is an not 
 
 ```bash
 function myfunc() {
-    echo "hello $1"
+  echo "hello $1"
 }
 ```
 
@@ -363,8 +372,8 @@ myfunc "John"
 
 ```bash
 function myfunc() {
-    local myresult='some value'
-    echo $myresult
+  local myresult='some value'
+  echo $myresult
 }
 ```
 
@@ -496,7 +505,7 @@ if [[ "A" =~ . ]]
 
 ```bash
 if (( $a < $b )); then
-   echo "$a is smaller than $b"
+  echo "$a is smaller than $b"
 fi
 ```
 
@@ -583,17 +592,15 @@ done
 
 ```bash
 if [[ " ${array[@]} " =~ " ${value} " ]]; then
-    # whatever you want to do when arr contains value
+  # whatever you want to do when arr contains value
 fi
 
 if [[ ! " ${array[@]} " =~ " ${value} " ]]; then
-    # whatever you want to do when arr doesn't contain value
+  # whatever you want to do when arr doesn't contain value
 fi
 ```
 
 **Note**: `IFS` space settings can lead to false positives: <https://stackoverflow.com/a/15394738/1569557>
-
-
 
 ## Dictionaries
 
@@ -826,13 +833,13 @@ Case switch on file mime-type using `file` tool.
 
 ```bash
 for file in *; do
-    case $(file --mime-type -b "$file") in
-        image/*g)        ... ;;
-        text/plain)      ... ;;
-        application/xml) ... ;;
-        application/zip) ... ;;
-        *)               ... ;;
-    esac
+  case $(file --mime-type -b "$file") in
+    image/*g)        ... ;;
+    text/plain)      ... ;;
+    application/xml) ... ;;
+    application/zip) ... ;;
+    *)               ... ;;
+  esac
 done
 ```
 
@@ -979,10 +986,10 @@ declare regex="\s+string\s+"
 
 declare file_content=$( cat "${file}" )
 if [[ " $file_content " =~ $regex ]] # please note the space before and after the file content
-    then
-        echo "found"
-    else
-        echo "not found"
+  then
+    echo "found"
+  else
+    echo "not found"
 fi
 ```
 

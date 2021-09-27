@@ -8,7 +8,7 @@ function _secrets_decrypt() {
   if [[ ! -f "${1}" ]]; then
     echo_err "secrets files ${1} does not existz"
   fi
-  cat "$1" |base64 -d |gpg --decrypt 2> /dev/null
+  cat "$1" | base64 -d | gpg --decrypt 2>/dev/null
 }
 alias secrets_load='eval $(_secrets_decrypt ~/.bash_encrypted)'
 
@@ -35,9 +35,18 @@ function matrix_ask_to_continue {
   while ${waitingforanswer}; do
     read -p "${msg} (hit 'y/Y' to continue, 'n/N' to cancel) " -n 1 ynanswer
     case ${ynanswer} in
-      [Yy] ) waitingforanswer=false; break;;
-      [Nn] ) echo ""; echo_err "Operation cancelled as requested!";;
-      *    ) echo ""; echo "Please answer either yes (y/Y) or no (n/N).";;
+    [Yy])
+      waitingforanswer=false
+      break
+      ;;
+    [Nn])
+      echo ""
+      echo_err "Operation cancelled as requested!"
+      ;;
+    *)
+      echo ""
+      echo "Please answer either yes (y/Y) or no (n/N)."
+      ;;
     esac
   done
   echo ""
@@ -71,16 +80,15 @@ function matrix_ask_for_password {
   local PROMPT=''
   local CHAR=''
   local PASSWORD=''
-  while IFS= read -p "${PROMPT}" -r -s -n 1 CHAR
-  do
+  while IFS= read -p "${PROMPT}" -r -s -n 1 CHAR; do
     # Enter -> accept password
-    if [[ ${CHAR} == $'\0' ]] ; then
+    if [[ ${CHAR} == $'\0' ]]; then
       break
     fi
     # Backspace -> delete last char
-    if [[ ${CHAR} == $'\177' ]] ; then
-      if [ ${CHARCOUNT} -gt 0 ] ; then
-        CHARCOUNT=$((CHARCOUNT-1))
+    if [[ ${CHAR} == $'\177' ]]; then
+      if [ ${CHARCOUNT} -gt 0 ]; then
+        CHARCOUNT=$((CHARCOUNT - 1))
         PROMPT=$'\b \b'
         PASSWORD="${PASSWORD%?}"
       else
@@ -88,7 +96,7 @@ function matrix_ask_for_password {
       fi
     # All other cases -> read last char
     else
-      CHARCOUNT=$((CHARCOUNT+1))
+      CHARCOUNT=$((CHARCOUNT + 1))
       PROMPT='*'
       PASSWORD+="${CHAR}"
     fi
@@ -124,7 +132,7 @@ function matrix_ask_for_password_twice {
   matrix_ask_for_password "${VARIABLE_NAME_1}" "${MESSAGE}"
   matrix_ask_for_password "${VARIABLE_NAME_2}" "${MESSAGE} (again)"
 
-  if [ "${!VARIABLE_NAME_1}" != "${!VARIABLE_NAME_2}" ] ; then
+  if [ "${!VARIABLE_NAME_1}" != "${!VARIABLE_NAME_2}" ]; then
     echo_err "Error: password mismatch"
   fi
 

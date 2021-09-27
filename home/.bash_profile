@@ -72,4 +72,6 @@ fi
 
 ###########################
 # Last User specific environment and startup programs
-~/.matrix/bin/neofetch
+if [[ $TERM_PROGRAM != "vscode" ]]; then
+  ~/.matrix/bin/neofetch
+fi

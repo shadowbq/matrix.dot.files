@@ -6,8 +6,24 @@ Tmux is a great terminal emulator that can help you do numerous things
 * Detach and leave terminals open
 * Attach PAIR Co-Worker to terminal
 * start a build or compilation process
-* start a forground service
-* tail a log file or two 
+* start a foreground service
+* tail a log file or two  
+
+## Install
+
+linux:
+
+```shell
+$> apt|yum|etc.. install tmux
+```
+
+macOS:  
+
+* see `macOS - PASTE Buffer issues` issue below
+
+```shell
+brew install reattach-to-user-namespace tmux
+```
 
 ## Dot Matrix Modifications
 
@@ -131,7 +147,7 @@ C-Space z       Zoom the active pane
 ...
 ```
 
-## OSX - PASTE Buffer issues
+## macOS - PASTE Buffer issues
 
 There is line in the config to handle this
 
@@ -143,5 +159,3 @@ set-option -g default-command "reattach-to-user-namespace -l $SHELL"
 You may also likely need to *Allow terminal application access to paste buffer* in iTERM2 profile.
 
 Read more here: https://github.com/tmux-plugins/tmux-yank#requirements
-
-

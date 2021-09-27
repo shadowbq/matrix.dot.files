@@ -2,11 +2,11 @@
 
 We should never store unecrypted secrets on our machines. 
 
-**Storing unencrypted Secret ENVs in a file is bad idea®.**
+**Storing un-encrypted Secret ENVs in a file is bad idea®.**
 
 ## The Good IDEA
 
-Store secrets as ENVs on a file (`.bash_secrets`) that can be sourced from Bash, but don't write the file to the harddrive. Instead write it RSA 2048 encrypted then Base64 as (` ~/.bash_encrypted`) and decrypt in memory and source it as needed.
+Store secrets as ENVs on a file (`.bash_secrets`) that can be sourced from Bash, but don't write the file to the hard-drive. Instead write it RSA 2048 encrypted then Base64 as (` ~/.bash_encrypted`) and decrypt in memory and source it as needed.
 
 It is implemented as an alias `secrets_load` which evals bash function `_secrets_decrypt` on the `~/.bash_encrypted` file using gpg keys that are pin secured.
 
@@ -14,7 +14,7 @@ Source: `.matrix/functions/security_functions`
 
 ## Usage
 
-```
+```shell
 $> env |grep -i SECRET_TOKEN
 $> secrets_load
 Please enter the passphrase to unlock the OpenPGP secret key:
@@ -33,23 +33,24 @@ SECRET_TOKEN=abcdefg12345678ZYXWV
 
 Install the GPG client
 
-```
-# (macosx) brew install gpg
-# (linux) apt/yum install gpg
-# (bsd) ... gpg
+* NOTE: that on MacOS the command isn't gpg2 but rather just gpg. 
+
+```shell
+$ (macosx)> brew install gpg
+$ (linux)> apt/yum install gpg|gpg2
+$ (bsd) > gpg
 ```
 
 Init GPG
 
-```
+```shell
 gpg --list-keys
 gpg: directory '/Users/smacgregor/.gnupg' created
 gpg: keybox '/Users/smacgregor/.gnupg/pubring.kbx' created
 gpg: /Users/smacgregor/.gnupg/trustdb.gpg: trustdb created
 ```
 
-
-### Set your pin entry method (required):
+### Set your pin entry method (required)
 
 You will need a pin entry application *that works(looking at you mac)*
 
@@ -69,48 +70,48 @@ lrwxr-xr-x  1 smacgregor  admin  43 Nov  5 09:15 /usr/local/bin/pinentry-tty -> 
 
 A pure cli experience on servers or terminal
 
-```
+```shell
 echo "pinentry-program /usr/bin/pinentry-tty" >> ~/.gnupg/gpg-agent.conf
 ```
 
 For *debian/ubuntu* you *MUST* update the alternatives
 
-```
+```shell
 sudo update-alternatives --config pinentry
 ```
 
 For *macos/OSX* you can *ALTERNATIVELY* use a GUI/popup which also works with `keychain`
 
-```
+```shell
 brew install pinentry-mac
 echo "pinentry-program /usr/local/bin/pinentry-mac" >> ~/.gnupg/gpg-agent.conf
 ```
 
-Reload the GPG Agent (or killit to force a restart)
-```
+Reload the GPG Agent (or kill it to force a restart)
+
+```shell
 gpg-connect-agent reloadagent /bye
 # `killall gpg-agent` if that not working correctly
 ```
 
-Note (This was seen as require at least on **macos**): 
+Note (This was seen as require at least on **macos**):  
 
 `dot.matrix` should have solved the GPG_TTY issue, but if need it add it manually
 
-```
+```shell
 env |grep GPG
 GPG_TTY=/dev/ttys001
 ```
 
-else 
+else  
 
 `export GPG_TTY=$(tty)` to my `~/.bash_local`
-
 
 ### Make New Secrets Securely using RAMDisks
 
 Given that you have a GPG KEY `0123456789ABCDEF0123456789ABCDEF`:
 
-```
+```shell
 $> gpg --list-keys
 /Users/scottmacgregor/.gnupg/pubring.kbx
 ----------------------------------------
@@ -122,7 +123,7 @@ sub   rsa2048 2019-12-28 [E] [expires: 2021-12-27]
 
 Encrypt a bash script with contents: `export SECRET_TOKEN=abcdefg12345678ZYXWV` securely into `.bash_encrypted`
 
-```
+```shell
 # Make your Linux secrets securely 
 mkdir -p $HOME/tmpfs
 mount -t tmpfs -o size=512m ramfs $HOME/tmpfs
@@ -130,13 +131,13 @@ mount -t tmpfs -o size=512m ramfs $HOME/tmpfs
 macos_ramdisk mount
 ```
 
-```
+```shell
 vi $HOME/tmpfs/.bash_secrets
 [..Write.Secrets.here..]
 cat $HOME/tmpfs/.bash_secrets | gpg --encrypt -r 0123456789ABCDEF0123456789ABCDEF --armor |base64 > ~/.bash_encrypted
 ```
 
-```
+```shell
 # Wipe secrets ( Nuke: https://unix.stackexchange.com/a/271870/104660)
 umount $HOME/tmpfs
 macos_ramdisk umount $HOME/tmpfs
@@ -146,7 +147,7 @@ macos_ramdisk umount $HOME/tmpfs
 
 As an alternative to `secrets_load`,  you can manually decrypt and load into current `tty` ENV.
 
-``` 
+``` shell
 $> eval $(cat ~/.bash_encrypted |base64 -d |gpg --decrypt 2> /dev/null)
 ```
 
@@ -155,7 +156,6 @@ $> eval $(cat ~/.bash_encrypted |base64 -d |gpg --decrypt 2> /dev/null)
 GPG: Extract private key and import on different machine
 Identify your private key by running `gpg --list-secret-keys`. 
 You need the ID of your private key (second column)
-
 
 Run this command to export your key: `gpg --export-secret-keys $ID > ~/.ssh/my-gpg-private-key.asc`.
 Copy the key to the other machine ( scp is your friend)
@@ -174,17 +174,17 @@ Ensure the keys are correct by observing the ID with LONG format:
 
 Everything showed up as normal **except** for the uid which now reads `[unknown]`:
 
-```
+```shell
 uid [ unknown ] User < user@useremail.com >
 ```
 
 Bump that trust, because its yours!
 
-```
+```shell
 $> gpg --edit-key user@useremail.com
 gpg> trust
 
-Please decide how far you trust this user to correctly verify other users' keys
+Please decide how far you trust this user to correctly verify other users\' keys
 (by looking at passports, checking fingerprints from different sources, etc.)
 
   1 = I don't know or won't say
@@ -203,7 +203,7 @@ Validate it is now `ultimate` trust.
 
 `gpg --keyid-format 0xLONG -k`
 
-```
+```shell
 uid [ ultimate ] User < user@useremail.com >
 ```
 
@@ -219,14 +219,14 @@ envchain - supports macOS keychain or D-Bus secret service (gnome-keyring)
 
 ### Bad: LUKS / Container
 
-Mount it and unmount it into a FS. 
+Mount it and unmount it into a FS.
 
-### Worst Option: Unsecure File Fault 
+### Worst Option: Insecure File Fault
 
 Source it from `.bash_local`, and in linux give it SELINUX labels.
 (http://blog.siphos.be/2015/07/restricting-even-root-access-to-a-folder/)
 
-```
+```shell
 $> ls -lZ .bash_local
 -rw-------. 1 scottmacgregor  root system_u:object_r:secrets_log_t 60 Dec 27 14:53 .bash_local
 ```

@@ -1,5 +1,6 @@
 #############################
-# matrix
+# matrix functions
+# check for homesick, or homeshick equivalent status
 ## ## ## ## ##
 # shellcheck shell=bash
 #############################
@@ -30,6 +31,7 @@ function check_matrix_online() {
 function check_matrix_local() {
   command -v homesick >/dev/null 2>&1
   if [ $? -eq 0 ]; then
+    export GIT_CONFIG_PARAMETERS="'color.status=always'"
     matrix_status=$(homesick status matrix.dot.files)
     if [[ "$matrix_status" =~ "nothing to commit" ]]; then
       echo -n ""
@@ -37,6 +39,16 @@ function check_matrix_local() {
       echo -e "$matrix_status"
     fi
   else
-    echo_warn "Unable to validate .matrix local (missing:homesick/git) (possible/rvm failure)"
+    command -v "$HOME"/.homesick/repos/homeshick/bin/homeshick >/dev/null 2>&1
+    if [ $? -eq 0 ]; then
+      matrix_status=$("$HOME"/.homesick/repos/homeshick/bin/homeshick check matrix.dot.files)
+      if [[ "$matrix_status" =~ "modified" ]]; then
+        echo -e "$matrix_status"
+      else
+        echo -n ""
+      fi
+    else
+      echo_warn "Unable to validate .matrix local (missing:homesick/git) (possible/rvm failure)"
+    fi
   fi
 }

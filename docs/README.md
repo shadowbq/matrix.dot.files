@@ -1,16 +1,16 @@
 # The Opinion
 
-*dot.matrix uses `bash`. I prefer 4.x and above! I prefer GNU Coreutils with GPLv3 (moderncore). I rarely use `sh`*
+*dot.matrix uses `bash`. I prefer 4.x and above! I prefer GNU Coreutils with GPLv3 (modern-core). I rarely use `sh`*
 
 I **DO NOT** use ksh, pdksh, ash, dash, C shell (csh, tcsh), Z shell (zsh), and the Friendly Interactive Shell (fish).
 
-I prefer DRY code when possible.
+I prefer D.R.Y. code when possible.
 
 I prefer extensions and extensibility.
 
 I prefer fancy and colorful output when possible.
 
-I prefer shell scripts that don't require python, ruby, node, etc.
+I prefer bash shell scripts that don't require python, ruby, node, etc.
 
 I agree with many concepts in https://google.github.io/styleguide/shell.xml but not all, see refer to `README.bash.md` for style guide.
 
@@ -20,20 +20,29 @@ Binaries (x86/i386/arm/arm7/ELF/Mach-O/PE32) need to be build on the target syst
 
 ## Containers
 
-Containers.. maybe, but don't rely it. 
+Containers.. may be accessible on systems, but don't rely it do to enterprise compliance requirements.
 
-## Document confusing BASH Shell Code
+## Bash
+
+### Document confusing BASH Shell Code
 
 Explain hard code with:
 
 * `# COMMENTS`
 * https://explainshell.com/explain?cmd=
 
-## Bash Styles
+### Bash Styles & Linting
+
+Use automated tooling when possible to standardize your bash scripts.
+
+***I prefer 2 spaces as the Bash indentation.***
+
+* [shfmt](https://github.com/mvdan/sh) - Shell-format helps you with indentations, removing extra spaces, and alignment.
+* [shellcheck](https://github.com/koalaman/shellcheck) - ShellCheck is a shell script static analysis tool.
 
 Refer to `README.bash.md` for style guide.
 
-Please use shellcheck https://github.com/koalaman/shellcheck
+Please use explicit bash in shellcheck
 
 ```shell
 # shellcheck shell=bash
@@ -41,9 +50,9 @@ Please use shellcheck https://github.com/koalaman/shellcheck
 
 Ref: https://github.com/koalaman/shellcheck/wiki/SC2148
 
-### Bash
+Enabled in VSCode - ShellCheck for Visual Studio Code [VSCode MarketPlace](https://marketplace.visualstudio.com/items?itemName=timonwong.shellcheck)
 
-#### Command Substitution
+### Command Substitution
 
 Command substitution allows the output of a command to be substituted in place of the command name itself.:
 
@@ -55,7 +64,7 @@ The syntax of the shell command language has an ambiguity for expansions beginni
 
 `$( (command) )`
 
-#### Arithmetic Expansion
+### Arithmetic Expansion
 
 Arithmetic expansion provides a mechanism for evaluating an arithmetic expression and substituting its value. The format for arithmetic expansion shall be as follows:
 
@@ -71,6 +80,17 @@ echo_info "printed in BLUE to STDERR"
 echo_debug "printed in GRAY to STDERR if ENV: MATRIX_DEBUG set"  
 ```
 
+### Testing in Bash
+
+`matrix.dot.files` is designed for *userspace* consistency, *not service* consistency. matrix.dot.files isn't needed for workloads like `alpine` or `coreos`.
+
+`[[` works only in Bash, Zsh and the Korn shell, and is more powerful; `[` and `test` are available in POSIX shells.  
+But its past 2020.. so Bash is available for *userspace* on all linux, macos, freebsd, even windows 10+ on WSL.  
+
+Remember to set to a BOOLEAN variable via command `/usr/bin/true || /usr/bin/false` not strings. **DO NOT QUOTE false!**
+
+## Other GNU Shell Tooling
+
 ### Grep with Regex
 
 Also, you need to tell grep to use extended regular expressions.
@@ -83,16 +103,15 @@ Without extended regular expressions, you have to escape the |, (, and ). Note t
 
 ### Username
 
+Retrieving the entire Username and Group combo
+
+```shell
+$> id -p
+uid	smacgregor
+groups	staff everyone localaccounts _appserverusr admin _appserveradm _lpadmin com.apple.access_ssh _appstore _lpoperator _developer _analyticsusers com.apple.access_ftp com.apple.access_screensharing com.apple.access_remote_ae com.apple.sharepoint.group.1
+```
+
 https://www.cyberciti.biz/faq/howto-get-group-name-in-linux/
-
-### Testing in Bash
-
-dot.matrix is for userspace consistency, not service consistency. dot.matrix isn't needed for alpine or coreos.  
-
-`[[` works only in Bash, Zsh and the Korn shell, and is more powerful; `[` and `test` are available in POSIX shells. 
-But its 2020.. so.. bash is available for userspace on all linux, macos, freebsd, even windows 10 on WSL. 
-
-Remember to set to a BOOLEAN variable via command /usr/bin/true || /usr/bin/false not strings. **DO NOT QUOTE false!**
 
 ### INI Option replacement
 
@@ -100,6 +119,6 @@ Search for INI value and replace it:
 
 `grep -q '^option' file && sed -i 's/^option.*/option=value/' file || echo 'option=value' >> file`
 
-## References:
+## References
 
 Man Bash 3.x Builtins: https://linux.die.net/man/1/bash

@@ -1,0 +1,25 @@
+#!/usr/bin/env capsicumizer
+
+run = "/usr/local/bin/gedit";
+
+access_path = [
+	"$HOME",
+	"/usr/local",
+	"/var/db/fontconfig",
+	"/tmp",
+];
+
+library_path = [
+	"/lib",
+	"/usr/lib",
+	"/usr/local/lib",
+	"/usr/local/lib/gvfs",
+	"/usr/local/lib/gio/modules",
+	"/usr/local/lib/gedit",
+];
+
+# gedit does not need any extra preloads
+# this is just an example
+ld_preload = [
+	"libgobject-2.0.so"
+];

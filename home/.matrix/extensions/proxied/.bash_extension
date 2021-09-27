@@ -25,16 +25,16 @@
 ###########################
 
 if [  -z "$globalurl_proxy" ]; then 
-    echo_warn "Proxy Configuration loading.."
-    echo_warn "$globalurl_proxy"
+  echo_warn "Proxy Configuration loading.."
+  echo_warn "$globalurl_proxy"
 
-    path_to_corkscrew=$(command -v corkscrew)
-    if [ -x "$path_to_corkscrew" ]; then
-        echo_notify "Corkscrew found."
-    fi
-    ignore_proxy="127.0.0.1,169.254.169.254,localhost"
+  path_to_corkscrew=$(command -v corkscrew)
+  if [ -x "$path_to_corkscrew" ]; then
+      echo_notify "Corkscrew found."
+  fi
+  ignore_proxy="127.0.0.1,169.254.169.254,localhost"
 else 
-    echo_error "'matrix proxied extension' loaded without setting \$globalurl_proxy"
+  echo_error "'matrix proxied extension' loaded without setting \$globalurl_proxy"
 fi 
 
 

@@ -1,0 +1,35 @@
+(version 1)
+;; Disallow everything by default
+(deny default)
+
+; Baseline
+(allow file-read-metadata ipc-posix-shm)
+
+(allow process-exec (literal "/sbin/ping"))
+
+( allow mach-lookup
+    (global-name "com.apple.system.notification_center")
+)
+
+; DTrace Allow
+(allow file-read-data file-write-data file-ioctl (literal "/dev/dtracehelper"))
+
+; Networking, including Unix Domain Sockets
+(allow network*)
+
+; Raw sockets
+(if (defined? 'system-socket)
+    (allow system-socket))
+
+; Hardware model information
+(allow sysctl-read)
+
+; Syslog early in the boot process
+(allow file-read-data file-write-data (literal "/dev/console"))
+
+(allow file-read-data
+    ; /etc/hosts support
+    (literal "/private/etc/hosts")
+    (literal "/private/etc")
+)
+

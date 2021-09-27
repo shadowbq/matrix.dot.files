@@ -1,6 +1,8 @@
 # Powerline
 
-Powerline is a great statusline plugin for the shell and used in matrix.dot.files.
+Powerline is a great status-line plugin for the shell and used in matrix.dot.files.
+
+![matrix-screenshot](meta/powerline-screenshot.png)
 
 * Extensible and feature rich, written in Python. 
 * It also supports prompts and statuslines in several Linux utilities and tools.
@@ -8,49 +10,60 @@ Powerline is a great statusline plugin for the shell and used in matrix.dot.file
 * Fast and lightweight, with daemon support, which provides even more better performance
 
 Enabled by Default in .matrix: `home/.matrix/powerline/.bash_extension`
+**`check_powerline` is called from the extension during shell initiation to also enable it**
 
-**`check_powerline` is called which also enables it**
+## Install Powerline
 
-Additional Functions:
+By default you will find this error `[ERROR] Powerline is not found, but enabled.` until it is disabled or installed as below.
 
-Matrix function: `check_powerline_requirements`
-Matrix function: `check_pip_powerline`
-Matrix function: `check_pipx_powerline`
+Run `check_powerline_requirements` to validate all the prerequisites tools required for powerline are installed and reachable from the shell.
 
-## Install 
+Prerequisites
+
+* Fonts with special characters
+* `socat` installed
+* `pip` | `pipx` installed with python 3.8 or 3.9.
+
+Additional Support Functions:
+
+* Matrix function: `check_pip_powerline`
+* Matrix function: `check_pipx_powerline`
 
 ### Fonts
 
 Powerline requires some special font symbols so we recommend using particular fonts in terminal configuration.
 
-There are many patched fonts that can be used: 
+There are many patched fonts that can be used:  
 
 * https://github.com/powerline/fonts
 * https://github.com/abertsch/Menlo-for-Powerline
 
-Remember: You need the powerline font on the client renderingi, not the server. (Example: If you are using OSX to connect to a linux machine you need menlo-powerline in your iterm2 config on the macos, not the linux machine.)
+Remember: You need the powerline font on the client rendering, not the server.  
+(Example: If you are using OSX to connect to a linux machine you need `menlo-powerline` in your `iterm2` config on the macos, not the linux machine.)
   
-OSX:
+macOS:
 
-So in your iterm for osx use `menlo for powerline` or `monaco`.
+Configure `iterm2` for macOS to use `menlo for powerline` or `monaco`.
+
+![iterm](meta/iterm.png)
 
 Debian / BSD:
 
-Install `apt install fonts-powerline`
+Install `apt|yum|etc.. install fonts-powerline`
 
-### PIP way (legacy method)
-
-If you are installing directly onto your python env.
+Automated Install:
 
 ```shell
-pip install psutil
-pip install powerline-status
-pip install powerline-gitstatus
-pip install powerline-inject
-# pip install powerkube-fork
+git clone https://github.com/powerline/fonts.git --depth=1 && cd fonts && ./install.sh && cd .. && rm -rf fonts
 ```
 
-### PIPX way: (preferred 2020)
+IDE / VSCode Terminal:
+
+Many IDEs may spawn your terminal and you may want to also edit the font here:
+
+![vscode](meta/vscode-menlo.png)
+
+### PIPX way: (Preferred 2020+)
 
 If you want to install powerline via `pipx` here are the commands:
 
@@ -59,6 +72,19 @@ pipx install powerline-status
 pipx inject powerline-status psutil
 pipx inject powerline-status powerline-gitstatus
 pipx inject powerline-status powerline-inject
+# (optional kubectl tooltips) pip inject powerline-status powerkube-fork
+```
+
+### PIP way (Legacy method)
+
+If you are installing directly onto your python env.
+
+```shell
+pip install powerline-status
+pip install psutil
+pip install powerline-gitstatus
+pip install powerline-inject
+# (optional kubectl tooltips) pip install powerkube-fork
 ```
 
 ## TMUX integration
