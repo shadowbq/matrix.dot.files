@@ -102,6 +102,25 @@ docker run --rm -i hadolint/hadolint hadolint \
   - < "$@"
 ```
 
+Mapping Directory Context 
+
+Note: The below uses `realpath` with is gnu-coreutils gplv3
+         
+```shell
+#!/usr/bin/env bash
+set -euo pipefail
+
+SCRIPT_PATH=$(realpath "${BASH_SOURCE[0]}")
+SCRIPT_DIR=$(dirname "${SCRIPT_PATH}")
+ROOT_DIR=$(dirname "${SCRIPT_DIR}")
+
+docker run -it --rm \
+  -v "${ROOT_DIR}:${ROOT_DIR}" \
+  -w "${ROOT_DIR}" \
+  registry.io/owner/repo:v1.0.0 \
+  tool ARGs         
+```
+         
 Function for inclusions
 
 ```shell
