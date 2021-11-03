@@ -3,10 +3,10 @@ require 'pathname'
 require 'fileutils'
 #require 'os'
 
-puts "Checking Matrix Dependencies"
-unless system 'check_matrix_dependencies'
-  raise "Error launching dependencies script"
-end
+puts "Check Matrix Dependencies after install.."
+#unless system 'check_matrix_dependencies'
+#  raise "Error launching dependencies script"
+#end
 
 #if OS.mac?
 =begin
