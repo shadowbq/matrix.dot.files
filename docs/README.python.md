@@ -22,7 +22,7 @@ Homebrew will jerk around your python isntallation and completely destroy your p
 
 ```shell
 sudo apt install -y build-essential checkinstall
-sudo apt install -y libreadline-gplv2-dev libncursesw5-dev libssl-dev libsqlite3-dev tk-dev libgdbm-dev libc6-dev libbz2-dev zlibb1g-dev
+sudo apt install -y libreadline-gplv2-dev libncursesw5-dev libssl-dev libsqlite3-dev tk-dev libgdbm-dev libc6-dev libbz2-dev zlib1g-dev
 sudo apt install -y libffi-dev 
 ```
 
