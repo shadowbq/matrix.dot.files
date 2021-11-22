@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+# shellcheck disable=SC1001
+# Show all IPS for running vms, but exit code 1 if at least one VM does not have an IPV4 set
+rtn=0
+for VM in $(VBoxManage list runningvms | awk -F\{ '{print $2}' | sed -e 's/}//g');
+do {
+  VMNAME=$(VBoxManage showvminfo "${VM}" --machinereadable | awk -F\= '/^name/{print $2}')
+  VMIP=$(VBoxManage guestproperty get "${VM}" "/VirtualBox/GuestInfo/Net/0/V4/IP" | sed -e 's/Value: //g')
+  if [[ $VMIP =~ "No value set" ]]; then
+    rtn=1
+    printf "** Missing VM Guest Addons ** VM-Name: %-50s\n" "${VMIP}" "${VMNAME}" >&2
+  else 
+    printf "VM-IP: %-16s VM-Name: %-50s\n" "${VMIP}" "${VMNAME}"
+  fi 
+} done
+exit $rtn
