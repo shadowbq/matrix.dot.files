@@ -1,0 +1,77 @@
+#############################
+# Verbose Functions
+# This is fine for BASH v3
+# Bashlines that help to make the console easier to read during scripts.
+## ## ## ## ##
+# shellcheck shell=bash
+#############################
+
+# set verbose level to info
+__MATRIX_VERBOSITY=6
+
+declare -A LOG_LEVELS
+# https://en.wikipedia.org/wiki/Syslog#Severity_level
+LOG_LEVELS=([0]="emerg" [1]="alert" [2]="crit" [3]="err" [4]="warning" [5]="notice" [6]="info" [7]="debug")
+
+## .step "Foo Monkey Explosion"
+# $> 
+# $> -==\
+# $> -=*=> Foo Monkey Explosion
+# $> -==/
+# $> 
+
+function .step() 
+  echo ; echo "-==\\" ; echo "-=*=>" "$@" ; echo "-==/" ; echo ;
+}
+
+## verbose error usage
+# .log 3 "Something is wrong here"
+# $> [error] Something is wrong here
+
+function .log() {
+  local LEVEL=${1}
+  shift
+  if [ ${__MATRIX_VERBOSITY} -ge ${LEVEL} ]; then
+    echo "[${LOG_LEVELS[$LEVEL]}]" "$@"
+  fi
+}
+
+## verbose error usage
+# .log2stderr 3 "Something is wrong here"
+# [STDERR]$> [error] Something is wrong here
+
+function .log2stderr() {
+  local LEVEL=${1}
+  shift
+  if [ ${__MATRIX_VERBOSITY} -ge ${LEVEL} ]; then
+    echo "[${LOG_LEVELS[$LEVEL]}]" "$@" 1>&2
+  fi
+}
+
+
+## verbose && command #command will be executed if $__MATRIX_VERBOSITY => 1 
+# .verbose && echo "Foo"
+
+function .verbose() {
+    [[ $__MATRIX_VERBOSITY -ge 1 ]] && return 0 || return 1
+}
+
+## verbose error alias usage to syslog
+# .logger 3 "Something is wrong here"
+# $> [error] Something is wrong here
+
+function .logger() {
+  local LEVEL=${1}
+  shift
+  logger -p "${LOG_LEVELS[$LEVEL]}" -t "$0[$$]" -- "$*"
+}
+
+## Reference: Matrix Common Colored Echo Errors
+# .matrix/opt/templates/bash-test-proofs
+# .matrix/functions/.bash_errors
+
+# function echo_warn()   { echo -ne "${YELLOW}"; cat <<<"$@" 1>&2 ; echo -ne "${NORMAL}"; }
+# function echo_err()    { echo -ne "${RED}";    cat <<<"$@" 1>&2 ; echo -ne "${NORMAL}"; }
+# function echo_notify() { echo -ne "${GREEN}";  cat <<<"$@" 1>&2 ; echo -ne "${NORMAL}"; }
+# function echo_info()   { echo -ne "${BLUE}";   cat <<<"$@" 1>&2 ; echo -ne "${NORMAL}"; }
+# function echo_debug()  { echo -ne "${GRAY}";   cat <<<"$@" 1>&2 ; echo -ne "${NORMAL}"; }
