@@ -6,7 +6,37 @@ function echo_info() {
   echo -ne "${NORMAL}"
 }
 
+echo "Fetching Dev Key"
+gpg --receive-keys ED7F5BF46B3BBED81C87368E2C393E0F18A9236D
+
+# You could use and ultimate trust the dev key
+# gpg --no-default-keyring --keyring yt-dev --edit-key ED7F5BF46B3BBED81C87368E2C393E0F18A9236D
+
+tmpsig=$(mktemp -u)
+echo "Fetching YT GPG Sig"
+curl -sL https://yt-dl.org/downloads/latest/youtube-dl.sig -o $tmpsig
+
 echo -n "Current: " && [[ $(type -t echo_info) == function ]] && echo_info "youtube-dl: $(youtube-dl --version)" || echo "youtube-dl: $(youtube-dl --version)"
-curl -L https://yt-dl.org/downloads/latest/youtube-dl -o /usr/local/bin/youtube-dl
+
+echo ""
+echo "Validating existing Sig"
+gpg  --verify $tmpsig /usr/local/bin/youtube-dl &2>/dev/null
+echo ""
+
+tmpytdl=$(mktemp -u)
+curl -sL https://yt-dl.org/downloads/latest/youtube-dl -o $tmpytdl
+
+echo "Validating new Sig"
+gpg --verify $tmpsig /usr/local/bin/youtube-dl &2>/dev/null
+echo ""
+
+if [ $? -eq 0 ];then
+  mv $tmpytdl /usr/local/bin/youtube-dl
+else
+  echo "Error Validating Key, not updating youtube-dl"
+fi
+
 chmod a+rx /usr/local/bin/youtube-dl
 echo -n "Updated: " && [[ $(type -t echo_info) == function ]] && echo_info "youtube-dl: $(youtube-dl --version)" || echo "youtube-dl: $(youtube-dl --version)"
+
+rm $tmpsig
