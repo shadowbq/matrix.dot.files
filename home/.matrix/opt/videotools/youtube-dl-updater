@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+
+function echo_info() {
+  echo -ne "${BLUE}"
+  cat <<<"$@" 1>&2
+  echo -ne "${NORMAL}"
+}
+
+echo -n "Current: " && [[ $(type -t echo_info) == function ]] && echo_info "youtube-dl: $(youtube-dl --version)" || echo "youtube-dl: $(youtube-dl --version)"
+curl -L https://yt-dl.org/downloads/latest/youtube-dl -o /usr/local/bin/youtube-dl
+chmod a+rx /usr/local/bin/youtube-dl
+echo -n "Updated: " && [[ $(type -t echo_info) == function ]] && echo_info "youtube-dl: $(youtube-dl --version)" || echo "youtube-dl: $(youtube-dl --version)"
