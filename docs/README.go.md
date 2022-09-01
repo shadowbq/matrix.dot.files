@@ -17,6 +17,16 @@ export GOPATH=$HOME/.gopath
 export PATH=$GOPATH:$GOPATH/bin:$PATH
 ```
 
+## What other tools are needed generally
+
+The system needs these tools to compile GCC on systems 
+
+* gcc
+* make
+* bison
+
+Ask an example in debian/ubuntu: `sudo apt install gcc make bison`
+
 ## Is there a go virtual manager linked?
 
 Yes, but you need setup up `gvm` into matrix.dot.files
@@ -30,10 +40,10 @@ Latest GOLANG: https://golang.org/doc/devel/release.html
 ```shell
 GVM_NO_UPDATE_PROFILE=true
 bash < <(curl -s -S -L https://raw.githubusercontent.com/moovweb/gvm/master/binscripts/gvm-installer)
+source $HOME/.gvm/scripts/gvm
 gvm install go1.4 -B
 gvm use go1.4
 export GOROOT_BOOTSTRAP=$GOROOT
-gvm install go1.15
-gvm use go1.15 --default
+gvm install go1.19
+gvm use go1.19 --default
 ```
-
