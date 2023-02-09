@@ -22,6 +22,12 @@ echo "$NAME"
 echo "${NAME}!"
 ```
 
+TL;DR: `set` can see shell-local variables, `env` cannot.
+
+`set` is a built-in to the shell, so it is aware of shell-local variables (including shell functions). `env` is an independent executable; it only sees the variables that the shell passes to it (environment variables).
+
+`a=1` is a local variable. Environment variables are created with `export a=1` or `a=1; export a`.
+
 ### String quotes
 
 ```bash
