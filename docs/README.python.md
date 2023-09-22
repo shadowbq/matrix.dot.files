@@ -5,7 +5,7 @@ Python can be a complete mess. Overtime py 2.7 to py 3.x has seen many tool turn
 * I believe in extending the os-distro system python as *little as possible*.
 * I believe in using a user-mode multi-version method for python similar but not identical for ruby and node.
 * Since 2020, I assume a py 3.x os-distro system python for preparing overlays exist. (ugh.. macOS)
-* I use `pyenv` to shim in py 3.8.x as global.
+* I use `pyenv` to shim in py 3.x as global.
 * I use `pipx` to install *matrix.dot.file* `bins` and inject libs for those bins that are python based like `powerline-status` into a `venv`.
 * I use `pip` to install global libraries that aren't bin based.
 * I use `poetry` to manage python developed sandbox projects.
@@ -40,6 +40,12 @@ curl https://pyenv.run | bash
 ```shell
 pyenv versions
 * system (set by /Users/smacgregor/.pyenv/version)
+```
+
+## Upgrade `Pyenv`
+
+```shell
+pyenv update
 ```
 
 ## Install a Sane Python 
@@ -101,6 +107,51 @@ Publish using twine via makefile:
 ```shell
 make clean
 make upload
+```
+## PIPX 
+
+PIPX can use multiple different versions of the python on your system!
+
+### Need NEW Python Version but not ready to swap Global/Default to NEW 
+
+```shell 
+$> python --version
+Python 3.9.0
+
+$> pyenv versions
+  system
+* 3.9.0 (set by /Users/XXXX/.pyenv/version)
+  3.9.0/envs/myworkspace
+  myworkspace --> /Users/XXXX/.pyenv/versions/3.9.0/envs/myworkspace
+$> pyenv install 3.11.5
+$> pyenv shell 3.11.5
+$> pyenv versions
+  system
+* 3.9.0 (set by /Users/smacgregor/.pyenv/version)
+  3.9.0/envs/myworkspace
+  3.11.5
+  myworkspace --> /Users/smacgregor/.pyenv/versions/3.9.0/envs/myworkspace
+$> # Install pipx via pip3 without fear into each python version needed.
+$> pip install pipx
+$> pipx install abc-toolkit
+$> pipx list
+venvs are in /Users/XXXX/.local/pipx/venvs
+apps are exposed on your $PATH at /Users/XXXX/.local/bin
+   package abc-toolkit 3.3.1, Python 3.11.5
+    - abc-tool
+   package powerline-status 2.7, Python 3.9.0
+    - powerline
+    - powerline-config
+    - powerline-daemon
+    - powerline-lint
+    - powerline-render
+   package pygments 2.7.2, Python 3.9.0
+    - pygmentize
+$> pyenv shell --unset
+$> python --version
+Python 3.9.0
+$> abc-tool
+.... works!
 ```
 
 ## Optional: Enable Poetry
