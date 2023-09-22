@@ -130,7 +130,7 @@ $> pyenv versions
 * 3.9.0 (set by /Users/smacgregor/.pyenv/version)
   3.9.0/envs/myworkspace
   3.11.5
-  myworkspace --> /Users/smacgregor/.pyenv/versions/3.9.0/envs/myworkspace
+  myworkspace --> /Users/XXXX/.pyenv/versions/3.9.0/envs/myworkspace
 $> # Install pipx via pip3 without fear into each python version needed.
 $> pip install pipx
 $> pipx install abc-toolkit
