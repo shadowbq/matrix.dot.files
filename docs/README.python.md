@@ -39,7 +39,7 @@ curl https://pyenv.run | bash
 
 ```shell
 pyenv versions
-* system (set by /Users/smacgregor/.pyenv/version)
+* system (set by /Users/XXXX/.pyenv/version)
 ```
 
 ## Upgrade `Pyenv`
@@ -127,7 +127,7 @@ $> pyenv install 3.11.5
 $> pyenv shell 3.11.5
 $> pyenv versions
   system
-* 3.9.0 (set by /Users/smacgregor/.pyenv/version)
+* 3.9.0 (set by /Users/XXXX/.pyenv/version)
   3.9.0/envs/myworkspace
   3.11.5
   myworkspace --> /Users/XXXX/.pyenv/versions/3.9.0/envs/myworkspace
