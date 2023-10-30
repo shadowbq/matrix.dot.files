@@ -26,3 +26,7 @@ function svi() {
 function svim() {
   sudo vim $@
 }
+
+function cvi() {
+  vim --clean $@
+}

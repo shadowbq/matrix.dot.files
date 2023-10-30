@@ -75,3 +75,5 @@ fi
 if [[ $TERM_PROGRAM != "vscode" ]]; then
   ~/.matrix/bin/neofetch
 fi
+
+[[ -s "/Users/smacgregor/.gvm/scripts/gvm" ]] && source "/Users/smacgregor/.gvm/scripts/gvm"
