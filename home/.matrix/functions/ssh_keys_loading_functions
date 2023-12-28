@@ -5,6 +5,13 @@
 #############################
 
 function load_ssh_keys() {
+  trap ctrl_c INT
+
+  function ctrl_c() {
+    echo_err "SSH Key skipped and not imported (ctrl+c)."
+    return 1
+  }
+
   if [ "$(type -t strict_ssh_set)" == "function" ]; then
     if [[ $STRICT_SSH || $matrix_ssh_enforce_keys_strict == "true" ]]; then
       strict_ssh_set
@@ -15,15 +22,15 @@ function load_ssh_keys() {
   ssh-add -l >/dev/null 2>&1
 
   if [ $? -eq 0 ]; then
-    echo_notify "Keys successfully imported."
+    echo_notify "SSH Key(s) successfully imported."
   else
-    echo_err "No SSH Keys Imported."
+    echo_err "No SSH Key(s) Imported."
   fi
 }
 
 # SSH Strict Modes correction script
 function strict_ssh_set() {
-  check_settings="$(grep -i StrictModes /etc/ssh/sshd_config | grep -i yes| grep -v '^#')"  
+  check_settings="$(grep -i StrictModes /etc/ssh/sshd_config | grep -i yes | grep -v '^#')"
   if [ $? -ne 0 ]; then
     echo 'SSH Client StrictModes not enforce by system, but requested by dot.matrix config.'
   fi
