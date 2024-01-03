@@ -48,17 +48,13 @@ Show the available castles:
 homesick list
 ```
 
-## Configuration
+## Configuration (Post Install)
 
-`.matrix_config` in your home directory is where your personal changes should go.
+**Where is the main configuration of `matrix.dot.files`?**
+  
+`~/.matrix_config` is where you enable or disable matrix modules/extensions(ie: go, nodejs, docker, vim etc..).
 
-You can avoid error on **matrix local consistency** checks by adding this git nugget.
-
-```shell
-$> git update-index --skip-worktree home/.matrix_config
-$> git ls-files -v . |grep ^S
-S home/.matrix_config
-```
+**Where do local Shell settings go?**
 
 Local files can be added to a singular system for individual enhancement.
 
@@ -67,7 +63,7 @@ Local files can be added to a singular system for individual enhancement.
 .bash_aliases
 ```
 
-Secure files like these are ignored from the repo in the `.gitignore`
+Secure files like these are ignored from the repo in the `.gitignore` by default.
 
 ```shell
 .secrets
@@ -76,6 +72,21 @@ Secure files like these are ignored from the repo in the `.gitignore`
 .ssh/*.key
 .ssh/id*
 ```
+
+**How do I `ignore` or `skip` files so I don't commit them to a git repo?**
+
+You can ignore files using the alias `skip` to avoid errors on **matrix local consistency** checks by adding this git nugget. 
+
+This will allow for customization of your files away from the upstream repo.
+
+```shell
+$> git skip home/.matrix_config
+$> git skip home/.ssh/ssh_config
+$> git skipped
+S home/.matrix_config
+S home/.ssh/ssh_config
+```
+
 
 ## The Docs
 
