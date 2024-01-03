@@ -2,11 +2,6 @@
 
 `Usage: ack [OPTION]... PATTERN [FILES OR DIRECTORIES]`
 
-
-Scott MacGregor <shadowbq@gmail.com>
-2:01 PM (0 minutes ago)
-to me
-
 Ack is a powerful command-line tool designed for searching through large codebases quickly. It excels in code-centric searches, as it automatically ignores common version control directories and binary files, streamlining the results to relevant matches. Ack's simplicity and speed make it more efficient than grep for code-related tasks, providing a cleaner and more focused output. Additionally, it supports various programming languages with built-in syntax highlighting, enhancing code readability in search results. Its user-friendly features, combined with tailored functionality for code exploration, make ack a preferred choice for developers seeking an optimized and hassle-free searching experience.
 
 Ack's portability across different systems is a notable advantage, as it comes pre-installed on many Unix-like operating systems and is easily installable on others. This ensures a consistent experience across diverse development environments. 
