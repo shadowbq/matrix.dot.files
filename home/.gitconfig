@@ -37,7 +37,7 @@
 	unstash = stash pop
 	remove-tags = "!f() { git tag -l ${1} | xargs -I % echo \"git tag -d % && git push --delete origin %\" | sh; }; f"
 	squash-all = "!f(){ git reset $(git commit-tree HEAD^{tree} -m \"${1:-A New Hope.}\");};f"
-	list-skipped = "!f(){ git ls-files -v ${1} | grep ^S};f"
+	list-skipped = "!f(){ git ls-files -v ${1} | grep ^S;};f"
 	markdown-toc = "git-md-toc-creator"
 	smartlog = "log --graph --pretty=format:'commit: %C(bold red)%h%Creset %C(red)<%H>%Creset %C(bold magenta)%d %Creset%ndate: %C(bold yellow)%cd %Creset%C(yellow)%cr%Creset%nauthor: %C(bold blue)%an%Creset %C(blue)<%ae>%Creset%n%C(cyan)%s%n%Creset'"
 [http]
