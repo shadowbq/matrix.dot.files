@@ -37,7 +37,7 @@
 	unstash = stash pop
 	remove-tags = "!f() { git tag -l ${1} | xargs -I % echo \"git tag -d % && git push --delete origin %\" | sh; }; f"
 	squash-all = "!f(){ git reset $(git commit-tree HEAD^{tree} -m \"${1:-A New Hope.}\");};f"
-	list-skipped = "!f(){ git ls-files -v ${1} | grep ^S;};f"
+	skipped = "!f(){ git ls-files -v ${1} | grep ^S;};f"
 	skip = update-index --skip-worktree --
 	unskip = update-index --no-skip-worktree --
 	markdown-toc = "git-md-toc-creator"
