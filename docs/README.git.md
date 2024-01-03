@@ -2,12 +2,144 @@
 
 `git` is essential to our everyday operations when using version control.
 
-Git is awesome as plugins in the path slip into the main binary completion.
+* Alias
+* Extensions
+* Managing Secrets for Git
 
-* Manage multiple users
-* Fix Configs (ala proxies)
-* Fetch hard get data
-* etc..
+## GIT Aliases 
+
+`matrix.dot.files` includes many useful aliases to enhance your GIT experience. 
+
+### Aliases
+* `git aliases` - List your aliases
+* `git [br,ci,co,df,st]` - Common git shortcut string aliases
+* `git info` - Show the remote configuration
+
+#### Tracking
+
+* `git diff-staged` - Show the diff of staged files by using the cached flag
+* `git wdiff` - Show the diff with Color
+* `git forget` - Removes the copy of the file from the index / staging-area, without touching the working tree copy
+* `git ignored` - List files ignored by the repo
+
+#### Backout
+
+* `git revertfile` - Recheckout a file 
+* `git uncommit` - Reset and backout the lastcommit before a push
+
+#### Destructive
+
+* `git purge` - remove untracked directories (permanently deletes files)
+* `git squash-all` - Squash the entire repo
+* `git remove-tags` - Remove all the tags
+
+#### Stash Helpers
+* `(git stash)` - Builtin - Record the current state of the working directory and the index, but want to go back to a clean working directory.
+* `git unstash` - Pop from the Stash back on the checked out files
+
+#### Stage Helpers
+* `(git stage`) - Builtin - (This is a synonym for git-add)
+* `git staged` - List what is staged
+* `git unstage` - Unstage a file that was staged 
+
+#### Skip Helpers
+* `git skipped` - List files that are ignored but in the repo
+* `git skip` - Ignore a local file changes in the repo
+* `git unskip` - Stop ignoring local file changes in the repo
+
+#### Generation
+* `git markdown-toc` - Create a markdown TOC
+
+#### Log Aliases 
+
+* `git last` - Show the last line of the log file
+* `git oneline` - Show the logs but only one line per entry with entitie information
+* `git out` - Log Oneline origin/main..HEAD
+* `git tree` - Log with Tree output
+* `git smartlog` - hg smartlog clone - Reference: https://gist.github.com/jessesquires/d0f3fc99be8208394a450ce86443ce7d
+
+## Extensions
+
+Git plugins in the shell `$PATH` slip into the main binary completion similiar to `kubectl`.
+
+### Swap Users
+
+`git swap` 
+
+Example: Swap to user `shadowbq` in current checked out repo
+
+```shell
+$ git swap shadowbq
+shadowbq <shadowbq@gmail.com>
+```
+
+Example Options:
+
+```shell
+usage: ./git swap <username in ~/.gitusers>
+usage: ./git swap <username> <email>
+
+Switch Local and Save to Config
+usage: ./git swap [--new-user1 || -1] <username> <email>
+usage: ./git swap [--new-user2 || -2] <username> <email>
+usage: ./git swap [--new-user3 || -3] <username> <email>
+
+Switch Global
+usage: ./git swap [--global || -g] <username> <email>
+```
+
+### User Config
+
+The configuration supports three different users [user1,user2,user3]
+
+```ini
+~/.gitusers
+user1name="shadowbq"
+user1email="shadowbq@gmail.com"
+```
+
+### Git Who Am I
+
+`git whoami` - Show who you are based on global or local settings in a repo
+
+```shell
+$> git whoami
+shadowbq <shadowbq@gmail.com>
+```
+
+### Git Downcase
+
+Note: The global MDF in `~/.gitconfig` config is set to 'ignorecase'
+
+Need I say more.. force downcase of filenames in repo. It will `git mv` the files to the new locations.
+It will also set the current repo configuration:
+
+`git config core.ignorecase false`
+
+### Private Repos
+
+The wack-o-mole of fetching HTTPS git private repos.
+
+Example usage: 
+
+```shell
+export GITHUB_TOKEN=${GITHUB_TOKEN} 
+git private "${git_tag}" myorg private-repo "${filename}" "${archive:?}/${filename}"
+```
+
+Example usage: *less secure*
+
+```shell
+GITHUB_TOKEN=ABCDEFGHIJ0123456789 git private v0.0.1 myorg private-repo foo.tar.gz /var/tmp/foo.tar.gz
+```
+
+### Proxy Clear
+
+Clearing any proxy settings that may be attached to the current checked out repo.
+
+### Others
+
+md-toc-creator - Markdown Table of Contents Creations script.
 
 ## Secrets
 
@@ -87,81 +219,4 @@ For Linux, install Git and GCM Core, then configure Git to use GCM Core.
 
 3. Configure Git to use GCM Core. There are several backing stores that you may choose from, so see the GCM Core docs to complete your setup. For more information, see "[GCM Core Linux](https://aka.ms/gcmcore-linuxcredstores)."
 
-## Swap Users
 
-`git swap` 
-
-Example: Swap to user `shadowbq` in current checked out repo
-
-```shell
-$ git swap shadowbq
-shadowbq <shadowbq@gmail.com>
-```
-
-Example Options:
-
-```shell
-usage: ./git swap <username in ~/.gitusers>
-usage: ./git swap <username> <email>
-
-Switch Local and Save to Config
-usage: ./git swap [--new-user1 || -1] <username> <email>
-usage: ./git swap [--new-user2 || -2] <username> <email>
-usage: ./git swap [--new-user3 || -3] <username> <email>
-
-Switch Global
-usage: ./git swap [--global || -g] <username> <email>
-```
-
-### User Config
-
-The configuration supports three different users [user1,user2,user3]
-
-```ini
-~/.gitusers
-user1name="shadowbq"
-user1email="shadowbq@gmail.com"
-```
-
-## Who Am I
-
-`git whoami` - Show who you are based on global or local settings in a repo
-
-```shell
-$> git whoami
-shadowbq <shadowbq@gmail.com>
-```
-
-## Downcase
-
-Note: The global MDF in `~/.gitconfig` config is set to 'ignorecase'
-
-Need I say more.. force downcase of filenames in repo. It will `git mv` the files to the new locations.
-It will also set the current repo configuration:
-
-`git config core.ignorecase false`
-
-## Private Repos
-
-The wack-o-mole of fetching HTTPS git private repos.
-
-Example usage: 
-
-```shell
-export GITHUB_TOKEN=${GITHUB_TOKEN} 
-git private "${git_tag}" myorg private-repo "${filename}" "${archive:?}/${filename}"
-```
-
-Example usage: *less secure*
-
-```shell
-GITHUB_TOKEN=ABCDEFGHIJ0123456789 git private v0.0.1 myorg private-repo foo.tar.gz /var/tmp/foo.tar.gz
-```
-
-## Proxy Clear
-
-Clearing any proxy settings that may be attached to the current checked out repo.
-
-## Others
-
-md-toc-creator - Markdown Table of Contents Creations script.
