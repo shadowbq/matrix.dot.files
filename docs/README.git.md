@@ -64,7 +64,7 @@ Git plugins in the shell `$PATH` slip into the main binary completion similiar t
 
 ### Swap Users
 
-`git swap` 
+`git swap` - quickly change current git/github user in the repo
 
 Example: Swap to user `shadowbq` in current checked out repo
 
@@ -88,8 +88,6 @@ Switch Global
 usage: ./git swap [--global || -g] <username> <email>
 ```
 
-### User Config
-
 The configuration supports three different users [user1,user2,user3]
 
 ```ini
@@ -109,6 +107,8 @@ shadowbq <shadowbq@gmail.com>
 
 ### Git Downcase
 
+`git downcase` - Downcase all filenames in the current repo!
+
 Note: The global MDF in `~/.gitconfig` config is set to 'ignorecase'
 
 Need I say more.. force downcase of filenames in repo. It will `git mv` the files to the new locations.
@@ -118,13 +118,15 @@ It will also set the current repo configuration:
 
 ### Private Repos
 
+`git-private "${git_tag}" myorg private-repo "${filename}" "${archive:?}/${filename}"` - Download a Published Private Tag from Github using Curl HTTPs REST API.
+
 The wack-o-mole of fetching HTTPS git private repos.
 
 Example usage: 
 
 ```shell
-export GITHUB_TOKEN=${GITHUB_TOKEN} 
-git private "${git_tag}" myorg private-repo "${filename}" "${archive:?}/${filename}"
+ export GITHUB_TOKEN=ABCDEFGHIJ0123456789 
+git private v0.0.1 myorg private-repo foo.tar.gz /var/tmp/foo.tar.gz
 ```
 
 Example usage: *less secure*
@@ -135,11 +137,13 @@ GITHUB_TOKEN=ABCDEFGHIJ0123456789 git private v0.0.1 myorg private-repo foo.tar.
 
 ### Proxy Clear
 
+`git proxyclear` - Nuke proxy settings
+
 Clearing any proxy settings that may be attached to the current checked out repo.
 
 ### Others
 
-md-toc-creator - Markdown Table of Contents Creations script.
+`git md-toc-creator` - Markdown Table of Contents Creations script.
 
 ## Secrets
 
