@@ -13,6 +13,7 @@ get_email() {
   git config user.email || ([ -n "$EMAIL" ] && echo "$EMAIL") || echo "$(id -nu)@$(hostname -f)"
 }
 
+# getent is Unix command which helps you query one of the following administrative databases in Unix: passwd, group, hosts, services, protocols, or networks.
 get_name() {
   git config user.name || getent passwd $(id -un) | cut -d : -f 5 | cut -d , -f 1
 }
