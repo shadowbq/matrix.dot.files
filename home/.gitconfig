@@ -19,10 +19,15 @@
 	co = checkout
 	br = branch  
 	df = diff
+	aliases = "!f() { git config --global -l | grep alias | sort; }; f"
 	tree = log --graph --pretty='format:%C(yellow)%h%Creset %s %Cgreen(%an)%Creset %Cred%d%Creset'
 	staged = diff --cached
 	diff-staged = diff --cached
 	unstage = reset HEAD --
+	purge = clean -fd
+  	revertfile = checkout --
+  	forget = rm --cached --
+  	uncommit = reset --soft HEAD^
 	ignored = ls-files --others
 	oneline = log --oneline --decorate
 	last = log --oneline -1 HEAD
@@ -33,6 +38,7 @@
 	remove-tags = "!f() { git tag -l ${1} | xargs -I % echo \"git tag -d % && git push --delete origin %\" | sh; }; f"
 	squash-all = "!f(){ git reset $(git commit-tree HEAD^{tree} -m \"${1:-A New Hope.}\");};f"
 	markdown-toc = "git-md-toc-creator"
+	smartlog = "log --graph --pretty=format:'commit: %C(bold red)%h%Creset %C(red)<%H>%Creset %C(bold magenta)%d %Creset%ndate: %C(bold yellow)%cd %Creset%C(yellow)%cr%Creset%nauthor: %C(bold blue)%an%Creset %C(blue)<%ae>%Creset%n%C(cyan)%s%n%Creset'"
 [http]
 	sslVerify = false
 [filter "lfs"]
