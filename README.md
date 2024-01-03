@@ -52,18 +52,18 @@ homesick list
 
 **Where is the main configuration of `matrix.dot.files`?**
   
-`~/.matrix_config` is where you enable or disable matrix modules/extensions(ie: go, nodejs, docker, vim etc..).
+* `~/.matrix_config` is where you enable or disable matrix modules/extensions(ie: go, nodejs, docker, vim etc..).
 
 **Where do local Shell settings go?**
 
-Local files can be added to a singular system for individual enhancement.
+* Local files can be added to a singular system for individual enhancement.
 
 ```shell
 .bash_local
 .bash_aliases
 ```
 
-Secure files like these are ignored from the repo in the `.gitignore` by default.
+* Secure files like these are ignored from the repo in the `.gitignore` by default.
 
 ```shell
 .secrets
@@ -75,9 +75,8 @@ Secure files like these are ignored from the repo in the `.gitignore` by default
 
 **How do I `ignore` or `skip` files so I don't commit them to a git repo?**
 
-You can ignore files using the alias `skip` to avoid errors on **matrix local consistency** checks by adding this git nugget. 
-
-This will allow for customization of your files away from the upstream repo.
+* You can ignore files using the alias `skip` to avoid errors on **matrix local consistency** checks by adding this git nugget. 
+* This will allow for customization of your files away from the upstream repo.
 
 ```shell
 $> git skip home/.matrix_config
