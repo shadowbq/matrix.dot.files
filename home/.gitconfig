@@ -29,7 +29,7 @@
   	forget = rm --cached --
   	uncommit = reset --soft HEAD^
 	ignored = ls-files --others
-	oneline = log --oneline --decorate
+	oneline = log --graph --pretty=format:'%Cred%h%Creset -%Cblue%d%Creset %s %Cgreen(%cr)%Creset' --abbrev-commit --date=relative
 	last = log --oneline -1 HEAD
 	out = log --oneline origin/master..HEAD
 	wdiff = diff --color-words
