@@ -19,6 +19,7 @@
 	co = checkout
 	br = branch  
 	df = diff
+	home = "!f() { git remote -v | grep -o @.* ;}; f"
 	aliases = "!f() { git config --global -l | grep alias | sort; }; f"
 	tree = log --graph --pretty='format:%C(yellow)%h%Creset %s %Cgreen(%an)%Creset %Cred%d%Creset'
 	staged = diff --cached
