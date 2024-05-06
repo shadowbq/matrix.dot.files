@@ -26,9 +26,9 @@
 	diff-staged = diff --cached
 	unstage = reset HEAD --
 	purge = clean -fd
-  revertfile = checkout --
-  forget = rm --cached --
-  uncommit = reset --soft HEAD^
+	revertfile = checkout --
+	forget = rm --cached --
+	uncommit = reset --soft HEAD^
 	ignored = ls-files --others
 	oneline = log --graph --pretty=format:'%Cred%h%Creset -%Cblue%d%Creset %s %Cgreen(%cr)%Creset' --abbrev-commit --date=relative
 	last = log --oneline -1 HEAD
@@ -51,14 +51,14 @@
 	process = git-lfs filter-process
 	required = true
 [diff]
-  tool = sourcetree
+	tool = sourcetree
 [merge]
-  tool = sourcetree
+	tool = sourcetree
 [difftool "sourcetree"]
-  cmd = /Applications/p4merge.app/Contents/MacOS/p4merge \"$LOCAL\" \"$REMOTE\"
-  path = 
+	cmd = /Applications/p4merge.app/Contents/MacOS/p4merge \"$LOCAL\" \"$REMOTE\"
+	path = 
 [mergetool "sourcetree"]
-  cmd = /Applications/p4merge.app/Contents/MacOS/p4merge \"$BASE\" \"$LOCAL\" \"$REMOTE\" \"$MERGED\"
-  trustExitCode = true
+	cmd = /Applications/p4merge.app/Contents/MacOS/p4merge \"$BASE\" \"$LOCAL\" \"$REMOTE\" \"$MERGED\"
+	trustExitCode = true
 [hub]
-  protocol = https
+	protocol = https
