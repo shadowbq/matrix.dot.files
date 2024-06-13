@@ -23,3 +23,6 @@ alias seashore='open -a "Seashore.app"'
 alias typora='open -a "Typora.app"'
 alias meld='/Applications/Meld.app/Contents/MacOS/Meld'
 alias play-cli='mpg123'
+
+# Use Finder's Quick Look on a file (^C or space to close)
+alias ql='qlmanage -p 2>/dev/null'

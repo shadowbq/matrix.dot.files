@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+
+function echo_err() {
+  echo -ne "${RED}"
+  cat <<<"$@" 1>&2
+  echo -ne "${NORMAL}"
+}
+
+command -v gs >/dev/null 2>&1
+if [ $? -eq 1 ]; then
+  echo_err "[WARNING] GS (GhostScript) not found in path. "
+  exit 1
+fi
+
+if [ $# -ne 3 ]; then
+  echo "Not enough args: $>pdf-merge in1.pdf in2.pdf out.pdf"
+  exit 1
+fi
+
+gs -dBATCH -dNOPAUSE -q -sDEVICE=pdfwrite -dPDFSETTINGS=/prepress -sOutputFile="$3" "$1" "$2"

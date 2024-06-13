@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+
+function echo_err() {
+  echo -ne "${RED}"
+  cat <<<"$@" 1>&2
+  echo -ne "${NORMAL}"
+}
+
+command -v gs >/dev/null 2>&1
+if [ $? -eq 1 ]; then
+  echo_err "[WARNING] GS (GhostScript) not found in path. "
+  exit 1
+fi
+
+if [ $# -ne 2 ]; then
+  echo "Not enough args: $>pdf-shrink in.pdf out.pdf"
+  exit 1
+fi
+
+# alternative
+# gs -sDEVICE=pdfwrite -dCompatibilityLevel=1.4 -dPDFSETTINGS=/default -dNOPAUSE -dQUIET -dBATCH -dDetectDuplicateImages -dCompressFonts=true -r150 -sOutputFile=output.pdf input.pdf
+
+gs -sDEVICE=pdfwrite  -dCompatibilityLevel=1.4 -dPDFSETTINGS=/ebook -dNOPAUSE -dBATCH  -dQUIET -sOutputFile="$2" "$1"
