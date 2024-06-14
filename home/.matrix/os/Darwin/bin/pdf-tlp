@@ -1,0 +1,83 @@
+#!/bin/bash -e
+# /opt/scripts/pdf_watermark.sh
+# @author: Nestor Urquiza
+# @date: 20180323
+# @description: Creates a temporary pdfmark and merges it with the input pdf to produce a watermark with a custom text
+#
+
+function echo_err() {
+  echo -ne "${RED}"
+  cat <<<"$@" 1>&2
+  echo -ne "${NORMAL}"
+}
+
+USAGE="Usage: $(basename "$0") <pdf_from_file> <pdf_to_file> <tlp-color> <customer> [password]"
+ 
+if [ $# -lt "3" ] 
+then
+    echo "$USAGE"
+    exit 1 
+fi
+
+command -v gs >/dev/null 2>&1
+if [ $? -eq 1 ]; then
+  echo_err "[WARNING] GS (GhostScript) not found in path. "
+  exit 1
+fi
+
+pdf_from_file=$1
+pdf_to_file=$2
+tlp=$3
+customer=$4
+password=$5
+
+tmpfile=mark.ps
+
+if [ "$tlp" == "white" ]; then
+    watermark="TLP:WHITE // ${customer} // PUBLIC"
+    color="0.0 0.0 0.0"
+elif [ "$tlp" == "green" ]; then
+    watermark="TLP:GREEN // ${customer} // COMMUNITY ONLY"
+    color="0.0 1.0 0.0"
+elif [ "$tlp" == "amber" ]; then
+    watermark="TLP:AMBER // ${customer} // LIMITED DISTRIBUTION"
+    color="1.0 0.7 0.0"
+elif [ "$tlp" == "ambers" ]; then
+    watermark="TLP:AMBER+STRICT // ${customer} // DO NOT REDISTRIBUTE"
+    color="1.0 0.7 0.0"
+elif [ "$tlp" == "red" ]; then
+    watermark="TLP:RED // ${customer} // RESTRICTED"
+    color="1.0 0.0 0.0"
+else
+    echo "Invalid TLP color"
+    exit 1
+fi
+
+! read -d '' pdf_mark <<EOF
+<<
+   /EndPage
+   {
+     2 eq { pop false }
+     {
+         gsave      
+         /Helvetica findfont 
+         12 scalefont 
+         setfont
+         newpath
+         ${color} setrgbcolor 
+         160 770 moveto
+         (${watermark}) false  charpath
+         1 setlinewidth fill
+         160 10 moveto
+         (${watermark}) false  charpath
+         1 setlinewidth fill
+         grestore
+         true
+     } ifelse
+   } bind
+>> setpagedevice
+EOF
+
+echo  "$pdf_mark" > "$tmpfile" 
+pdf-mark "$pdf_from_file" "$pdf_to_file" "$tmpfile" "$password"
+rm "$tmpfile"
