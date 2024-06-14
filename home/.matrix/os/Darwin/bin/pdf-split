@@ -10,9 +10,11 @@ function echo_err() {
   echo -ne "${NORMAL}"
 }
 
+USAGE="Usage: $(basename "$0") input.pdf first_page last_page output.pdf"
+
 if [ $# -lt 4 ] 
 then
-        echo "Usage: $(basename "$0") input.pdf first_page last_page output.pdf"
+        echo "$USAGE"
         exit 1
 fi
 

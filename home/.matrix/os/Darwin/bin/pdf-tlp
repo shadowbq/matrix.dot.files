@@ -49,6 +49,8 @@ else
     exit 1
 fi
 
+font="Helvetica findfont 12 scalefont"
+
 ! read -d '' pdf_mark <<EOF
 <<
    /EndPage
@@ -56,8 +58,7 @@ fi
      2 eq { pop false }
      {
          gsave      
-         /Helvetica findfont 
-         12 scalefont 
+         /${font} 
          setfont
          newpath
          ${color} setrgbcolor 
