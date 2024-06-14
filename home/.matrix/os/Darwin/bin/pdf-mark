@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
-# /opt/scripts/pdfmark.sh
 # @author: Nestor Urquiza
-# @date: 20140501
+# @fork: shadowbq
 # @description: Accepts a pdfmark file. See http://partners.adobe.com/public/developer/en/acrobat/sdk/pdf/pdf_creation_apis_and_specs/pdfmarkReference.pdf
 #               Then it applies the metadata to the input pdf file generating the resulting output file
+# @usage: pdfmark.sh <pdf_from_file> <pdf_to_file> <pdfmark_file> [password]
 
 function echo_err() {
   echo -ne "${RED}"

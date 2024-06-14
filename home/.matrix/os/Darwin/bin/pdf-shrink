@@ -1,4 +1,8 @@
 #!/usr/bin/env bash
+# pdf-shrink.sh
+# @author: shadowbq
+# @desription: Shrink PDF file size using GhostScript ebook settings
+# @usage: pdf-shrink in.pdf out.pdf
 
 function echo_err() {
   echo -ne "${RED}"

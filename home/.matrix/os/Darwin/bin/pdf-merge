@@ -1,4 +1,8 @@
 #!/usr/bin/env bash
+# pdf-merge.sh
+# @author: shadowbq
+# @description: Merge two PDF files into one.
+# @usage: pdf-merge in1.pdf in2.pdf out.pdf
 
 function echo_err() {
   echo -ne "${RED}"
