@@ -1,4 +1,4 @@
-#!/bin/bash -e
+#!/usr/bin/env bash
 # /opt/scripts/pdf_watermark.sh
 # @author: Nestor Urquiza
 # @date: 20180323
@@ -78,6 +78,4 @@ fi
 >> setpagedevice
 EOF
 
-echo  "$pdf_mark" > "$tmpfile" 
-pdf-mark "$pdf_from_file" "$pdf_to_file" "$tmpfile" "$password"
-rm "$tmpfile"
+gs -dBATCH -dNOPAUSE -q -sDEVICE=pdfwrite -dALLOWPSTRANSPARENCY -dSAFER -dCompatibilityLevel="1.5" -dPDFSETTINGS="/printer" -sOutputFile="$pdf_to_file" -c "$pdf_mark" -f "$pdf_from_file"

@@ -1,4 +1,4 @@
-#!/bin/bash -e
+#!/usr/bin/env bash
 #
 # pdfsplit [input.pdf] [first_page] [last_page] [output.pdf] 
 #

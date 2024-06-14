@@ -1,4 +1,4 @@
-#!/bin/bash -e
+#!/usr/bin/env bash
 # /opt/scripts/pdf_watermark.sh
 # @author: Nestor Urquiza
 # @date: 20180323
