@@ -31,6 +31,21 @@ nvm install node
 nvm use node
 ```
 
+Confirm that you shell is now using the latest (in this case v22.3.0)
+
+```shell
+nvm ls
+       v16.13.2
+->      v22.3.0
+default -> node (-> v22.3.0)
+iojs -> N/A (default)
+unstable -> N/A (default)
+node -> stable (-> v22.3.0) (default)
+stable -> 22.3 (-> v22.3.0) (default)
+lts/* -> lts/iron (-> N/A)
+...
+```
+
 ## Is there a NPM virtual manager?
 
 Yes, and its preferred setup is `NVM` already enabled in the nodejs extension.
