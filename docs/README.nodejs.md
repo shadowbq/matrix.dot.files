@@ -44,6 +44,8 @@ node -> stable (-> v22.3.0) (default)
 stable -> 22.3 (-> v22.3.0) (default)
 lts/* -> lts/iron (-> N/A)
 ...
+node --version
+v22.3.0
 ```
 
 ## Is there a NPM virtual manager?
