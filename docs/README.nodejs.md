@@ -1,6 +1,6 @@
 # Node-js
 
-## How to install Node with NPM via NVM
+## How to install,update Node with NPM via NVM
 
 The `profile` setting disables NVM from modifying the .bashrc
 
@@ -11,11 +11,23 @@ PROFILE='/dev/null'
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.37.2/install.sh | bash
 ```
 
-Restart your shell.
+or 
 
 ```shell
-nvm install node
+(
+  cd "$NVM_DIR"
+  git fetch --tags origin
+  git checkout `git describe --abbrev=0 --tags --match "v[0-9]*" $(git rev-list --tags --max-count=1)`
+) && \. "$NVM_DIR/nvm.sh"
+```
+
+Exit and Restart your shell.
+
+Now list the latests versions of node, install the latest version of node, and ensure you use it.
+
+```shell
 nvm ls-remote
+nvm install node
 nvm use node
 ```
 
