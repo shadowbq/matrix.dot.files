@@ -38,8 +38,13 @@ curl https://pyenv.run | bash
 ## Observe installed versions
 
 ```shell
-pyenv versions
-* system (set by /Users/XXXX/.pyenv/version)
+$> pyenv versions
+system 
+* 3.9.0 (set by /Users/XXXX/.pyenv/version)
+$> python --version
+Python 3.9.0
+$> python3 --version
+Python 3.9.0
 ```
 
 ## Upgrade `Pyenv`
