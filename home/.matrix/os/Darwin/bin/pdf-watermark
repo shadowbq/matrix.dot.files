@@ -1,0 +1,58 @@
+#!/usr/bin/env bash
+# @author: Nestor Urquiza
+# @forked by: Shadowbq
+# @description: Creates a pdfmark and merges it with the input pdf to produce a watermark with a custom transparent text
+# @usage: ./watermark_pdf.sh <pdf_from_file> <pdf_to_file> <watermark>
+
+function echo_err() {
+  echo -ne "${RED}"
+  cat <<<"$@" 1>&2
+  echo -ne "${NORMAL}"
+}
+
+USAGE="Usage: $(basename "$0") <pdf_from_file> <pdf_to_file> <watermark>"
+ 
+if [ $# -lt "3" ] 
+then
+    echo "$USAGE"
+    exit 1 
+fi
+
+command -v gs >/dev/null 2>&1
+if [ $? -eq 1 ]; then
+  echo_err "[WARNING] GS (GhostScript) not found in path. "
+  exit 1
+fi
+
+pdf_from_file=$1
+pdf_to_file=$2
+watermark=$3
+
+
+
+font="/Helvetica-Bold 72 selectfont"
+color=".85 setgray"
+transparency=".6"
+angle=45
+
+
+! read -d '' pdf_mark <<EOF
+<<
+   /EndPage
+   {
+     2 eq { pop false }
+     {
+         gsave      
+         ${font}
+         ${color}
+         ${transparency} .setfillconstantalpha
+         220 270 moveto ${angle} rotate (${watermark}) show
+         grestore
+         true
+     } ifelse
+   } bind
+>> setpagedevice
+EOF
+
+gs -dBATCH -dNOPAUSE -q -sDEVICE=pdfwrite -dALLOWPSTRANSPARENCY -dSAFER -dCompatibilityLevel="1.5" -dPDFSETTINGS="/printer" -sOutputFile="$pdf_to_file" -c "$pdf_mark" -f "$pdf_from_file"
+

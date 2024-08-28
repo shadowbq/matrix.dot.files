@@ -35,9 +35,11 @@ cd "$HOME"
 # Final .matrix Commands to be executed
 # Defined commonly in .matrix/functions
 
-[ "$matrix_ssh_agent_manage" == true ] && ssh-agent-start
-[ "$matrix_ssh_load_keys" == true ] && load_ssh_keys
-[ "$matrix_ssh_enforce_keys_strict" == true ] && strict_ssh_set
+if [ $TERM_PROGRAM != "vscode" ]; then
+  [ "$matrix_ssh_agent_manage" == true ] && ssh-agent-start
+  [ "$matrix_ssh_load_keys" == true ] && load_ssh_keys
+  [ "$matrix_ssh_enforce_keys_strict" == true ] && strict_ssh_set
+fi 
 
 xpull_assign
 check_coreutil
@@ -46,7 +48,7 @@ check_mr
 
 ##########################
 # Check for .matrix consistency
-if [ "$matrix_consistency" == true ]; then
+if [ "$matrix_consistency" == true ] && [ $TERM_PROGRAM != "vscode" ]; then
   check_matrix_online
   check_matrix_local
 fi

@@ -73,5 +73,5 @@ fi
 ###########################
 # Last User specific environment and startup programs
 if [[ $TERM_PROGRAM != "vscode" ]]; then
-  ~/.matrix/bin/neofetch
+  ~/.matrix/bin/hyfetch
 fi

@@ -1,7 +1,0 @@
-#!/usr/bin/env bash
-if [ $# -ne 2 ]; then
-  echo "Not enough args: $>pdf-shrink-img in.pdf out.pdf"
-  exit 1
-fi
-
-/usr/local/bin/gs -sDEVICE=pdfwrite  -dCompatibilityLevel=1.4 -dPDFSETTINGS=/ebook -dNOPAUSE -dBATCH  -dQUIET -sOutputFile="$2" "$1"

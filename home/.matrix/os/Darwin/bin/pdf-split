@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+#
+# @Author: shadowbq
+# @Description: Split a PDF file into a new PDF file with specified pages.
+# @usage: pdf-split input.pdf 10 20 output.pdf
+
+function echo_err() {
+  echo -ne "${RED}"
+  cat <<<"$@" 1>&2
+  echo -ne "${NORMAL}"
+}
+
+USAGE="Usage: $(basename "$0") input.pdf first_page last_page output.pdf"
+
+if [ $# -lt 4 ] 
+then
+        echo "$USAGE"
+        exit 1
+fi
+
+command -v gs >/dev/null 2>&1
+if [ $? -eq 1 ]; then
+  echo_err "[WARNING] GS (GhostScript) not found in path. "
+  exit 1
+fi
+
+gs -dBATCH -dNOPAUSE -q -sDEVICE=pdfwrite -dALLOWPSTRANSPARENCY -dSAFER -dCompatibilityLevel="1.5" -dPDFSETTINGS="/printer"  -sOutputFile="$4" -dFirstPage=$2 -dLastPage=$3 -sDEVICE=pdfwrite "$1"

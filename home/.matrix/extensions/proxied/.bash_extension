@@ -23,6 +23,9 @@
 # specify it with either http.sslCAInfo or http.sslCAPath.
 # 
 ###########################
+# Alternative: bash-it / ZSH Ohmygosh Proxy plugin 
+# https://raw.githubusercontent.com/Bash-it/bash-it/master/plugins/available/proxy.plugin.bash
+###########################
 
 if [  -z "$globalurl_proxy" ]; then 
   echo_warn "Proxy Configuration loading.."
