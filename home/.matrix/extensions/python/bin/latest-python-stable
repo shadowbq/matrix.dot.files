@@ -1,0 +1,51 @@
+#!/usr/bin/env bash
+
+url='https://www.python.org/ftp/python/'
+
+# Function to check if sort supports -V flag
+check_sort_version_sort() {
+    if sort --help 2>&1 | grep -q '\-V, --version-sort'; then
+        return 0  # Sort supports -V flag
+    else
+        return 1  # Sort does not support -V flag
+    fi
+}
+
+# Function to check if gsed is available
+check_gsed() {
+    command -v gsed > /dev/null 2>&1
+}
+
+# Check if sort supports -V flag
+if check_sort_version_sort; then
+    sort_bin="$(command -v sort)"
+else
+    # Check if /usr/local/bin/gsort exists
+    if [ -x /usr/local/bin/gsort ]; then
+        sort_bin="/usr/local/bin/gsort"
+    else
+        echo "Error: Neither sort with -V flag support nor gsort found."
+        exit 1
+    fi
+fi
+
+# Determine sed command based on availability of gsed
+if check_gsed; then
+    sed_cmd="gsed"
+else
+    sed_cmd="sed"
+fi
+
+# Fetch Python versions, sort them, and download the latest release
+curl --silent "$url" |
+    $sed_cmd -n 's!.*href="\([0-9]\+\.[0-9]\+\.[0-9]\+\)/".*!\1!p' |
+    $sort_bin -rV |
+while read -r version; do
+    filename="Python-$version.tar.xz"
+    # Print URL, version, and filename
+    echo "URL: $url$version/$filename"
+    echo "Version: $version"
+    echo "Filename: $filename"
+    break
+done
+
