@@ -2,14 +2,13 @@ source 'https://rubygems.org'
 
 gem "pry"
 gem "pru"
-gem "homesick"
 gem "wirble"
 gem "gist"
 gem "rmate"
 
 local_gemfile = "~/.Gemfile.local"
 
-if File.exists?(local_gemfile)
+if File.exist?(local_gemfile)
   puts "Loading Gemfile.local ..." if $DEBUG # `ruby -d` or `bundle -v`
   instance_eval File.read(local_gemfile)
 end
