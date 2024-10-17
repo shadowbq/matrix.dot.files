@@ -5,7 +5,7 @@ Python can be a complete mess. Here are my 3.x best practices:
 * I believe in extending the os-distro system python as *little as possible*.
 * I believe in using a user-mode multi-version method for python similar but not identical for ruby and node.
 * Since 2020, I assume a py 3.x os-distro system python for preparing overlays exist. (ugh.. macOS)
-* I use `pyenv` to shim in py 3.x as global, and `virtualenvs` as dev project environments.
+* I use `pyenv` to shim in py 3.x as global, and `pyenv virtualenvs` as dev project environments.
 * I use `pipx` to install *matrix.dot.file* `bins` and inject libs for those bins that are python based like `powerline-status` into a `venv`.
 * I use `pip` to install global libraries that aren't bin based.
 * I use `poetry` to manage python developed sandbox projects.
