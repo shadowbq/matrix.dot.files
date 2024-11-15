@@ -49,11 +49,25 @@ Latest GOLANG: https://golang.org/doc/devel/release.html
 GVM_NO_UPDATE_PROFILE=true
 bash < <(curl -s -S -L https://raw.githubusercontent.com/moovweb/gvm/master/binscripts/gvm-installer)
 source $HOME/.gvm/scripts/gvm
+```
+Prior to go1.21
+
+```
 gvm install go1.4 -B
 gvm use go1.4
 export GOROOT_BOOTSTRAP=$GOROOT
 gvm install go1.19
 gvm use go1.19 --default
+```
+
+After go release 1.21
+
+```shell
+gvm install go1.20 -B
+gvm use go1.20
+export GOROOT_BOOTSTRAP=$GOROOT
+gvm install go1.23
+gvm use go1.23 --default
 ```
 
 
