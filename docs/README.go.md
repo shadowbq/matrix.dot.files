@@ -41,6 +41,7 @@ Yes, but you need setup up `gvm` into matrix.dot.files
 * https://github.com/moovweb/gvm
 
 Install Golang Bootstrap 1.4 then build 1.15 and set it default.
+Note: building 1.21 or later requires 1.20 as a substep.
 
 Latest GOLANG: https://golang.org/doc/devel/release.html
 
