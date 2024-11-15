@@ -27,6 +27,13 @@ The system needs these tools to compile GCC on systems
 
 Ask an example in debian/ubuntu: `sudo apt install gcc make bison`
 
+You might find this error if you are missing these:
+
+```shell
+$> source ~/.gvm/scripts/gvm
+ERROR: Missing requirements.
+```
+
 ## Is there a go virtual manager linked?
 
 Yes, but you need setup up `gvm` into matrix.dot.files
