@@ -49,7 +49,7 @@ gvm use go1.19 --default
 ```
 
 
-## 2024 Problems
+## 2024 Problems (MacOS AMD64)
 
 The binary switch was not working well on GVM for the AMD64 mac.
 
