@@ -99,7 +99,7 @@ Edit .profile_local
 
 Update `$GOROOT` and `$PATH`
 
-export PATH="/usr/local/opt/go@1.22/bin:$PATH"' >> /Users/smacgregor/.bash_profile
+`export PATH="/usr/local/opt/go@1.22/bin:$PATH"' >> ~/.bash_profile`
 
 ```bash
 export GOROOT="$(brew --prefix golang)/libexec"
@@ -108,7 +108,9 @@ export PATH="$PATH:$(brew --prefix golang)/bin"
 
 Results in `GOROOT='/usr/local/opt/go/libexec'`
 
-Start a new windows
+## Validate Go Installed Correctly
+
+Start a new windows and use `go env`
 
 ```shell
 $> go env
