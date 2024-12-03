@@ -27,6 +27,13 @@ The system needs these tools to compile GCC on systems
 
 Ask an example in debian/ubuntu: `sudo apt install gcc make bison`
 
+You might find this error if you are missing these:
+
+```shell
+$> source ~/.gvm/scripts/gvm
+ERROR: Missing requirements.
+```
+
 ## Is there a go virtual manager linked?
 
 Yes, but you need setup up `gvm` into matrix.dot.files
@@ -34,6 +41,7 @@ Yes, but you need setup up `gvm` into matrix.dot.files
 * https://github.com/moovweb/gvm
 
 Install Golang Bootstrap 1.4 then build 1.15 and set it default.
+Note: building 1.21 or later requires 1.20 as a substep.
 
 Latest GOLANG: https://golang.org/doc/devel/release.html
 
@@ -41,6 +49,10 @@ Latest GOLANG: https://golang.org/doc/devel/release.html
 GVM_NO_UPDATE_PROFILE=true
 bash < <(curl -s -S -L https://raw.githubusercontent.com/moovweb/gvm/master/binscripts/gvm-installer)
 source $HOME/.gvm/scripts/gvm
+```
+Prior to go1.21
+
+```
 gvm install go1.4 -B
 gvm use go1.4
 export GOROOT_BOOTSTRAP=$GOROOT
@@ -48,8 +60,18 @@ gvm install go1.19
 gvm use go1.19 --default
 ```
 
+After go release 1.21
 
-## 2024 Problems
+```shell
+gvm install go1.20 -B
+gvm use go1.20
+export GOROOT_BOOTSTRAP=$GOROOT
+gvm install go1.23
+gvm use go1.23 --default
+```
+
+
+## 2024 Problems (MacOS AMD64)
 
 The binary switch was not working well on GVM for the AMD64 mac.
 
@@ -77,7 +99,7 @@ Edit .profile_local
 
 Update `$GOROOT` and `$PATH`
 
-export PATH="/usr/local/opt/go@1.22/bin:$PATH"' >> /Users/smacgregor/.bash_profile
+`export PATH="/usr/local/opt/go@1.22/bin:$PATH"' >> ~/.bash_profile`
 
 ```bash
 export GOROOT="$(brew --prefix golang)/libexec"
@@ -86,7 +108,9 @@ export PATH="$PATH:$(brew --prefix golang)/bin"
 
 Results in `GOROOT='/usr/local/opt/go/libexec'`
 
-Start a new windows
+## Validate Go Installed Correctly
+
+Start a new windows and use `go env`
 
 ```shell
 $> go env

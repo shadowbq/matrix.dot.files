@@ -61,7 +61,12 @@ It also attempts to load bash_completions and print the current NVM version when
 
 ## How do I run local bins in the path?
 
-Dont confuse `pipx` with `npx` as they are not similar.
+* `NPM` is used for installing packages within the scope of a single project, while NPM global is used for installing packages system-wide, allowing you to access them from any project.
+  * `NPM Global` When you install a package globally with npm (using `npm install -g <package_name>`), it adds the package to your system's global directory, which is typically located at `/usr/local` or where Node.js is installed on your system. This allows you to use that package in any project on your computer without needing to re-install it locally.
+  * `Under NVM Context` When you install a package globally with NPM in an NVM environment, that package is installed into the global node_modules directory of that specific NVM environment. The global node_modules directory is determined by the path specified when you create or switch to a particular NVM environment.
+* `NPX` allows running commands directly from an npm package without having to install it first, providing a convenient way to use CLI tools and executables without cluttering your local or global installation.
+  
+Note: Dont confuse `pipx` with `npx` as they are not similar. Additionally, `npx-alias` still only provides current context executions unlike `pipx` which holds its own context.
 
 ### Don't get confused on with your PATH
 
