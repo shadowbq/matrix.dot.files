@@ -1,0 +1,49 @@
+#!/usr/bin/env bash
+
+# Get timestamp for 15 minutes ago in seconds
+fifteen_minutes_ago=$(date -d "15 minutes ago" +%s)
+
+# Auto-confirm flag
+auto_confirm=false
+if [ "$1" == "-y" ]; then
+    auto_confirm=true
+fi
+
+# Collect containers that stopped within the last 15 minutes
+stopped_containers=()
+
+# Loop through exited containers and check stop time
+for container_id in $(docker ps -a --filter "status=exited" --format "{{.ID}}"); do
+    stop_time=$(docker inspect -f '{{.State.FinishedAt}}' "$container_id" | xargs -I {} date -d {} +%s)
+    
+    if [ "$stop_time" -ge "$fifteen_minutes_ago" ]; then
+        name=$(docker inspect -f '{{.Name}}' "$container_id" | sed 's|/||')
+        stopped_containers+=("$container_id $name $(date -d "@$stop_time")")
+    fi
+done
+
+# Print the list of containers
+if [ "${#stopped_containers[@]}" -eq 0 ]; then
+    echo "No containers stopped within the last 15 minutes."
+    exit 0
+fi
+
+echo "The following containers will be started:"
+printf "%s\n" "${stopped_containers[@]}"
+
+# Ask for confirmation if not auto-confirmed
+if ! $auto_confirm; then
+    read -p "Do you want to start these containers? (y/n): " confirm
+    if [[ ! "$confirm" =~ ^[Yy]$ ]]; then
+        echo "Aborting."
+        exit 1
+    fi
+fi
+
+# Start containers
+for container_info in "${stopped_containers[@]}"; do
+    container_id=$(echo "$container_info" | awk '{print $1}')
+    docker start "$container_id"
+    echo "Restarted container: $container_id"
+done
+
