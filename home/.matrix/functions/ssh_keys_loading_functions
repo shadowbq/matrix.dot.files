@@ -4,6 +4,11 @@
 # shellcheck shell=bash
 #############################
 
+function unload_ssh_keys() {
+  ps auxww | grep -v 'grep' | grep 'ssh.agent'
+  ssh-add -D
+}
+
 function load_ssh_keys() {
   trap ctrl_c INT
 

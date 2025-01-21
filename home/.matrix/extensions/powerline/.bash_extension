@@ -28,9 +28,10 @@ function check_pip_powerline {
 }
 
 function check_pipx_powerline {
- # [ -d "$HOME/.local/pipx/venvs/powerline-status/lib/python3.8/site-packages/" ] && POWERLINE_REPO_ROOT=~/.local/pipx/venvs/powerline-status/lib/python3.8/site-packages/
  # [ -d "$HOME/.local/pipx/venvs/powerline-status/lib/python3.9/site-packages/" ] && POWERLINE_REPO_ROOT=~/.local/pipx/venvs/powerline-status/lib/python3.9/site-packages/
+  # macOS pyenv doesnt use 'share'
   [ -d "$HOME/.local/share/pipx/venvs/powerline-status/lib/python3.12/site-packages/" ] && POWERLINE_REPO_ROOT=~/.local/share/pipx/venvs/powerline-status/lib/python3.12/site-packages/
+  [ -d "$HOME/.local/pipx/venvs/powerline-status/lib/python3.12/site-packages/" ] && POWERLINE_REPO_ROOT=~/.local/pipx/venvs/powerline-status/lib/python3.12/site-packages/
   export POWERLINE_REPO_ROOT
 }
 
