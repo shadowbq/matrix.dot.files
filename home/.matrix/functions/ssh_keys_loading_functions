@@ -9,6 +9,11 @@ function unload_ssh_keys() {
   ssh-add -D
 }
 
+# alias
+function ssh-keys-unload() {
+  unload_ssh_keys
+}
+
 function load_ssh_keys() {
   trap ctrl_c INT
 

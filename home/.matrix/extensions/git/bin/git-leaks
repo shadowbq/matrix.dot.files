@@ -1,0 +1,10 @@
+#!/bin/sh
+
+# git-leaks
+# Author: Shadowbq
+# License: MIT
+
+set -e
+command -v gitleaks >/dev/null 2>&1 || { echo >&2 "gitleaks binary not found.  Aborting."; exit 1; }
+gitleaks dir -c ~/.gitleaks.toml --redact=0 -v
+
