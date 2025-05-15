@@ -73,5 +73,5 @@ fi
 ###########################
 # Last User specific environment and startup programs
 if [[ $TERM_PROGRAM != "vscode" ]]; then
-  ~/.matrix/bin/hyfetch
+  ~/.matrix/bin/hyfetch --package_managers off --disable Packages Network
 fi
