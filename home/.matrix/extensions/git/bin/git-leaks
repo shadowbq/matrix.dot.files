@@ -1,10 +1,37 @@
-#!/bin/sh
+#!/usr/bin/env bash
 
 # git-leaks
 # Author: Shadowbq
 # License: MIT
 
-set -e
 command -v gitleaks >/dev/null 2>&1 || { echo >&2 "gitleaks binary not found.  Aborting."; exit 1; }
-gitleaks dir -c ~/.gitleaks.toml --redact=0 -v
+
+leaks_config_path="$HOME/.gitleaks.toml"
+
+if [ ! -f "$leaks_config_path" ]; then
+  touch $leaks_config_path
+  echo "Creating new default gitleaks config: $leaks_config_path"
+  cat > "$leaks_config_path" << 'EOF'
+# Title for the gitleaks configuration file.
+title = "Custom Gitleaks configuration"
+[extend]
+# useDefault will extend the default gitleaks config built in to the binary
+# the latest version is located at:
+# https://github.com/gitleaks/gitleaks/blob/master/config/gitleaks.toml
+useDefault = true
+
+[[allowlists]]
+description = "Allowlist for specific rules"
+paths = ["__pycache__", "LICENSE"]
+regex = '''.*'''
+
+# [[rules]]
+# id = "username"
+# description = "My Username"
+# regex = '''(?i)(flast|username)'''
+# tags = ["key", "PII"]
+EOF
+fi
+
+gitleaks dir -c $leaks_config_path --redact=0 -v
 
