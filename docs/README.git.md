@@ -44,7 +44,7 @@
 
 #### Skip Helpers
 * `git skipped` - List files that are ignored but in the repo
-* `git skip` - Ignore a local file changes in the repo
+* `git skip` - Ignore a local file changes in the repo (like a local config file that is actually in the repo)
 * `git unskip` - Stop ignoring local file changes in the repo
 
 #### Generation
@@ -57,6 +57,10 @@
 * `git out` - Log Oneline origin/main..HEAD
 * `git tree` - Log with Tree output
 * `git smartlog` - hg smartlog clone - Reference: https://gist.github.com/jessesquires/d0f3fc99be8208394a450ce86443ce7d
+
+#### Security
+
+* `git leaks` - Scan for secrets recursively in the local directory, not the repo itself using gitleaks.
 
 ## Extensions
 
