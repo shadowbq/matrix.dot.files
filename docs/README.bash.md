@@ -999,6 +999,14 @@ if [[ " $file_content " =~ $regex ]] # please note the space before and after th
 fi
 ```
 
+### Search specific Depth using grep
+
+To search a specific directory depth for just files (type f) and print the files that match and their matches (-H) 
+
+```bash
+find . -maxdepth 1 -type f -exec grep 'foo' -H {} \;
+```
+
 ## Use of Sed and Awk
 
 **Note:** `sed` and `gsed` across the gplv2 (macos) and gplv3 (linux,homebrew) have many regex match differences, but if you are careful you can use them. 

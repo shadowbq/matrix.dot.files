@@ -9,6 +9,11 @@
 # Retrieve the tags from the docker hub registry for a specific image
 #
 
+# If we find Rancher Desktop Configs load the path
+if [ -d "$HOME/.rd/" ]; then
+  PATH=$PATH:"$HOME/.rd/bin"
+fi
+
 command -v docker >/dev/null 2>&1
 if [ $? -eq 1 ]; then
   echo_warn "[matrix.dot.extension.docker] Docker not found, but extension loaded."
