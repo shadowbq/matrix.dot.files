@@ -4,14 +4,30 @@
 # Author: Shadowbq
 # License: MIT
 
-command -v gitleaks >/dev/null 2>&1 || { echo >&2 "gitleaks binary not found.  Aborting."; exit 1; }
+command -v gitleaks >/dev/null 2>&1 || {
+  echo >&2 "gitleaks binary not found.  Aborting."
+  exit 1
+}
 
-leaks_config_path="$HOME/.gitleaks.toml"
+# check if .gitleaks.toml exists in the current directory
+if [ -f ".gitleaks.toml" ]; then
+  leaks_config_path=".gitleaks.toml"
+else
+  # check if .gitleaks.toml exists in the home directory
+  if [ -f "$HOME/.gitleaks.toml" ]; then
+    leaks_config_path="$HOME/.gitleaks.toml"
+  else
+    # set .gitleaks.toml file in the home directory
+    leaks_config_path="$HOME/.gitleaks.toml"
+  fi
+fi
+
+echo "Using gitleaks config: $leaks_config_path"
 
 if [ ! -f "$leaks_config_path" ]; then
   touch $leaks_config_path
   echo "Creating new default gitleaks config: $leaks_config_path"
-  cat > "$leaks_config_path" << 'EOF'
+  cat >"$leaks_config_path" <<'EOF'
 # Title for the gitleaks configuration file.
 title = "Custom Gitleaks configuration"
 [extend]
@@ -34,4 +50,3 @@ EOF
 fi
 
 gitleaks dir -c $leaks_config_path --redact=0 -v
-

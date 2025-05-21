@@ -1,0 +1,159 @@
+#!/usr/bin/env bash
+#
+# MIT License
+# Copyright (c) 2025 shadowbq
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included in all
+# copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+# SOFTWARE.
+#
+
+# Default values
+gitleaks_config_path=".gitleaks.toml"
+append_mode="false"
+simulate_mode="false"
+
+# Parse arguments
+while [[ $# -gt 0 ]]; do
+    case "$1" in
+    -h | --help)
+        cat <<EOF
+Usage: git-leaks-allowlist [-o output_file] [-a] [-h|--help]
+
+Options:
+  -o <output_file>   Specify output gitleaks config file (default: .gitleaks.toml)
+  -a, --append       Append mode, add to existing gitleaks config file
+  -s, --simulate     Simulate mode: create a temporary config file and print it
+  -h, --help         Show this help message and exit
+
+Description:
+  Reads .gitignore in the current directory and creates a gitleaks config file
+  that allows all files listed in .gitignore.
+EOF
+        exit 0
+        ;;
+    -o)
+        shift
+        if [[ -z "$1" ]]; then
+            echo >&2 "No output file specified.  Aborting."
+            exit 1
+        fi
+        gitleaks_config_path="$1"
+        ;;
+    -a)
+        append_mode="true"
+        ;;
+    -s | --simulate)
+        simulate_mode="true"
+        ;;
+    *)
+        echo >&2 "Unknown option: $1"
+        exit 1
+        ;;
+    esac
+    shift
+done
+
+# Check if gitleaks is installed
+command -v gitleaks >/dev/null 2>&1 || {
+    echo >&2 "gitleaks binary not found.  Aborting."
+    exit 1
+}
+
+# Check if .gitignore exists in the current directory
+if [ -f ".gitignore" ]; then
+    gitignore_path=".gitignore"
+else
+    echo >&2 ".gitignore file not found.  Aborting."
+    exit 1
+fi
+
+if [[ "$simulate_mode" == "true" ]]; then
+    tmpfile=$(mktemp /tmp/gitleaks-allowlist.XXXXXX.toml)
+    if [[ $append_mode == "true" ]]; then
+        # Copy the contents of the existing config file to the temporary file
+        if [[ -f "$gitleaks_config_path" ]]; then
+            cp "$gitleaks_config_path" "$tmpfile"
+        else
+            echo >&2 "No existing config file found to append to.  Aborting."
+            exit 1
+        fi
+    fi
+    gitleaks_config_path="$tmpfile"
+fi
+
+# Check if config already exists (skip this in append mode)
+if [[ "$append_mode" == "false" && -f "$gitleaks_config_path" ]]; then
+    echo >&2 "$gitleaks_config_path already exists.  Aborting."
+    exit 1
+fi
+
+# Not append mode, create a new .gitleaks.toml file
+if [[ "$append_mode" == "true" ]]; then
+    echo "Appending to gitleaks config: $gitleaks_config_path"
+else
+    echo "Creating new gitleaks config: $gitleaks_config_path"
+    cat >"$gitleaks_config_path" <<'EOF'
+# Title for the gitleaks configuration file.
+title = "Custom Gitleaks configuration"
+[extend]
+# useDefault will extend the default gitleaks config built in to the binary
+useDefault = true
+
+EOF
+fi
+
+# Read the .gitignore file and create allowlist entries
+while IFS= read -r line; do
+    # Skip empty lines and comments
+    if [[ -z "$line" || "$line" =~ ^# ]]; then
+        continue
+    fi
+    # Add allowlist entry to config file
+    {
+        # if the line contains a . or * then it is a file directive
+        if [[ "$line" == *"."* || "$line" == *"*"* ]]; then
+            echo "[[allowlists]]"
+            echo "description = \"Allowlist for $line\""
+            #if the line has a . then escape the dot with a \ slash
+            if [[ "$line" == *"."* ]]; then
+                line="${line//./\\.}"
+            fi
+
+            # if the line has a * then add a period prior to the star
+            if [[ "$line" == *"*"* ]]; then
+                line="${line//\*/.*}"
+            fi
+            echo "paths = ['''$line''']"
+
+        else
+            echo "[[allowlists]]"
+            echo "description = \"Allowlist for $line\""
+            echo "paths = [\"$line\"]"
+            echo "regex = '''.*'''"
+        fi
+        echo ""
+    } >>"$gitleaks_config_path"
+done <"$gitignore_path"
+
+if [[ "$simulate_mode" == "true" ]]; then
+    echo "Simulate mode: created config at $gitleaks_config_path"
+    cat "$gitleaks_config_path"
+    rm -f "$gitleaks_config_path"
+else
+    echo "Gitleaks config created: $gitleaks_config_path"
+fi
