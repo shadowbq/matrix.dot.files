@@ -16,7 +16,7 @@ Adds Cargo to your `PATH` so Rust commands work globally:
 
     `curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh`
 
-2.  **Add Cargo to your `PATH`** (if not already done):
+2.  (This .matrix extension does this for you..) **Add Cargo to your `PATH`** :
 
     `PATH="$HOME/.cargo/bin:$PATH"`
 
