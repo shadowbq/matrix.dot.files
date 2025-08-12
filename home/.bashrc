@@ -23,22 +23,11 @@ export EDITOR="vi"
 export PAGER=less
 export VISUAL="$editor"
 
-PATH="$HOME/.cargo/bin:$PATH"
+
 PATH=$PATH:"/usr/local/sbin"
 PATH=$PATH:"$HOME"/bin
 export PATH
 
-if command -v /opt/homebrew/bin/brew >/dev/null 2>&1; then
-  # ARM macOS homebrew
-  eval "$(/opt/homebrew/bin/brew shellenv)"
-elif command -v /usr/local/bin/brew >/dev/null 2>&1; then
-  eval "$(/usr/local/bin/brew shellenv)"
-else
-  echo "No homebrew detected"
-fi
 
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
-[[ -s "/home/shadowbq/.gvm/scripts/gvm" ]] && source "/home/shadowbq/.gvm/scripts/gvm"
+

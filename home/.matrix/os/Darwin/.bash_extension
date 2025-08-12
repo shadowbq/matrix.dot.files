@@ -13,7 +13,7 @@ fi
 export BASH_SILENCE_DEPRECATION_WARNING=1
 
 function osx {
-  [[ `uname -s` == 'Darwin' ]]
+  [[ $(uname -s) == 'Darwin' ]]
 }
 
 # Prompt
@@ -34,9 +34,47 @@ xterm*|rxvt*)
   ;;
 esac
 
+
+ssh-add -l >/dev/null 2>&1
+if [ $? -eq 1 ]; then
+  if [ "$(command -v keychain)" ]; then 
+    eval `keychain --inherit any --agents ssh --eval id_dsa` || exit 1
+  fi
+fi
+
+
+###########################
+# Check for TextMate installation, if installed use mate as core editor
+if [ -f "/usr/local/bin/mate" ]; then
+  export EDITOR="/usr/local/bin/mate -w" 
+fi
+
+##########################
+# Deal with Java
+# export JAVA_HOME=`/usr/libexec/java_home -v 1.7`
+
+
+
+#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#
+# HomeBrew
+#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#
+
 if [ -n "$matrix_skip_checks" ]; then 
   command -v brew >/dev/null 2>&1 || { echo >&2 "You should think about installing homebrew."; }
 fi 
+
+# Homebrew shellenvs
+
+if command -v /opt/homebrew/bin/brew >/dev/null 2>&1; then
+  # ARM macOS homebrew
+  eval "$(/opt/homebrew/bin/brew shellenv)"
+elif command -v /usr/local/bin/brew >/dev/null 2>&1; then
+  eval "$(/usr/local/bin/brew shellenv)"
+else
+  echo "No homebrew detected"
+fi
+
+# Homebrew CoreUtils Recommendations
 
 command -v brew >/dev/null 2>&1 
 if [ $? -eq 0 ]; then
@@ -59,33 +97,14 @@ if [ $? -eq 0 ]; then
   fi
 fi
 
-
-
-ssh-add -l >/dev/null 2>&1
-if [ $? -eq 1 ]; then
-  if [ "$(command -v keychain)" ]; then 
-    eval `keychain --inherit any --agents ssh --eval id_dsa` || exit 1
-  fi
-fi
-
-# MacPorts Installer addition on 2011-11-15_at_07:56:01: adding an appropriate PATH variable for use with MacPorts.
-export PATH=/opt/local/bin:/opt/local/sbin:$PATH
-# Finished adapting your PATH environment variable for use with MacPorts.
-
-###########################
-# Check for TextMate installation, if installed use mate as core editor
-if [ -f "/usr/local/bin/mate" ]; then
-       export EDITOR="/usr/local/bin/mate -w" 
-fi
-
-##########################
-# Deal with Java
-# export JAVA_HOME=`/usr/libexec/java_home -v 1.7`
-
-##########################
 # Bash Completion HomeBrew
 # Hack to force it 
+
 export BASH_COMPLETION_COMPAT_DIR="/usr/local/etc/bash_completion.d"
 if [ -f /usr/local/Cellar/bash-completion/1.3_3/etc/bash_completion ]; then
 . /usr/local/Cellar/bash-completion/1.3_3/etc/bash_completion
 fi 
+
+# MacPorts Installer addition on 2011-11-15_at_07:56:01: adding an appropriate PATH variable for use with MacPorts.
+export PATH=/opt/local/bin:/opt/local/sbin:$PATH
+# Finished adapting your PATH environment variable for use with MacPorts.

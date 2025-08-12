@@ -1,0 +1,10 @@
+###########################
+# RUST extension
+# See docs/README.rsut.md
+# - MDF extension
+###########################
+# shellcheck shell=bash
+#
+###########################
+
+PATH="$HOME/.cargo/bin:$PATH"

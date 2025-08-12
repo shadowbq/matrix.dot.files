@@ -73,5 +73,10 @@ fi
 ###########################
 # Last User specific environment and startup programs
 if [[ $TERM_PROGRAM != "vscode" ]]; then
-  ~/.matrix/bin/hyfetch --package_managers off --disable Packages Network
+  ~/.matrix/bin/hyfetch
 fi
+
+# Added by LM Studio CLI (lms)
+export PATH="$PATH:/home/shadowbq/.lmstudio/bin"
+# End of LM Studio CLI section
+

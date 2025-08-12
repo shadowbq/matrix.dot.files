@@ -4,16 +4,6 @@
 # shellcheck shell=bash
 #############################
 
-function unload_ssh_keys() {
-  ps auxww | grep -v 'grep' | grep 'ssh.agent'
-  ssh-add -D
-}
-
-# alias
-function ssh-keys-unload() {
-  unload_ssh_keys
-}
-
 function load_ssh_keys() {
   trap ctrl_c INT
 
@@ -36,10 +26,6 @@ function load_ssh_keys() {
   else
     echo_err "No SSH Key(s) Imported."
   fi
-}
-
-function ssh-keys-load() {
-  load_ssh_keys
 }
 
 # SSH Strict Modes correction script
