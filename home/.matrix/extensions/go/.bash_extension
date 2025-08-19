@@ -9,4 +9,4 @@
 export GOPATH=$HOME/.gopath
 export PATH=$GOPATH:$GOPATH/bin:$PATH
 
-[[ -s "/home/shadowbq/.gvm/scripts/gvm" ]] && source "/home/shadowbq/.gvm/scripts/gvm"
+[[ -s "$HOME/.gvm/scripts/gvm" ]] && source "$HOME/.gvm/scripts/gvm"
