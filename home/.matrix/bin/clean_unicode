@@ -1,0 +1,42 @@
+#!/usr/bin/env bash
+# clean_unicode.sh
+# Usage: ./clean_unicode.sh input.txt > output.txt
+
+set -euo pipefail
+
+# --- Pick GNU sed ---
+if sed --version 2>/dev/null | grep -qi "gnu"; then
+    SED=sed
+elif command -v gsed >/dev/null 2>&1 && gsed --version | grep -qi "gnu"; then
+    SED=gsed
+else
+    echo "ERROR: GNU sed required (install with 'brew install gnu-sed' on macOS)" >&2
+    exit 1
+fi
+
+# --- Check for iconv ---
+command -v iconv >/dev/null 2>&1 || {
+    echo "ERROR: iconv is not installed" >&2
+    exit 1
+}
+
+# --- Transformations ---
+"$SED" \
+    -e "s/\xE2\x80\x98/'/g" \
+    -e "s/\xE2\x80\x99/'/g" \
+    -e "s/\xE2\x80\x9A/,/g" \
+    -e "s/\xE2\x80\x9B/'/g" \
+    -e "s/\xE2\x80\x9C/\"/g" \
+    -e "s/\xE2\x80\x9D/\"/g" \
+    -e "s/\xE2\x80\x9E/\"/g" \
+    -e "s/\xE2\x80\x9F/\"/g" \
+    -e "s/\xE2\x80\x93/-/g" \
+    -e "s/\xE2\x80\x94/-/g" \
+    -e "s/\xE2\x80\x95/-/g" \
+    -e "s/\xE2\x80\xA6/.../g" \
+    -e "s/\xE2\x80\xA2/*/g" \
+    -e "s/\xC2\xB7/-/g" \
+    -e "s/\xC2\xA0/ /g" \
+    -e "s/\xE2\x80\xAF/ /g" \
+    -e "s/\xCC\xA9//g" \
+    "$1" | iconv -f utf-8 -t ascii//TRANSLIT
