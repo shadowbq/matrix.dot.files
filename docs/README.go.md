@@ -8,6 +8,27 @@ golang is a fast moving language that release an update every six months on aver
 
 You need to bootstrap golang 1.4 with a binary or c++ developer tool set as all other golangs require golang to compile golang.
 
+## GVM ERROR NOTE
+
+gvm in 2025 has an error on overriding cd() with a function. 
+
+`.gvm/scripts/env/cd` - The eval is parsing spaces correctly. The below is how you can patch it. 
+
+```
+ 19 if __gvm_is_function cd; then
+ 20     # echo "CD is a function"
+ 21     eval "$(echo "__gvm_oldcd()"; declare -f cd | sed '1 s/{/\'$'\n''{/' | tail -n +2)"
+ 22 elif [[ "$(builtin type cd)" == "cd is a shell builtin" ]]; then
+ 23     # echo "CD is builtin"
+ 24     #eval "$(echo "__gvm_oldcd() { builtin cd \"\$@\"; return \$?; }")"
+ 25     eval "$(echo "__gvm_oldcd() { if [[ -z \"\$*\" ]]; then builtin cd; return \$?; else builtin cd \"\$*\"; return \$?; fi }"    )"
+ 26 fi
+```
+
+The PR in Github is here.. 
+* https://github.com/moovweb/gvm/issues/457
+* https://github.com/moovweb/gvm/pull/482
+
 ## What does it do?
 
 It exports your gopath, and adds standard home go to your path.
