@@ -69,8 +69,8 @@ Note that you must source how powerline is actually installed in `.tmux.conf`. T
 It is done already for you if you followed the basic install directions.
 
 ```shell
-# Pyenv 3.8 with PIPX Install of powerline-status
-source "~/.local/pipx/venvs/powerline-status/lib/python3.8/site-packages/powerline/bindings/tmux/powerline.conf"
+# Pyenv with PIPX Install of powerline-status
+source "$POWERLINE_REPO_ROOT/powerline/bindings/tmux/powerline.conf"
 ```
 
 ## TMUX Shared Session
