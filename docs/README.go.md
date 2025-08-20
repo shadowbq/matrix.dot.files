@@ -8,9 +8,21 @@ golang is a fast moving language that release an update every six months on aver
 
 You need to bootstrap golang 1.4 with a binary or c++ developer tool set as all other golangs require golang to compile golang.
 
-## GVM ERROR NOTE
+## GVM NOTE
 
-gvm in 2025 has an error on overriding cd() with a function. 
+GVM is heavy used, but the core maintainer is lacking. 
+
+Potentially use a fork: 
+
+https://github.com/adonespitogo/gvm
+
+### Example Justificaton
+
+Forks fix..
+
+* https://github.com/adonespitogo/gvm/commit/be0e53a448a4cd40b75686ef5894eb41f493dc1b
+
+gvm mainline in 2025 has an error on overriding cd() with a function that is 2 years old... 
 
 `.gvm/scripts/env/cd` - The eval is parsing spaces correctly. The below is how you can patch it. 
 
