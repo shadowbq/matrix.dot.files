@@ -25,10 +25,28 @@ fi
 # Client Version: v1.32.0
 # Kustomize Version: v5.5.0
 
+# Load dynamic Bash Completion for kubectl if bash_completion is enabled
+if type -t _get_comp_words_by_ref &>/dev/null; then
+  source <(kubectl completion bash)
+fi
+
 function powerline-kubernetes-toggle() {
   if [[ $RENDER_POWERLINE_KUBERNETES = "NO" ]]; then
     export RENDER_POWERLINE_KUBERNETES=YES
   else
     export RENDER_POWERLINE_KUBERNETES=NO
   fi
+}
+
+
+# official krew install script for bash
+# krew.sigs.k8s.io
+function install-krew() { 
+  set -x; cd "$(mktemp -d)" &&
+  OS="$(uname | tr '[:upper:]' '[:lower:]')" &&
+  ARCH="$(uname -m | sed -e 's/x86_64/amd64/' -e 's/\(arm\)\(64\)\?.*/\1\2/' -e 's/aarch64$/arm64/')" &&
+  KREW="krew-${OS}_${ARCH}" &&
+  curl -fsSLO "https://github.com/kubernetes-sigs/krew/releases/latest/download/${KREW}.tar.gz" &&
+  tar zxvf "${KREW}.tar.gz" &&
+  ./"${KREW}" install krew
 }
