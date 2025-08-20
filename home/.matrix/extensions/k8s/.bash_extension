@@ -26,7 +26,7 @@ fi
 # Kustomize Version: v5.5.0
 
 # Load dynamic Bash Completion for kubectl if bash_completion is enabled
-if type -t _get_comp_words_by_ref &>/dev/null; then
+if [ "$(type -t complete)" == "builtin" ]; then
   source <(kubectl completion bash)
 fi
 

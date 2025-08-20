@@ -18,6 +18,7 @@ cd "$HOME"
 ###########################
 # Matrix Plugins configs
 [ "$matrix_ext_history" == true ] && matrix_loader "extensions/history"
+[ "$matrix_ext_completion" == true ] && matrix_loader "extensions/completions"
 
 [ "$matrix_ext_git" == true ] && matrix_loader "extensions/git"
 [ "$matrix_ext_python" == true ] && matrix_loader "extensions/python"
@@ -25,7 +26,6 @@ cd "$HOME"
 [ "$matrix_ext_nodejs" == true ] && matrix_loader "extensions/nodejs"
 [ "$matrix_ext_rust" == true ] && matrix_loader "extensions/rust"
 [ "$matrix_ext_go" == true ] && matrix_loader "extensions/go"
-[ "$matrix_ext_completion" == true ] && matrix_loader "extensions/completions"
 [ "$matrix_ext_powerline" == true ] && matrix_loader "extensions/powerline"
 [ "$matrix_ext_gcc" == true ] && matrix_loader "extensions/gcc"
 [ "$matrix_ext_docker" == true ] && matrix_loader "extensions/docker"
