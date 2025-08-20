@@ -29,6 +29,7 @@ cd "$HOME"
 [ "$matrix_ext_powerline" == true ] && matrix_loader "extensions/powerline"
 [ "$matrix_ext_gcc" == true ] && matrix_loader "extensions/gcc"
 [ "$matrix_ext_docker" == true ] && matrix_loader "extensions/docker"
+[ "$matrix_ext_k8s" == true ] && matrix_loader "extensions/k8s"
 [ "$matrix_ext_archives" == true ] && matrix_loader "extensions/archives"
 [ "$matrix_ext_vim" == true ] && matrix_loader "extensions/vim" && _matrix_vim-init
 

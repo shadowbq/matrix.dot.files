@@ -127,7 +127,8 @@ Read the Docs, as they are very helpful in getting unstuck, or installed correct
 [README - Proxies](docs/README.proxied.md) - Using Proxies  
 [README - Secrets](docs/README.secrets.md) - Secure shell usage of Secrets  
 [README - Sandboxes](docs/README.sandbox.md) - Application Sandboxing  
-[README - Containers](docs/README.containers.md) - Docker and K8s  
+[README - Docker](docs/README.containers.md) - Docker and image tags  
+[README - K8s](docs/README.containers.md) - K8s and kubectl customizations 
 [README - Security](docs/README.security.md) - General Security Information  
 
 ### Additional 3rd Tools Manuals  

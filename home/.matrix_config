@@ -15,6 +15,7 @@ export matrix_ext_rust=true
 export matrix_ext_completion=true
 export matrix_ext_powerline=true
 export matrix_ext_docker=true
+export matrix_ext_k8s=true
 export matrix_ext_gcc=false
 export matrix_ext_archives=true
 export matrix_ext_vim=true

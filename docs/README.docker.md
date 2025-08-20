@@ -1,9 +1,8 @@
-# Containers
+# Docker
 
 Information about the use of:
 
 * Docker Images
-* K3s/K8s - `kubectl`
 * Linux Application Packers
 
 ## Extension
@@ -15,13 +14,8 @@ The extension holds a few docker and k8s helper applications and functions
 * docker-remove-dangling-images - Docker rmi dangling=true
 * docker-matrix-stopall - Stop all Service Images
   
-### K8s
-  
-* kubectl-config_swap - kubectl configuraiton switcher
-  
 ### Matrix specific
   
-* powerline-kubernetes-toggle - Enable/Disable Kubernetes namespace in SHELL Prompt
 * Protainer.yaml - Docker Compose for init starting and stoping Portainer.io
 * docker-matrix-portainer-start - Start Portainer.io
 

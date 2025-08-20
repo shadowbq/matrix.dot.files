@@ -1,0 +1,34 @@
+###########################
+# K8s / kubectl
+# - MDF extension
+###########################
+# shellcheck shell=bash
+#
+###########################
+
+if [[ -d "$HOME/.rd/bin" ]]; then
+  # echo "Rancher Desktop found."
+  export PATH=$PATH:"$HOME/.rd/bin"
+fi
+
+command -v kubectl >/dev/null 2>&1
+if [ $? -eq 1 ]; then
+  echo_warn "[matrix.dot.extension.k8s] kubectl not found, but k8s extension loaded."
+fi
+
+if [[ -d "${KREW_ROOT:-$HOME/.krew}/bin" ]]; then
+  # echo "Krew found. kubectl krew, the plugin manager found."
+  export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
+fi
+
+# kubectl version --client
+# Client Version: v1.32.0
+# Kustomize Version: v5.5.0
+
+function powerline-kubernetes-toggle() {
+  if [[ $RENDER_POWERLINE_KUBERNETES = "NO" ]]; then
+    export RENDER_POWERLINE_KUBERNETES=YES
+  else
+    export RENDER_POWERLINE_KUBERNETES=NO
+  fi
+}

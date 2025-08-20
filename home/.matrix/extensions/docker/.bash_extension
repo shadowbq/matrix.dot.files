@@ -112,10 +112,3 @@ function dlog() {
   docker logs $(dgrep "$1")
 }
 
-function powerline-kubernetes-toggle() {
-  if [[ $RENDER_POWERLINE_KUBERNETES = "NO" ]]; then
-    export RENDER_POWERLINE_KUBERNETES=YES
-  else
-    export RENDER_POWERLINE_KUBERNETES=NO
-  fi
-}
