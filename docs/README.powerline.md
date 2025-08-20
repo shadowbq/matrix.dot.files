@@ -91,14 +91,15 @@ pip install powerline-inject
 
 `~/.tmux.conf` by .matrix needs to be edited to point at where powerline-status really is!
 
+Note that you must source how powerline is actually installed in `.tmux.conf`. This may include changing the directive if you dont use PIPX. 
+
+It is done already for you if you followed the basic install directions.
+
 ```shell
-# Legacy Python 2.7 with powerline-status
-# source "/usr/local/lib/python2.7/dist-packages/powerline/bindings/tmux/powerline.conf"
-# System Python 3.8 with powerline-status
-# source "/usr/local/lib/python3.8/site-packages/powerline/bindings/tmux/powerline.conf"
-# Pyenv 3.8 with PIPX Install of powerline-status
-source "~/.local/pipx/venvs/powerline-status/lib/python3.8/site-packages/powerline/bindings/tmux/powerline.conf"
+# Pyenv with PIPX Install of powerline-status
+source "$POWERLINE_REPO_ROOT/powerline/bindings/tmux/powerline.conf"
 ```
+
 
 ## Theme & ColorScheme
 
