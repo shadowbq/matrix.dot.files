@@ -112,6 +112,7 @@ Read the Docs, as they are very helpful in getting unstuck, or installed correct
 [README - Node.js](docs/README.nodejs.md)  
 [README - Python](docs/README.python.md)  
 [README - Ruby](docs/README.ruby.md)  
+[README - Rust](docs/README.rust.md)
 
 ### Best Practices  
 
@@ -128,6 +129,7 @@ Read the Docs, as they are very helpful in getting unstuck, or installed correct
 [README - Sandboxes](docs/README.sandbox.md) - Application Sandboxing  
 [README - Containers](docs/README.containers.md) - Docker and K8s  
 [README - Security](docs/README.security.md) - General Security Information  
+
 ### Additional 3rd Tools Manuals  
 
 [README - ACK](docs/tools/README.ack.md)  
