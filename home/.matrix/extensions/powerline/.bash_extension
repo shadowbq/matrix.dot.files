@@ -28,10 +28,15 @@ function check_pip_powerline {
 }
 
 function check_pipx_powerline {
- # [ -d "$HOME/.local/pipx/venvs/powerline-status/lib/python3.8/site-packages/" ] && POWERLINE_REPO_ROOT=~/.local/pipx/venvs/powerline-status/lib/python3.8/site-packages/
- # [ -d "$HOME/.local/pipx/venvs/powerline-status/lib/python3.9/site-packages/" ] && POWERLINE_REPO_ROOT=~/.local/pipx/venvs/powerline-status/lib/python3.9/site-packages/
-  [ -d "$HOME/.local/share/pipx/venvs/powerline-status/lib/python3.12/site-packages/" ] && POWERLINE_REPO_ROOT=~/.local/share/pipx/venvs/powerline-status/lib/python3.12/site-packages/
-  export POWERLINE_REPO_ROOT
+    POWERLINE_REPO_ROOT=$(find "$HOME/.local" -path "*/pipx/venvs/powerline-status/lib/python3.*/site-packages" 2>/dev/null | sort -V | tail -1)
+    
+    if [ -n "$POWERLINE_REPO_ROOT" ]; then
+        # echo "Found powerline at: $POWERLINE_REPO_ROOT"
+        export POWERLINE_REPO_ROOT
+    else
+        echo "Warning: No powerline-status installation found in pipx venvs"
+        unset POWERLINE_REPO_ROOT
+    fi
 }
 
 function check_pip_powerline_addon {
@@ -49,10 +54,14 @@ function check_powerline {
     command -v powerline-daemon >/dev/null 2>&1
     if [ $? -eq 0 ]; then
       check_powerline_requirements
-      powerline-daemon -q
-      POWERLINE_BASH_CONTINUATION=1
-      POWERLINE_BASH_SELECT=1
-      . $POWERLINE_REPO_ROOT/powerline/bindings/bash/powerline.sh
+      if [ -n "$POWERLINE_REPO_ROOT" ]; then
+        powerline-daemon -q
+        POWERLINE_BASH_CONTINUATION=1
+        POWERLINE_BASH_SELECT=1
+        . $POWERLINE_REPO_ROOT/powerline/bindings/bash/powerline.sh
+      else
+        { echo_err "[ERROR] Powerline daemon is found, but powerline path is not found."; }
+      fi
     else
       { echo_err "[ERROR] Powerline is not found, but enabled."; }
     fi
