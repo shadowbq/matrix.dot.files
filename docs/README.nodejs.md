@@ -22,7 +22,7 @@ PROFILE='/dev/null' source "$NVM_DIR/nvm.sh"
 
 Exit and Restart your shell.
 
-Now list the latests versions of node, install the latest version of node, and ensure you use it.
+Now you can list the latests versions of node, install the latest version of node `nvm install node`, and ensure you `nvm use node` it.
 
 ```shell
 nvm ls-remote
@@ -34,17 +34,28 @@ Confirm that you shell is now using the latest (in this case v22.3.0)
 
 ```shell
 nvm ls
-       v16.13.2
-->      v22.3.0
-default -> node (-> v22.3.0)
+->      v24.9.0
+default -> node (-> v24.9.0)
 iojs -> N/A (default)
 unstable -> N/A (default)
-node -> stable (-> v22.3.0) (default)
-stable -> 22.3 (-> v22.3.0) (default)
-lts/* -> lts/iron (-> N/A)
+node -> stable (-> v24.9.0) (default)
+stable -> 24.9 (-> v24.9.0) (default)
+lts/* -> lts/jod (-> N/A)
+lts/argon -> v4.9.1 (-> N/A)
+lts/boron -> v6.17.1 (-> N/A)
+lts/carbon -> v8.17.0 (-> N/A)
+lts/dubnium -> v10.24.1 (-> N/A)
+lts/erbium -> v12.22.12 (-> N/A)
+lts/fermium -> v14.21.3 (-> N/A)
+lts/gallium -> v16.20.2 (-> N/A)
+lts/hydrogen -> v18.20.8 (-> N/A)
+lts/iron -> v20.19.5 (-> N/A)
+lts/jod -> v22.20.0 (-> N/A)
 ...
 node --version
-v22.3.0
+v24.9.0
+npm --version
+11.6.0
 ```
 
 ## Is there a NPM virtual manager?
