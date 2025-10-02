@@ -2,23 +2,22 @@
 
 ## How to install,update Node with NPM via NVM
 
-The `profile` setting disables NVM from modifying the .bashrc
+NVM needs to be installed on your host, follow the instructions to integrate into the matrix.dot.files environment
 
-For the latest installer version (https://github.com/nvm-sh/nvm/releases)
+**Note**: For the latest installer version [nvm-releases](https://github.com/nvm-sh/nvm/releases)
+
+The `PROFILE='/dev/null'` setting disables NVM from modifying your `.bashrc` in the matrix.
 
 ```shell
 PROFILE='/dev/null'
-curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.37.2/install.sh | bash
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh | bash
 ```
 
-or 
+or use the dynamic method identifying the latest release
 
 ```shell
-(
-  cd "$NVM_DIR"
-  git fetch --tags origin
-  git checkout `git describe --abbrev=0 --tags --match "v[0-9]*" $(git rev-list --tags --max-count=1)`
-) && \. "$NVM_DIR/nvm.sh"
+(cd "$NVM_DIR" && git fetch --tags origin && git checkout `git describe --abbrev=0 --tags --match "v[0-9]*" $(git rev-list --tags --max-count=1)`) &&
+PROFILE='/dev/null' source "$NVM_DIR/nvm.sh"
 ```
 
 Exit and Restart your shell.
