@@ -1,0 +1,131 @@
+#!/usr/bin/env bash
+# netwatch-kill.sh
+# Monitor a network target or local binding, kill a process if unreachable/unbound.
+
+set -euo pipefail
+
+TARGET=""
+BINDING=""
+PROCESS=""
+PIDFILE=""
+PID=""
+INTERVAL=5
+TIMEOUT=3
+
+usage() {
+  cat <<EOF
+Usage:
+  $0 (--target <host> | --binding <host:port>) [--pid <pid> | --process <name> | --pidfile <file>] [--interval N] [--timeout N]
+
+Examples:
+  $0 --target 8.8.8.8 --process myapp
+  $0 --binding 127.0.0.1:8080 --pid 12345
+  $0 --binding 127.0.0.1:8080 --pidfile /tmp/myproc.pid
+
+Description:
+  Monitors either:
+    --target   : ping a remote host/IP to ensure it's reachable
+    --binding  : verify that a local TCP socket is bound/listening
+
+  If the check fails, the specified process is terminated.
+EOF
+  exit 1
+}
+
+# Parse CLI args
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    --target) TARGET="$2"; shift 2 ;;
+    --binding) BINDING="$2"; shift 2 ;;
+    --pid) PID="$2"; shift 2 ;;
+    --process) PROCESS="$2"; shift 2 ;;
+    --pidfile) PIDFILE="$2"; shift 2 ;;
+    --interval) INTERVAL="$2"; shift 2 ;;
+    --timeout) TIMEOUT="$2"; shift 2 ;;
+    -h|--help) usage ;;
+    *) echo "Unknown argument: $1"; usage ;;
+  esac
+done
+
+# Validate exclusivity
+if [[ -n "$TARGET" && -n "$BINDING" ]]; then
+  echo "Error: --target and --binding cannot be used together."
+  usage
+elif [[ -z "$TARGET" && -z "$BINDING" ]]; then
+  echo "Error: one of --target or --binding is required."
+  usage
+fi
+
+# Tools check
+if [[ -n "$BINDING" ]] && ! command -v ss &>/dev/null && ! command -v lsof &>/dev/null; then
+  echo "Error: neither 'ss' nor 'lsof' found for binding check."
+  exit 1
+fi
+
+# Helpers
+get_pid() {
+  if [[ -n "$PID" ]]; then
+    echo "$PID"
+  elif [[ -n "$PIDFILE" && -f "$PIDFILE" ]]; then
+    cat "$PIDFILE"
+  elif [[ -n "$PROCESS" ]]; then
+    pgrep -f "$PROCESS" | head -n1
+  else
+    echo ""
+  fi
+}
+
+terminate_pid() {
+  local pid="$1"
+  if [[ -z "$pid" ]]; then
+    echo "No PID found to terminate."
+    return
+  fi
+  echo "Sending SIGTERM to PID $pid..."
+  kill -TERM "$pid" 2>/dev/null || true
+  sleep 2
+  if kill -0 "$pid" 2>/dev/null; then
+    echo "PID $pid still alive, sending SIGKILL..."
+    kill -KILL "$pid" 2>/dev/null || true
+  fi
+  echo "Process $pid terminated."
+}
+
+check_target() {
+  ping -c1 -W"$TIMEOUT" "$TARGET" &>/dev/null
+}
+
+check_binding() {
+  local host="${BINDING%%:*}"
+  local port="${BINDING##*:}"
+  if command -v ss &>/dev/null; then
+    ss -ltn "( sport = :$port )" 2>/dev/null | grep -qE "${host//./\\.}:$port"
+  else
+    lsof -iTCP:"$port" -sTCP:LISTEN 2>/dev/null | grep -q "$host"
+  fi
+}
+
+# Main monitoring loop
+if [[ -n "$TARGET" ]]; then
+  echo "Monitoring target $TARGET every ${INTERVAL}s (timeout ${TIMEOUT}s)..."
+  while true; do
+    if ! check_target; then
+      echo "Target $TARGET unreachable at $(date)"
+      PID_TO_KILL=$(get_pid)
+      terminate_pid "$PID_TO_KILL"
+      exit 1
+    fi
+    sleep "$INTERVAL"
+  done
+elif [[ -n "$BINDING" ]]; then
+  echo "Monitoring binding $BINDING every ${INTERVAL}s..."
+  while true; do
+    if ! check_binding; then
+      echo "Binding $BINDING not found at $(date)"
+      PID_TO_KILL=$(get_pid)
+      terminate_pid "$PID_TO_KILL"
+      exit 1
+    fi
+    sleep "$INTERVAL"
+  done
+fi

@@ -1,0 +1,347 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# m3u_to_m4b - Convert M3U playlists to M4B audiobooks with chapters
+# Licensed under BSD License
+
+# Script metadata
+readonly VERSION="1.0.0"
+readonly DESCRIPTION="Convert M3U playlists to M4B audiobooks with chapters"
+declare SCRIPT_NAME
+SCRIPT_NAME="$(basename "$0")"
+readonly SCRIPT_NAME
+
+# Default configuration
+declare -r DEFAULT_QUALITY=2
+declare QUALITY="$DEFAULT_QUALITY"
+declare BITRATE=""
+declare VERBOSE=false
+declare CLEANUP=true
+declare PLAYLIST=""
+declare OUTPUT=""
+
+#===================================================================
+# UTILITY FUNCTIONS
+#===================================================================
+
+# Error handling with consistent formatting
+die() {
+    echo "Error: $*" >&2
+    exit 1
+}
+
+# Warning messages
+warn() {
+    echo "Warning: $*" >&2
+}
+
+# Verbose logging
+log() {
+    if [[ "$VERBOSE" == true ]]; then
+        echo "[INFO] $*" >&2
+    fi
+}
+
+# Validate dependencies are available
+check_dependencies() {
+    local deps=(ffmpeg ffprobe bc)
+    local missing=()
+    
+    for dep in "${deps[@]}"; do
+        if ! command -v "$dep" >/dev/null; then
+            missing+=("$dep")
+        fi
+    done
+    
+    if [[ ${#missing[@]} -gt 0 ]]; then
+        die "Missing required dependencies: ${missing[*]}"
+    fi
+}
+
+# Validate input parameters
+validate_quality() {
+    if ! [[ "$QUALITY" =~ ^[0-9]$ ]]; then
+        die "Quality must be 0-9, got: $QUALITY"
+    fi
+}
+
+validate_bitrate() {
+    if [[ -n "$BITRATE" ]] && ! [[ "$BITRATE" =~ ^[0-9]+k?$ ]]; then
+        die "Bitrate must be in format like '128k' or '128', got: $BITRATE"
+    fi
+}
+
+validate_files() {
+    [[ -f "$PLAYLIST" ]] || die "Playlist file not found: $PLAYLIST"
+    [[ -n "$OUTPUT" ]] || die "Output file not specified"
+}
+
+#===================================================================
+# HELP AND VERSION FUNCTIONS
+#===================================================================
+
+show_version() {
+    echo "$SCRIPT_NAME version $VERSION"
+    echo "$DESCRIPTION"
+}
+
+show_usage() {
+    cat << EOF
+Usage: $SCRIPT_NAME [OPTIONS] input.m3u output.m4b
+
+$DESCRIPTION
+
+OPTIONS:
+    -q QUALITY      AAC quality (0-9, lower is better, default: $DEFAULT_QUALITY)
+    -b BITRATE      Fixed bitrate (e.g., 128k, overrides -q)
+    -v              Verbose output
+    -k              Keep temporary files
+    -h, --help      Show this help
+    --version       Show version information
+
+EXAMPLES:
+    $SCRIPT_NAME playlist.m3u audiobook.m4b
+    $SCRIPT_NAME -q 1 -v playlist.m3u audiobook.m4b
+    $SCRIPT_NAME -b 192k playlist.m3u audiobook.m4b
+
+Licensed under BSD License.
+EOF
+}
+
+#===================================================================
+# ARGUMENT PARSING
+#===================================================================
+
+parse_long_options() {
+    for arg in "$@"; do
+        case $arg in
+            --help)
+                show_usage
+                exit 0
+                ;;
+            --version)
+                show_version
+                exit 0
+                ;;
+            --*)
+                die "Unknown option: $arg (use --help for usage information)"
+                ;;
+        esac
+    done
+}
+
+parse_short_options() {
+    while getopts "q:b:vkh" opt; do
+        case $opt in
+            q)
+                QUALITY="$OPTARG"
+                validate_quality
+                ;;
+            b)
+                BITRATE="$OPTARG"
+                validate_bitrate
+                ;;
+            v)
+                VERBOSE=true
+                ;;
+            k)
+                CLEANUP=false
+                ;;
+            h)
+                show_usage
+                exit 0
+                ;;
+            \?)
+                die "Invalid option: -$OPTARG (use -h for help)"
+                ;;
+        esac
+    done
+    
+    shift $((OPTIND-1))
+    
+    if [[ $# -ne 2 ]]; then
+        die "Missing required arguments (use -h for help)"
+    fi
+    
+    PLAYLIST="$1"
+    OUTPUT="$2"
+}
+
+#===================================================================
+# CORE PROCESSING FUNCTIONS
+#===================================================================
+
+# Resolve file path relative to M3U directory
+resolve_file_path() {
+    local line="$1"
+    local playlist_dir="$2"
+    
+    if [[ "$line" = /* ]]; then
+        echo "$line"  # Already absolute
+    else
+        echo "$playlist_dir/$line"  # Make relative path absolute
+    fi
+}
+
+# Get audio file duration in milliseconds
+get_duration_ms() {
+    local file="$1"
+    local duration_sec
+    
+    duration_sec=$(ffprobe -v error -show_entries format=duration \
+                  -of default=noprint_wrappers=1:nokey=1 "$file")
+    
+    printf "%.0f" "$(echo "$duration_sec*1000" | bc -l)"
+}
+
+# Add chapter entry
+add_chapter() {
+    local chapters_file="$1"
+    local start_ms="$2"
+    local end_ms="$3"
+    local part="$4"
+    
+    cat >> "$chapters_file" <<EOF
+[CHAPTER]
+TIMEBASE=1/1000
+START=$start_ms
+END=$end_ms
+title=Part $part
+EOF
+}
+
+# Process M3U playlist and build concat list and chapters
+process_playlist() {
+    local playlist="$1"
+    local concat_list="$2"
+    local chapters_file="$3"
+    local playlist_dir
+    
+    playlist_dir="$(dirname "$(realpath "$playlist")")"
+    
+    local start_ms=0
+    local part=1
+    
+    # Initialize files
+    true > "$concat_list"
+    true > "$chapters_file"
+    
+    while IFS= read -r line; do
+        # Skip empty lines and comments
+        [[ -z "$line" || "$line" =~ ^# ]] && continue
+        
+        local file
+        file="$(resolve_file_path "$line" "$playlist_dir")"
+        
+        # Verify file exists
+        if [[ ! -f "$file" ]]; then
+            warn "File not found: $file"
+            continue
+        fi
+        
+        log "Processing: $(basename "$file")"
+        echo "file '$file'" >> "$concat_list"
+        
+        # Calculate chapter timing
+        local dur_ms end_ms
+        dur_ms="$(get_duration_ms "$file")"
+        end_ms=$((start_ms + dur_ms))
+        
+        add_chapter "$chapters_file" "$start_ms" "$end_ms" "$part"
+        
+        start_ms=$end_ms
+        ((part++))
+    done < "$playlist"
+    
+    log "Processed $((part-1)) audio files"
+}
+
+# Build FFmpeg audio codec arguments
+build_audio_args() {
+    if [[ -n "$BITRATE" ]]; then
+        echo "-c:a" "aac" "-b:a" "$BITRATE"
+        log "Using fixed bitrate: $BITRATE"
+    else
+        echo "-c:a" "aac" "-q:a" "$QUALITY"
+        log "Using VBR quality: $QUALITY"
+    fi
+}
+
+# Execute FFmpeg encoding
+encode_audiobook() {
+    local concat_list="$1"
+    local chapters_file="$2"
+    local output="$3"
+    
+    log "Starting encoding..."
+    
+    local audio_args
+    read -ra audio_args <<< "$(build_audio_args)"
+    
+    local ffmpeg_cmd=(
+        ffmpeg -hide_banner -y
+        -f concat -safe 0 -i "$concat_list"
+        -i "$chapters_file" -map_metadata 1
+        "${audio_args[@]}" -vn "$output"
+    )
+    
+    if [[ "$VERBOSE" == true ]]; then
+        log "Running: ${ffmpeg_cmd[*]}"
+        "${ffmpeg_cmd[@]}"
+    else
+        "${ffmpeg_cmd[@]}" 2>/dev/null
+    fi
+}
+
+# Cleanup temporary files
+cleanup_temp_files() {
+    local workdir="$1"
+    
+    if [[ "$CLEANUP" == true ]]; then
+        log "Cleaning up temporary files in $workdir"
+        rm -rf "$workdir"
+    else
+        log "Temporary files kept in: $workdir"
+    fi
+}
+
+#===================================================================
+# MAIN FUNCTION
+#===================================================================
+
+main() {
+    # Parse arguments
+    parse_long_options "$@"
+    parse_short_options "$@"
+    
+    # Validate everything
+    check_dependencies
+    validate_files
+    
+    # Log configuration
+    log "Input playlist: $PLAYLIST"
+    log "Output file: $OUTPUT"
+    log "Quality setting: $QUALITY"
+    [[ -n "$BITRATE" ]] && log "Bitrate: $BITRATE"
+    
+    # Setup workspace
+    local workdir concat_list chapters_file
+    workdir="$(mktemp -d)"
+    concat_list="$workdir/concat_list.txt"
+    chapters_file="$workdir/chapters.txt"
+    
+    # Process playlist and encode
+    process_playlist "$PLAYLIST" "$concat_list" "$chapters_file"
+    encode_audiobook "$concat_list" "$chapters_file" "$OUTPUT"
+    
+    echo "Created $OUTPUT"
+    
+    # Cleanup
+    cleanup_temp_files "$workdir"
+}
+
+# Run main function if script is executed directly
+if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
+    main "$@"
+fi
+
