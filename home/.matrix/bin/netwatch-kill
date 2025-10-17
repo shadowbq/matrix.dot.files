@@ -97,6 +97,20 @@ terminate_pid() {
   echo "Process $pid terminated."
 }
 
+# Helper to detect if host is an IP address (IPv4 or IPv6)
+is_ip_address() {
+  local host="$1"
+  # Check for IPv4
+  if [[ "$host" =~ ^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$ ]]; then
+    return 0
+  fi
+  # Check for IPv6 (basic pattern - contains colons and hex chars)
+  if [[ "$host" =~ ^[0-9a-fA-F:]+$ ]] && [[ "$host" == *:* ]]; then
+    return 0
+  fi
+  return 1
+}
+
 check_target() {
   local host="${TARGET%%:*}"
   local port="${TARGET##*:}"
@@ -114,10 +128,21 @@ check_target() {
 check_binding() {
   local host="${BINDING%%:*}"
   local port="${BINDING##*:}"
+  
   if command -v ss &>/dev/null; then
-    ss -ltn "( sport = :$port )" 2>/dev/null | grep -qE "${host//./\\.}:$port"
+    # Add -r flag for hostname resolution if host is not an IP address
+    if is_ip_address "$host"; then
+      ss -ltn "( sport = :$port )" 2>/dev/null | grep -qE "${host//./\\.}:$port"
+    else
+      ss -ltnr "( sport = :$port )" 2>/dev/null | grep -qE "${host//./\\.}:$port"
+    fi
   else
-    lsof -iTCP:"$port" -sTCP:LISTEN 2>/dev/null | grep -q "$host"
+    # Add -n flag for numeric addresses if host is an IP address
+    if is_ip_address "$host"; then
+      lsof -iTCP:"$port" -sTCP:LISTEN -n 2>/dev/null | grep -q "$host"
+    else
+      lsof -iTCP:"$port" -sTCP:LISTEN 2>/dev/null | grep -q "$host"
+    fi
   fi
 }
 
