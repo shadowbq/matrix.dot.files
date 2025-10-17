@@ -15,16 +15,17 @@ TIMEOUT=3
 usage() {
   cat <<EOF
 Usage:
-  $0 (--target <host> | --binding <host:port>) [--pid <pid> | --process <name> | --pidfile <file>] [--interval N] [--timeout N]
+  $0 (--target <host[:port]> | --binding <host:port>) [--pid <pid> | --process <name> | --pidfile <file>] [--interval N] [--timeout N]
 
 Examples:
-  $0 --target 8.8.8.8 --process myapp
+  $0 --target 8.8.8.8:2022 --process myapp      # Check TCP port
+  $0 --target 8.8.8.8 --process myapp           # Check with ping
   $0 --binding 127.0.0.1:8080 --pid 12345
   $0 --binding 127.0.0.1:8080 --pidfile /tmp/myproc.pid
 
 Description:
   Monitors either:
-    --target   : ping a remote host/IP to ensure it's reachable
+    --target   : check if a remote host is reachable (ping) or TCP port is open (host:port)
     --binding  : verify that a local TCP socket is bound/listening
 
   If the check fails, the specified process is terminated.
@@ -57,6 +58,11 @@ elif [[ -z "$TARGET" && -z "$BINDING" ]]; then
 fi
 
 # Tools check
+if [[ -n "$TARGET" ]] && ! command -v nc &>/dev/null; then
+  echo "Error: 'nc' (netcat) not found for target check."
+  exit 1
+fi
+
 if [[ -n "$BINDING" ]] && ! command -v ss &>/dev/null && ! command -v lsof &>/dev/null; then
   echo "Error: neither 'ss' nor 'lsof' found for binding check."
   exit 1
@@ -92,7 +98,17 @@ terminate_pid() {
 }
 
 check_target() {
-  ping -c1 -W"$TIMEOUT" "$TARGET" &>/dev/null
+  local host="${TARGET%%:*}"
+  local port="${TARGET##*:}"
+  
+  # Check if TARGET contains a port
+  if [[ "$host" == "$port" ]]; then
+    # No port specified, use ping
+    ping -c1 -W"$TIMEOUT" "$TARGET" &>/dev/null
+  else
+    # Port specified, use nc to check TCP connectivity
+    nc -z -w"$TIMEOUT" "$host" "$port" &>/dev/null
+  fi
 }
 
 check_binding() {
