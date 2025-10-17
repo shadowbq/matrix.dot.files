@@ -15,13 +15,13 @@ TIMEOUT=3
 usage() {
   cat <<EOF
 Usage:
-  $0 (--target <host[:port]> | --binding <host:port>) [--pid <pid> | --process <name> | --pidfile <file>] [--interval N] [--timeout N]
+  $(basename "$0") (--target <host[:port]> | --binding <host:port>) [--pid <pid> | --process <name> | --pidfile <file>] [--interval N] [--timeout N]
 
 Examples:
-  $0 --target 8.8.8.8:2022 --process myapp      # Check TCP port
-  $0 --target 8.8.8.8 --process myapp           # Check with ping
-  $0 --binding 127.0.0.1:8080 --pid 12345
-  $0 --binding 127.0.0.1:8080 --pidfile /tmp/myproc.pid
+  $(basename "$0") --target 8.8.8.8:2022 --process myapp      # Check TCP port
+  $(basename "$0") --target 8.8.8.8 --process myapp           # Check with ping
+  $(basename "$0") --binding 127.0.0.1:8080 --pid 12345
+  $(basename "$0") --binding 127.0.0.1:8080 --pidfile /tmp/myproc.pid
 
 Description:
   Monitors either:
