@@ -76,7 +76,7 @@ if [ $? -eq 0 ]; then
     exit $rtv
   else
     command -v wget >/dev/null 2>&1
-    if [ $rtv -eq 0 ]; then
+    if [ $? -eq 0 ]; then
       wget -q --spider $www_test_url
       case $? in
         4)
@@ -104,8 +104,18 @@ if [ $? -eq 0 ]; then
           ;;
       esac
     else
-      echo_err "wget missing."
-      rtv=$?
+      # wget not found, try curl
+      command -v curl >/dev/null 2>&1
+      if [ $? -eq 0 ]; then
+        curl -s -o /dev/null -I $www_test_url
+        rtv=$?
+        if [ $rtv -ne 0 ]; then
+          echo_err "curl failed with return value: $rtv"
+        fi
+      else 
+        echo_err "curl & wget not in default path missing.(may exist in homebrew etc.)"
+        rtv=$?
+      fi
     fi
   fi
 else 
