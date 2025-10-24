@@ -16,6 +16,10 @@ if [ -f /etc/bashrc ]; then
 fi
 
 ###########################
+# Matrix Global Path bin
+PATH=$PATH:"$HOME"/.matrix/bin
+
+###########################
 # Source user config override definitions specific to one system
 #
 # NOTE: Configure your .matrix in the .matrix_config file. **
@@ -47,10 +51,6 @@ source "$HOME"/.matrix/functions/.bash_extension
 bash_os="$(uname -s)"
 
 matrix_loader "os/${bash_os}"
-
-###########################
-# Matrix Global Path bin
-PATH=$PATH:"$HOME"/.matrix/bin
 
 ###########################
 # .matrix Extensions to be loaded, with running checks

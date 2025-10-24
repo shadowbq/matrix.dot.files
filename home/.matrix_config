@@ -48,3 +48,21 @@ export matrix_consistency=true
 
 # DEBUG
 export MATRIX_DEBUG=false
+
+# ONLINE / FAST MODE settings
+export matrix_fast_mode=false
+
+inet_test
+if [ $? -eq 0 ]; then
+    export matrix_online=true
+else
+    # Internet connection failed, run fast mode
+    export matrix_online=false
+    export matrix_consistency=false
+    export matrix_fast_mode=true
+fi
+
+# When running in VSCode terminal, enable fast mode
+if [ "$TERM_PROGRAM" != "vscode" ]; then
+    export matrix_fast_mode=true
+fi

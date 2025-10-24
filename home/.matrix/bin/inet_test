@@ -25,7 +25,7 @@
 ## Return values(rtv)
 ## 0 No problems occurred.
 ## 1 Generic error code.
-## 2 Parse error—for instance, when parsing command-line options, the ‘.wgetrc’ or ‘.netrc’...
+## 2 Parse error—for instance, when parsing command-line options, the '.wgetrc' or '.netrc'...
 ## 3 File I/O error.
 ## 4 Network failure. (No DNS resolution of google.com)
 ## 5 SSL verification failure.
@@ -43,6 +43,20 @@ BYELLOW='\033[1;33m'
 YELLOW='\033[0;33m'
 NORMAL='\033[00m'
 function echo_err { echo -ne "${RED}"; cat <<< "$@" 1>&2; echo -ne "${NORMAL}";}
+
+# Parse command line arguments
+VERBOSE=false
+while [[ $# -gt 0 ]]; do
+  case $1 in
+    -v|--verbose)
+      VERBOSE=true
+      shift
+      ;;
+    *)
+      shift
+      ;;
+  esac
+done
 
 host -t SOA -W 1 freebsd.org > /dev/null
 if [ $? -eq 0 ]; then
@@ -80,4 +94,10 @@ if [ $? -eq 0 ]; then
 else
   rtv=$?
 fi
+
+# Print success message if verbose and no error
+if [ "$VERBOSE" = true ] && [ ${rtv:-1} -eq 0 ]; then
+  echo -e "${GREEN}Internet connected.${NORMAL}"
+fi
+
 exit $rtv

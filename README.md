@@ -176,7 +176,7 @@ bash_matrix defines what additional include directives to load from the matrix (
 `.matrix` directory holds all additional plugins
 
 * OS specific - load paths, bins, aliases, advisors
-              - (./Darwin/.bash_extensions)
+              - (./Darwin/.bash_extension)
 * Global bins - cross platform shell scripts (xpull, rmate, ssh-copy-id, epoch, etc.. )
 * Rubygems in bundler format that improve experience
 * Additional functions, environment needs, and mockups
