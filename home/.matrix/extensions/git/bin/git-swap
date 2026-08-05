@@ -2,113 +2,158 @@
 # shellcheck shell=bash
 
 ### $HOME/.gitusers
-## user1name = shadowbq 
+## user1name = shadowbq
 ## user1email = "shadowbq@gmail.com"
-## user2name = foo-shadowbq 
-## user2email = "foo.shadowbq@gmail.com"           
-## user3name = bar-shadowbq 
-## user3email = "bar.shadowbq@gmail.com"           
+## user2name = foo-shadowbq
+## user2email = "foo.shadowbq@gmail.com"
+## userNname = anything
+## userNemail = "anything@example.com"
 
 # ./git swap shadowbq
-# ./git swap shadowbq shadowbq@gmail.com 
-# ./git swap -g shadowbq shadowbq@gmail.com 
+# ./git swap shadowbq shadowbq@gmail.com
+# ./git swap -g shadowbq shadowbq@gmail.com
+# ./git swap -12 newname new@email.com   # saves as profile #12
+# ./git swap -4                          # apply existing profile #4
+
+configfile="$HOME/.gitusers"
+
+list_profiles() {
+    mapfile -t nums < <(compgen -v | grep -E '^user[0-9]+name$' | sed -E 's/^user([0-9]+)name$/\1/' | sort -n)
+    if [ "${#nums[@]}" -gt 0 ]; then
+        echo "Configured profiles in ${configfile}:"
+        for n in "${nums[@]}"; do
+            namevar="user${n}name"
+            emailvar="user${n}email"
+            printf '  #%s: %s <%s>\n' "$n" "${!namevar}" "${!emailvar}"
+        done
+    fi
+}
 
 show_usage() {
-    echo "usage: ./git swap <username in ~/.gitusers> "
+    echo "usage: ./git swap <username in ~/.gitusers>"
     echo "usage: ./git swap <username> <email>"
     echo ""
-    echo "Switch Local and Save to Config"
-    echo "usage: ./git swap [--new-user1 || -1] <username> <email>"
-    echo "usage: ./git swap [--new-user2 || -2] <username> <email>"
-    echo "usage: ./git swap [--new-user3 || -3] <username> <email>"
+    echo "Apply an existing saved profile by number"
+    echo "usage: ./git swap -N"
+    echo "  e.g. ./git swap -4"
+    echo ""
+    echo "Switch Local and Save to Config (N = any positive integer)"
+    echo "usage: ./git swap [--new-userN || -N] <username> <email>"
+    echo "  e.g. ./git swap --new-user4 <username> <email>"
+    echo "  e.g. ./git swap -4 <username> <email>"
     echo ""
     echo "Switch Global"
     echo "usage: ./git swap [--global || -g] <username> <email>"
+
+    echo ""
+    list_profiles
 }
+
 tmpfile=$(mktemp /tmp/.gitusers.unix.XXXXXX)
 
 shopt -s extglob
-configfile="$HOME/.gitusers" # set the actual path name of your (DOS or Unix) config file
 touch "${configfile}"
-tr -d '\r' < $configfile > $tmpfile
+tr -d '\r' < "$configfile" > "$tmpfile"
 while IFS='= ' read -r lhs rhs
 do
     if [[ ! $lhs =~ ^\ *# && -n $lhs ]]; then
         rhs="${rhs%%\#*}"    # Del in line right comments
         rhs="${rhs%%*( )}"   # Del trailing spaces
-        rhs="${rhs%\"*}"     # Del opening string quotes 
-        rhs="${rhs#\"*}"     # Del closing string quotes 
-        declare $lhs="$rhs"
+        rhs="${rhs%\"*}"     # Del opening string quotes
+        rhs="${rhs#\"*}"     # Del closing string quotes
+        declare "$lhs=$rhs"
     fi
-done < $tmpfile
+done < "$tmpfile"
 rm "$tmpfile"
 
-if [ $# -eq 1 ]; then
+apply_profile() {
+    local n="$1"
+    local namevar="user${n}name"
+    local emailvar="user${n}email"
+    git config user.name "${!namevar}"
+    git config user.email "${!emailvar}"
+    git config github.user "${!namevar}"
+    git config github.email "${!emailvar}"
+}
+
+if [ $# -eq 0 ]; then
+    echo "Current identity:"
+    git whoami
+    echo ""
+    list_profiles
+    exit 0
+
+elif [ $# -eq 1 ]; then
     if [ "${1}" = "-h" ] || [ "${1}" = "--help" ]; then
         show_usage
         exit 0
-    elif [ "${1}" = "${user1name}" ]; then
-        git config user.name "${user1name}"
-        git config user.email "${user1email}"
-        git config github.user "${user1name}"
-        git config github.email "${user1email}"
-    elif [ "${1}" = "${user2name}" ]; then
-        git config user.name "${user2name}"
-        git config user.email "${user2email}"
-        git config github.user "${user2name}"
-        git config github.email "${user2email}"
-    elif [ "${1}" = "${user3name}" ]; then
-        git config user.name "${user3name}"
-        git config user.email "${user3email}"
-        git config github.user "${user3name}"
-        git config github.email "${user3email}"
-    else
-        echo "Did not find entry for user#name '${1}' in config: '${configfile}'. "
+    fi
+
+    # Shortcut: ./git swap -N  -> apply profile N directly
+    if [[ "${1}" =~ ^-([0-9]+)$ ]]; then
+        n="${BASH_REMATCH[1]}"
+        namevar="user${n}name"
+        if [ -n "${!namevar:-}" ]; then
+            apply_profile "$n"
+            git whoami
+            exit 0
+        else
+            echo "No profile #${n} found in config: '${configfile}'."
+            show_usage
+            exit 1
+        fi
+    fi
+
+    found=0
+    n=1
+    while :; do
+        namevar="user${n}name"
+        [ -z "${!namevar:-}" ] && break
+        if [ "${1}" = "${!namevar}" ]; then
+            apply_profile "$n"
+            found=1
+            break
+        fi
+        n=$((n+1))
+    done
+
+    if [ "$found" -ne 1 ]; then
+        echo "Did not find entry for user#name '${1}' in config: '${configfile}'."
         show_usage
         exit 1
-    fi    
+    fi
+
 elif [ $# -eq 2 ]; then
-    readonly name="${1:-}"
-    readonly email="${2:-}"
+    name="${1:-}"
+    email="${2:-}"
     git config user.name "${name}"
     git config user.email "${email}"
     git config github.user "${name}"
     git config github.email "${email}"
+
 elif [ $# -eq 3 ]; then
-    readonly switch="${1}"
-    readonly name="${2:-}"
-    readonly email="${3:-}"
+    switch="${1}"
+    name="${2:-}"
+    email="${3:-}"
+
     if [ "$switch" = "--global" ] || [ "$switch" = "-g" ]; then
         git config --global user.name "${name}"
         git config --global user.email "${email}"
         git config --global github.user "${name}"
         git config --global github.email "${email}"
-    elif [ "$switch" = "--new-user1" ] || [ "$switch" = "-1" ]; then
+    elif [[ "$switch" =~ ^(--new-user|-)([0-9]+)$ ]]; then
+        n="${BASH_REMATCH[2]}"
         git config user.name "${name}"
         git config user.email "${email}"
         git config github.user "${name}"
         git config github.email "${email}"
-        echo "user1name=\"${name}\"" >> "${configfile}"
-        echo "user1email=\"${email}\"" >> "${configfile}"
-    elif [ "$switch" = "--new-user2" ] || [ "$switch" = "-2" ]; then
-        git config user.name "${name}"
-        git config user.email "${email}"
-        git config github.user "${name}"
-        git config github.email "${email}"
-        echo "user2name=\"${name}\"" >> "${configfile}"
-        echo "user2email=\"${email}\"" >> "${configfile}"
-    elif [ "$switch" = "--new-user3" ] || [ "$switch" = "-3" ]; then
-        git config user.name "${name}"
-        git config user.email "${email}"
-        git config github.user "${name}"
-        git config github.email "${email}"
-        echo "user3name=\"${name}\"" >> "${configfile}"
-        echo "user3email=\"${email}\"" >> "${configfile}"
+        echo "user${n}name=\"${name}\"" >> "${configfile}"
+        echo "user${n}email=\"${email}\"" >> "${configfile}"
     else
         show_usage
         exit 1
     fi
-    
+
 else
     show_usage
     exit 1

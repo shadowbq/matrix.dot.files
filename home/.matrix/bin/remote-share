@@ -1,0 +1,536 @@
+#!/usr/bin/env bash
+#
+# remote-share.sh — disposable static file share on a trusted remote Linux host.
+#
+# Establishes a SINGLE multiplexed SSH connection to a trusted remote host, then
+# copies a local directory into a mktemp dir on the far end and launches a quiet
+# Python HTTP(S) server there — the file copy (scp) rides the same connection,
+# so nothing dials out twice. `share` runs in the FOREGROUND: it holds that one
+# connection open, and the instant it ends (Ctrl-C, closed terminal, dropped
+# link) the remote temp dir is destroyed automatically by a far-end trap.
+#
+# Everything is disposable: the temp dir, the (optional) self-signed TLS cert,
+# and the (optional) Basic Auth credentials all live only inside the remote
+# mktemp dir and vanish when the connection ends. Certs are generated fresh
+# every share and never reused.
+#
+# `clean` is the recovery command: it stops the server, removes the files, and
+# sweeps the host for any orphaned shares left by an unclean local exit.
+#
+# Usage:
+#   remote-share.sh share <local-dir> --host user@host [options]   (foreground)
+#   remote-share.sh clean [--host user@host]
+#
+# Options for `share`:
+#   --host user@host     Remote SSH target (required).
+#   --port N             Listen port (default 8732).
+#   --bind ADDR          Bind address (default 0.0.0.0; use 127.0.0.1 + tunnel
+#                        to keep it off the network).
+#   --tls                Serve HTTPS with a fresh, disposable self-signed cert
+#                        (generated on the remote via openssl; clients must use
+#                        -k / "trust anyway").
+#   --auth [user:pass]   Require HTTP Basic Auth. With no value, user "share"
+#                        and a random password are generated and printed once.
+#
+# This is a throwaway convenience tool for a *trusted* host. Basic Auth over
+# plain HTTP sends credentials base64-encoded but unencrypted — combine --auth
+# with --tls if the network is not trusted.
+
+set -euo pipefail
+
+STATE_FILE="${REMOTE_SHARE_STATE:-$HOME/.cache/remote-share/state}"
+DEFAULT_PORT=8732
+DEFAULT_BIND=0.0.0.0
+
+die() { printf 'error: %s\n' "$*" >&2; exit 1; }
+info() { printf '%s\n' "$*" >&2; }
+
+# Destroy a remote share: kill the server (by the pid it recorded in serve.pid,
+# reaping its whole process group) AND remove the temp dir — in ONE remote call
+# so there's no race between killing and deleting. Guarded so it will only touch
+# paths that look like one of ours. Accepts extra ssh args (e.g. a ControlPath).
+destroy_remote() {
+  local host="$1" dir="$2"; shift 2
+  [ -n "$dir" ] || return 0
+  ssh "$@" "$host" bash -s -- "$dir" <<'REMOTE' || info "  (warning: remote destroy of $dir may have failed)"
+set -uo pipefail
+dir="$1"
+case "$dir" in
+  */remote-share.??????*) : ;;
+  *) echo "refusing to touch unexpected path: $dir" >&2; exit 1 ;;
+esac
+# Kill by recorded pid; setsid made it a session leader, so PGID == PID and
+# "-$p" reaps the group. Fall back to the bare pid if the group send fails.
+kill_recorded() {
+  local sig="$1" p
+  [ -f "$dir/serve.pid" ] || return 0
+  p=$(cat "$dir/serve.pid" 2>/dev/null || true)
+  [ -n "$p" ] || return 0
+  kill "$sig" "-$p" 2>/dev/null || kill "$sig" "$p" 2>/dev/null || true
+}
+kill_recorded -TERM
+# Safety net: any serve-dist.py still bound to THIS dir (scoped, not a blanket pkill).
+pkill -f "serve-dist.py .*--directory $dir/www" 2>/dev/null || true
+sleep 0.3
+kill_recorded -KILL
+rm -rf "$dir" && echo "removed $dir" >&2
+REMOTE
+}
+
+# Remove a remote temp dir only (no kill), guarding the path. Used for rollback
+# before any server exists. Accepts extra ssh args (e.g. a ControlPath).
+cleanup_remote() {
+  local host="$1" dir="$2"; shift 2
+  [ -n "$dir" ] || return 0
+  ssh "$@" "$host" bash -s -- "$dir" <<'REMOTE' || info "  (warning: remote cleanup of $dir may have failed)"
+set -uo pipefail
+dir="$1"
+case "$dir" in
+  */remote-share.??????*) rm -rf "$dir" && echo "removed $dir" >&2 ;;
+  *) echo "refusing to rm unexpected path: $dir" >&2; exit 1 ;;
+esac
+REMOTE
+}
+
+usage() {
+  cat >&2 <<'EOF'
+Usage:
+  remote-share.sh share <local-dir> --host user@host [options]   (foreground)
+  remote-share.sh clean [--host user@host]
+
+`share` runs in the foreground and holds one SSH connection open. Press Ctrl-C
+(or drop the link / close the terminal) and the remote temp dir is destroyed
+automatically. `clean` is the recovery command: it stops the server, removes
+the files, and sweeps the host for any orphaned shares left by an unclean exit.
+
+share options:
+  --host user@host     Remote SSH target (required)
+  --port N             Listen port (default 8732)
+  --bind ADDR          Bind address (default 0.0.0.0)
+  --tls                Serve HTTPS with a fresh disposable self-signed cert
+  --auth [user:pass]   Require Basic Auth (autogenerates a password if omitted)
+EOF
+  exit "${1:-0}"
+}
+
+# ---------------------------------------------------------------------------
+# The quiet HTTP(S) server, shipped to the remote host as part of the payload.
+# Supports optional TLS (--certfile/--keyfile) and optional Basic Auth (creds
+# read from the file named by $SHARE_AUTH_FILE, so they never hit argv/ps).
+# ---------------------------------------------------------------------------
+read -r -d '' SERVE_PY <<'PYEOF' || true
+#!/usr/bin/env python3
+"""Minimal static file server: ignores benign disconnects, optional TLS + auth."""
+
+import argparse
+import base64
+import errno
+import hmac
+import os
+import ssl
+import sys
+from functools import partial
+from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
+
+_QUIET_ERRNOS = {
+    errno.ENOTCONN,
+    errno.ECONNRESET,
+    errno.EPIPE,
+    errno.ECONNABORTED,
+}
+
+
+class QuietThreadingHTTPServer(ThreadingHTTPServer):
+    daemon_threads = True
+
+    def handle_error(self, request, client_address):
+        exc = sys.exc_info()[1]
+        if isinstance(exc, ConnectionError):
+            return
+        if isinstance(exc, OSError) and exc.errno in _QUIET_ERRNOS:
+            return
+        super().handle_error(request, client_address)
+
+
+class Handler(SimpleHTTPRequestHandler):
+    # Set by main() to "Basic <b64>" when auth is required, else None.
+    auth_token = None
+    # Per-share random realm: the browser treats each disposable share as a
+    # fresh auth domain, so it won't silently reuse creds from a prior share.
+    realm = "remote-share"
+
+    def _no_store(self):
+        # Best-effort "don't remember this" — no server header can veto a
+        # browser password manager, but no-store keeps the credentialed
+        # responses and page content out of the on-disk cache.
+        self.send_header("Cache-Control", "no-store, max-age=0")
+
+    def send_head(self):
+        if self.auth_token is not None:
+            given = self.headers.get("Authorization", "")
+            if not hmac.compare_digest(given, self.auth_token):
+                self.send_response(401)
+                self.send_header(
+                    "WWW-Authenticate", 'Basic realm="%s"' % self.realm
+                )
+                self._no_store()
+                self.send_header("Content-Length", "0")
+                self.end_headers()
+                return None
+        return super().send_head()
+
+    def end_headers(self):
+        # Applies no-store to every 2xx/normal response too, not just 401s.
+        self._no_store()
+        super().end_headers()
+
+
+def main() -> None:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--bind", default="0.0.0.0")
+    parser.add_argument("--port", type=int, default=8732)
+    parser.add_argument("--directory", default=".")
+    parser.add_argument("--certfile")
+    parser.add_argument("--keyfile")
+    parser.add_argument("--realm", default="remote-share")
+    args = parser.parse_args()
+
+    Handler.realm = args.realm
+
+    auth_file = os.environ.get("SHARE_AUTH_FILE")
+    if auth_file:
+        with open(auth_file, encoding="utf-8") as fh:
+            creds = fh.read().strip()
+        Handler.auth_token = "Basic " + base64.b64encode(creds.encode()).decode()
+
+    handler = partial(Handler, directory=args.directory)
+    server = QuietThreadingHTTPServer((args.bind, args.port), handler)
+
+    if args.certfile:
+        ctx = ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)
+        ctx.load_cert_chain(args.certfile, args.keyfile)
+        server.socket = ctx.wrap_socket(server.socket, server_side=True)
+
+    try:
+        server.serve_forever()
+    except KeyboardInterrupt:
+        sys.stderr.write("\nServer stopped.\n")
+
+
+if __name__ == "__main__":
+    main()
+PYEOF
+
+# ---------------------------------------------------------------------------
+cmd_share() {
+  local local_dir="" host="" port="$DEFAULT_PORT" bind="$DEFAULT_BIND"
+  local use_tls=0 auth=""
+
+  while [ $# -gt 0 ]; do
+    case "$1" in
+      --host)  host="${2:-}"; shift 2 ;;
+      --port)  port="${2:-}"; shift 2 ;;
+      --bind)  bind="${2:-}"; shift 2 ;;
+      --tls)   use_tls=1; shift ;;
+      --auth)
+        # Optional value: consume the next arg only if it isn't another flag.
+        if [ $# -ge 2 ] && [ -n "${2:-}" ] && [ "${2#-}" = "$2" ]; then
+          auth="$2"; shift 2
+        else
+          auth="__GEN__"; shift
+        fi ;;
+      -h|--help) usage 0 ;;
+      -*) die "unknown option: $1" ;;
+      *)
+        [ -z "$local_dir" ] || die "unexpected argument: $1"
+        local_dir="$1"; shift ;;
+    esac
+  done
+
+  [ -n "$local_dir" ] || die "missing <local-dir>"
+  [ -d "$local_dir" ] || die "not a directory: $local_dir"
+  [ -n "$host" ] || die "missing --host user@host"
+
+  if [ -f "$STATE_FILE" ]; then
+    die "a share is already active (see: $0 status). Run '$0 stop' first."
+  fi
+
+  local hostname_only="${host#*@}"
+  local scheme="http"; [ "$use_tls" = 1 ] && scheme="https"
+
+  # Autogenerate a password if --auth was given with no value.
+  if [ "$auth" = "__GEN__" ]; then
+    local pass
+    pass=$(head -c 256 /dev/urandom | LC_ALL=C tr -dc 'A-Za-z0-9' | cut -c1-24)
+    [ -n "$pass" ] || die "failed to generate password"
+    auth="share:$pass"
+  fi
+
+  # Random per-share realm so the browser won't reuse creds across shares.
+  local realm="remote-share"
+  if [ -n "$auth" ]; then
+    local realm_suffix
+    realm_suffix=$(head -c 64 /dev/urandom | LC_ALL=C tr -dc 'a-f0-9' | cut -c1-12)
+    realm="remote-share-${realm_suffix:-once}"
+  fi
+
+  # -----------------------------------------------------------------------
+  # One multiplexed SSH connection carries everything. We open a background
+  # ControlMaster to a private socket; every scp/ssh below attaches to it via
+  # ControlPath, so there's a single TCP connection and a single auth. When
+  # this connection closes, the remote trap (installed in the holder below)
+  # destroys the temp dir — that's what makes death-of-connection == teardown.
+  # -----------------------------------------------------------------------
+  local ctl_dir ctl
+  ctl_dir=$(mktemp -d "${TMPDIR:-/tmp}/remote-share-ctl.XXXXXX") || die "mktemp failed"
+  ctl="$ctl_dir/ctl.sock"
+
+  # SSH options shared by the master and every multiplexed child command.
+  local -a SSH_MUX=(-o "ControlPath=$ctl")
+  # Keepalives make a dropped link surface promptly and tear the master down.
+  local -a SSH_MASTER_OPTS=(
+    -o "ControlMaster=yes" -o "ControlPath=$ctl" -o "ControlPersist=no"
+    -o "ServerAliveInterval=15" -o "ServerAliveCountMax=3"
+    -o "ExitOnForwardFailure=yes"
+  )
+
+  # remote_dir is filled in once we know it, so the trap can target it.
+  local remote_dir="" master_pid=""
+
+  # Local teardown: kill the remote server AND remove the temp dir over the
+  # still-open master (ssh does NOT forward Ctrl-C to a PTY-less remote, so we
+  # cannot rely on the holder's own trap — we do the destroy explicitly here),
+  # then close the master.
+  _share_teardown() {
+    trap - EXIT INT TERM HUP
+    info ""
+    info "Tearing down ..."
+    if [ -n "$remote_dir" ] && ssh -O check "${SSH_MUX[@]}" "$host" 2>/dev/null; then
+      destroy_remote "$host" "$remote_dir" "${SSH_MUX[@]}"
+    elif [ -n "$remote_dir" ]; then
+      # Master already gone — open a fresh connection to finish the job.
+      destroy_remote "$host" "$remote_dir"
+    fi
+    ssh -O exit "${SSH_MUX[@]}" "$host" 2>/dev/null || true
+    [ -n "$master_pid" ] && kill "$master_pid" 2>/dev/null || true
+    rm -rf "$ctl_dir" 2>/dev/null || true
+    rm -f "$STATE_FILE" 2>/dev/null || true
+    info "Done. Everything on $host has been destroyed."
+  }
+  trap _share_teardown EXIT INT TERM HUP
+
+  info "Opening SSH connection to $host ..."
+  # Background master: -M -N -f would daemonize, but we want a PID to track, so
+  # run it backgrounded from this shell and wait for the socket to come up.
+  ssh -N "${SSH_MASTER_OPTS[@]}" "$host" &
+  master_pid=$!
+  local waited=0
+  until ssh -O check "${SSH_MUX[@]}" "$host" 2>/dev/null; do
+    kill -0 "$master_pid" 2>/dev/null || die "SSH connection failed"
+    sleep 0.2
+    waited=$((waited + 1))
+    [ "$waited" -lt 100 ] || die "timed out establishing SSH connection"
+  done
+
+  info "Creating remote temp directory ..."
+  remote_dir=$(ssh "${SSH_MUX[@]}" "$host" \
+    'd=$(mktemp -d "${TMPDIR:-/tmp}/remote-share.XXXXXX") && mkdir "$d/www" && printf %s "$d"') \
+    || die "failed to create remote temp dir"
+  info "  remote dir: $remote_dir"
+
+  # Served content lives in www/; all control files (server, cert, key, auth,
+  # logs) stay in the temp-dir root, one level ABOVE the served root, so they
+  # can never be fetched over the share itself.
+  local www_dir="$remote_dir/www"
+
+  info "Copying files over the tunnel ..."
+  # scp attaches to the same master via ControlPath — no second connection.
+  scp -q "${SSH_MUX[@]}" -r "$local_dir/." "$host:$www_dir/" \
+    || die "scp failed"
+
+  # Ship the quiet server into the temp-dir root (NOT the served www/).
+  printf '%s\n' "$SERVE_PY" | ssh "${SSH_MUX[@]}" "$host" "cat > '$remote_dir/serve-dist.py'" \
+    || die "failed to install server script"
+
+  # Optional: fresh disposable self-signed cert, generated on the remote.
+  if [ "$use_tls" = 1 ]; then
+    info "Generating disposable self-signed cert on remote ..."
+    ssh "${SSH_MUX[@]}" "$host" bash -s -- "$remote_dir" "$hostname_only" <<'REMOTE' \
+      || die "cert generation failed (is openssl installed on the remote?)"
+set -euo pipefail
+dir="$1"; cn="$2"
+umask 077
+openssl req -x509 -newkey rsa:2048 -nodes \
+  -keyout "$dir/key.pem" -out "$dir/cert.pem" \
+  -days 1 -subj "/CN=$cn" >/dev/null 2>&1
+REMOTE
+  fi
+
+  # Optional: write Basic Auth creds to a 0600 file (never on argv/ps).
+  if [ -n "$auth" ]; then
+    printf '%s' "$auth" | ssh "${SSH_MUX[@]}" "$host" "umask 077; cat > '$remote_dir/auth'" \
+      || die "failed to write auth file"
+  fi
+
+  info "Starting server (bind $bind, port $port, $scheme) ..."
+  local pid
+  pid=$(ssh "${SSH_MUX[@]}" "$host" bash -s -- "$remote_dir" "$bind" "$port" "$use_tls" "$realm" <<'REMOTE'
+set -euo pipefail
+dir="$1"; bind="$2"; port="$3"; use_tls="$4"; realm="$5"
+cd "$dir"
+cmd=(python3 serve-dist.py --bind "$bind" --port "$port" --directory "$dir/www" --realm "$realm")
+if [ "$use_tls" = 1 ]; then
+  cmd+=(--certfile "$dir/cert.pem" --keyfile "$dir/key.pem")
+fi
+[ -f "$dir/auth" ] && export SHARE_AUTH_FILE="$dir/auth"
+# setsid forks, so $! is the wrong PID. Have the new session leader write its
+# OWN pid (preserved across exec) — that's the real process AND process-group
+# id, so teardown's `kill -- -$pid` reliably reaps the whole group.
+nohup setsid bash -c 'echo $$ > serve.pid; exec "$@"' _ "${cmd[@]}" \
+  >serve.log 2>&1 < /dev/null &
+# Give it a moment, then read the real pid and confirm it's alive.
+sleep 0.5
+pid=$(cat serve.pid 2>/dev/null || true)
+if [ -n "$pid" ] && kill -0 "$pid" 2>/dev/null; then
+  echo "$pid"
+else
+  echo "SERVER_DIED" >&2
+  cat serve.log >&2 || true
+  exit 1
+fi
+REMOTE
+) || die "failed to start remote server (see log above)"
+
+  # Fallback state, so `stop`/`status` can reach an orphan if we crash uncleanly.
+  mkdir -p "$(dirname "$STATE_FILE")"
+  {
+    printf 'HOST=%q\n' "$host"
+    printf 'REMOTE_DIR=%q\n' "$remote_dir"
+    printf 'PORT=%q\n' "$port"
+    printf 'BIND=%q\n' "$bind"
+    printf 'PID=%q\n' "$pid"
+    printf 'SCHEME=%q\n' "$scheme"
+  } > "$STATE_FILE"
+
+  info ""
+  info "Share is live:"
+  info "  ${scheme}://${hostname_only}:${port}/"
+  info "  (remote pid $pid, dir $remote_dir)"
+  if [ -n "$auth" ]; then
+    info ""
+    info "  Basic Auth: ${auth}   (shown once — not stored locally)"
+  fi
+  if [ "$use_tls" = 1 ]; then
+    info "  TLS: self-signed — clients need -k / 'trust anyway'."
+  fi
+  info ""
+  info "Serving over the open connection. Press Ctrl-C to tear down and destroy."
+
+  # -----------------------------------------------------------------------
+  # Foreground holder. Blocks over the SAME master connection. Its purpose is
+  # to (a) keep the connection busy and (b) act as a watchdog for a DROPPED link
+  # / closed terminal: in those cases the remote shell gets SIGHUP and its trap
+  # destroys everything. (For a local Ctrl-C, ssh does NOT signal a PTY-less
+  # remote, so _share_teardown above does the destroy explicitly — both paths
+  # are idempotent, guarded, and safe to run twice.)
+  ssh "${SSH_MUX[@]}" "$host" bash -s -- "$remote_dir" "$pid" <<'REMOTE' || true
+set -uo pipefail
+dir="$1"; pid="$2"
+cleanup() {
+  kill -TERM "-$pid" 2>/dev/null || kill -TERM "$pid" 2>/dev/null || true
+  pkill -f "serve-dist.py .*--directory $dir/www" 2>/dev/null || true
+  case "$dir" in
+    */remote-share.??????*) rm -rf "$dir" ;;
+  esac
+  exit 0
+}
+trap cleanup EXIT HUP INT TERM
+# Block until the connection drops or the server dies; the trap does teardown.
+while kill -0 "$pid" 2>/dev/null; do
+  sleep 2
+done
+REMOTE
+}
+
+# ---------------------------------------------------------------------------
+# clean — scrub a share: stop the server and remove its files, then sweep the
+# host for any orphaned remote-share servers/dirs. Safe to run anytime; it's
+# the recovery command when a `share` exited uncleanly and left something behind.
+#
+#   remote-share.sh clean [--host user@host]
+#
+# With no --host it uses the host from local state (if any). With --host it also
+# scans that host for stray serve-dist.py processes and /tmp/remote-share.* dirs.
+cmd_clean() {
+  local host=""
+  while [ $# -gt 0 ]; do
+    case "$1" in
+      --host) host="${2:-}"; shift 2 ;;
+      -h|--help) usage 0 ;;
+      *) die "unknown option: $1" ;;
+    esac
+  done
+
+  local did_something=0
+
+  # 1) Tear down the share recorded in local state, if any.
+  if [ -f "$STATE_FILE" ]; then
+    # shellcheck disable=SC1090
+    source "$STATE_FILE"
+    [ -n "$host" ] || host="$HOST"
+    info "Cleaning tracked share on $HOST (dir $REMOTE_DIR) ..."
+    destroy_remote "$HOST" "$REMOTE_DIR"
+    rm -f "$STATE_FILE"
+    did_something=1
+  else
+    info "No tracked share in local state."
+  fi
+
+  # 2) Sweep the host for orphans (stray processes + leftover temp dirs).
+  if [ -n "$host" ]; then
+    info "Sweeping $host for orphaned shares ..."
+    ssh "$host" bash -s <<'REMOTE' || info "  (warning: remote sweep may have failed)"
+set -uo pipefail
+# Kill any serve-dist.py still running (scoped to our server name).
+if pgrep -f 'serve-dist\.py' >/dev/null 2>&1; then
+  pkill -TERM -f 'serve-dist\.py' 2>/dev/null || true
+  sleep 0.3
+  pkill -KILL -f 'serve-dist\.py' 2>/dev/null || true
+  echo "  killed stray serve-dist.py process(es)" >&2
+fi
+# Remove any leftover disposable dirs (guarded glob — only ours).
+shopt -s nullglob
+removed=0
+for d in "${TMPDIR:-/tmp}"/remote-share.?????? /tmp/remote-share.??????; do
+  case "$d" in
+    */remote-share.??????*) rm -rf "$d" && echo "  removed $d" >&2 && removed=1 ;;
+  esac
+done
+[ "$removed" = 0 ] && echo "  no leftover temp dirs" >&2
+true
+REMOTE
+    did_something=1
+  else
+    info "No --host given and none in state — skipping host sweep."
+  fi
+
+  if [ "$did_something" = 1 ]; then
+    info "Clean complete."
+  else
+    info "Nothing to clean."
+  fi
+}
+
+# ---------------------------------------------------------------------------
+main() {
+  [ $# -ge 1 ] || usage 1
+  local sub="$1"; shift
+  case "$sub" in
+    share)  cmd_share "$@" ;;
+    clean)  cmd_clean "$@" ;;
+    -h|--help|help) usage 0 ;;
+    *) die "unknown command: $sub (try: share | clean)" ;;
+  esac
+}
+
+main "$@"

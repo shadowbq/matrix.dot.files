@@ -32,6 +32,8 @@ cd "$HOME"
 [ "$matrix_ext_k8s" == true ] && matrix_loader "extensions/k8s"
 [ "$matrix_ext_archives" == true ] && matrix_loader "extensions/archives"
 [ "$matrix_ext_vim" == true ] && matrix_loader "extensions/vim" && _matrix_vim-init
+[ "$matrix_ext_ai" == true ] && matrix_loader "extensions/ai"
+
 ##########################
 # Final .matrix Commands to be executed
 # Defined commonly in .matrix/functions

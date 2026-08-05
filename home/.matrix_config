@@ -19,6 +19,7 @@ export matrix_ext_k8s=true
 export matrix_ext_gcc=false
 export matrix_ext_archives=true
 export matrix_ext_vim=true
+export matrix_ext_ai=true
 
 # Enhanced History support
 export matrix_ext_history=true

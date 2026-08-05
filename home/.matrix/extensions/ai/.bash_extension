@@ -1,0 +1,20 @@
+# Model routing (per-tier variables)
+export ANTHROPIC_DEFAULT_OPUS_MODEL=claude-opus-4-6
+export ANTHROPIC_DEFAULT_SONNET_MODEL=claude-sonnet-4-6
+export ANTHROPIC_DEFAULT_HAIKU_MODEL=claude-haiku-4-5
+
+## Custom Overrides - Anthropic naming conventions (local overrides for matrix)
+export ANTHROPIC_DEFAULT_OPUS_MODEL=claude-4-6-opus
+export ANTHROPIC_DEFAULT_SONNET_MODEL=claude-4-6-sonnet
+export ANTHROPIC_DEFAULT_HAIKU_MODEL=claude-4-5-haiku
+export ANTHROPIC_CUSTOM_HEADERS=User-Agent:claude
+
+# Telemetry & metrics
+export CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC=true
+export CLAUDE_CODE_ENABLE_TELEMETRY=1
+export OTEL_METRICS_EXPORTER=otlp
+export OTEL_EXPORTER_OTLP_PROTOCOL=http/json
+# export OTEL_EXPORTER_OTLP_ENDPOINT=https://otel-collector.example.com/v1/metrics
+
+# Optional
+export DISABLE_COST_WARNINGS=1
