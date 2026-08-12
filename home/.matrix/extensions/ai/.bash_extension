@@ -1,11 +1,11 @@
 # Model routing (per-tier variables)
-export ANTHROPIC_DEFAULT_OPUS_MODEL=claude-opus-4-6
-export ANTHROPIC_DEFAULT_SONNET_MODEL=claude-sonnet-4-6
+export ANTHROPIC_DEFAULT_OPUS_MODEL=claude-opus-4-8
+export ANTHROPIC_DEFAULT_SONNET_MODEL=claude-sonnet-5
 export ANTHROPIC_DEFAULT_HAIKU_MODEL=claude-haiku-4-5
 
 ## Custom Overrides - Anthropic naming conventions (local overrides for matrix)
-export ANTHROPIC_DEFAULT_OPUS_MODEL=claude-4-6-opus
-export ANTHROPIC_DEFAULT_SONNET_MODEL=claude-4-6-sonnet
+export ANTHROPIC_DEFAULT_OPUS_MODEL=claude-4-8-opus
+export ANTHROPIC_DEFAULT_SONNET_MODEL=claude-5-sonnet
 export ANTHROPIC_DEFAULT_HAIKU_MODEL=claude-4-5-haiku
 export ANTHROPIC_CUSTOM_HEADERS=User-Agent:claude
 

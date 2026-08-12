@@ -1,0 +1,321 @@
+#!/usr/bin/env python3
+"""
+claude-todoist
+
+Print the current TODO list (and status) for the Claude Code (VSCode)
+session tied to your current project directory, rendered with rich.
+
+claude-4-8-opus uses this method to render the TODO lists. 
+
+LICENSE: MIT License © 2026
+
+pip install rich
+"""
+
+import argparse
+import json
+import os
+import select
+import sys
+import termios
+import time
+import tty
+from datetime import datetime, timezone
+from pathlib import Path
+from typing import Optional
+
+from rich.console import Console, Group
+from rich.table import Table
+from rich.panel import Panel
+from rich.progress_bar import ProgressBar
+from rich.live import Live
+from rich import box
+
+console = Console()
+
+STATUS_STYLE = {
+    "completed": ("✔", "green"),
+    "in_progress": ("➤", "yellow"),
+    "pending": ("○", "grey58"),
+}
+
+
+def slugify_cwd(cwd: str) -> str:
+    """Reproduce Claude's project-folder slug from a cwd path."""
+    return str(cwd).rstrip("/").replace("/", "-")
+
+
+def find_project_dir(claude_dir: Path, cwd: str) -> Optional[Path]:
+    """
+    Claude names project folders after the directory a session started in,
+    not necessarily the exact cwd you're running this from. Walk up from
+    `cwd` until we find a matching, existing project folder.
+    """
+    projects_root = claude_dir / "projects"
+    current = Path(cwd).resolve()
+
+    for path in [current, *current.parents]:
+        slug = slugify_cwd(str(path))
+        candidate = projects_root / slug
+        if candidate.is_dir():
+            return candidate
+
+    return None
+
+
+def scan_session(jsonl_path: Path):
+    """
+    Single pass over a session file. Returns (ts, todos, meta) where meta holds
+    the AI title and last-seen cwd. ts/todos are the latest TodoWrite state.
+    """
+    latest, latest_ts = None, None
+    title, cwd = None, None
+
+    with jsonl_path.open("r", encoding="utf-8") as f:
+        for line in f:
+            line = line.strip()
+            if not line:
+                continue
+            try:
+                record = json.loads(line)
+            except json.JSONDecodeError:
+                continue
+
+            if record.get("aiTitle"):
+                title = record["aiTitle"]
+            if record.get("cwd"):
+                cwd = record["cwd"]
+
+            ts = record.get("timestamp")
+
+            def consider(todos):
+                nonlocal latest, latest_ts
+                if todos and (latest_ts is None or (ts and ts > latest_ts)):
+                    latest_ts, latest = ts, todos
+
+            message = record.get("message")
+            if isinstance(message, dict):
+                for block in message.get("content") or []:
+                    if (
+                        isinstance(block, dict)
+                        and block.get("type") == "tool_use"
+                        and block.get("name") == "TodoWrite"
+                    ):
+                        consider(block.get("input", {}).get("todos"))
+
+            tool_result = record.get("toolUseResult")
+            if isinstance(tool_result, dict) and "newTodos" in tool_result:
+                consider(tool_result.get("newTodos"))
+
+    return latest_ts, latest, {"title": title, "cwd": cwd}
+
+
+def format_age(ts: str) -> str:
+    """Render an ISO-8601 UTC timestamp as 'HH:MM · Nm ago' in local time."""
+    if not ts:
+        return ""
+    try:
+        dt = datetime.fromisoformat(ts.replace("Z", "+00:00"))
+    except ValueError:
+        return ts
+
+    local = dt.astimezone()
+    delta = datetime.now(timezone.utc) - dt
+    secs = int(delta.total_seconds())
+    if secs < 60:
+        rel = f"{secs}s ago"
+    elif secs < 3600:
+        rel = f"{secs // 60}m ago"
+    elif secs < 86400:
+        rel = f"{secs // 3600}h ago"
+    else:
+        rel = f"{secs // 86400}d ago"
+
+    return f"{local:%H:%M} · {rel}"
+
+
+def build_todos_renderable(session_name: str, ts: str, todos: list, meta: dict = None):
+    """Build a rich renderable for a todo snapshot (usable with print or Live)."""
+    meta = meta or {}
+    total = len(todos)
+    done = sum(1 for t in todos if t.get("status") == "completed")
+    in_progress = sum(1 for t in todos if t.get("status") == "in_progress")
+
+    title = meta.get("title") or session_name
+    subline_bits = [f"[dim]{session_name[:8]}[/dim]"]
+    if meta.get("cwd"):
+        subline_bits.append(f"[dim]{Path(meta['cwd']).name}[/dim]")
+    age = format_age(ts)
+    if age:
+        subline_bits.append(f"[dim]{age}[/dim]")
+    subline = "  ·  ".join(subline_bits)
+
+    header = f"[bold cyan]{title}[/bold cyan]\n{subline}"
+    panel = Panel.fit(header, border_style="cyan")
+
+    table = Table(box=box.ROUNDED, show_lines=False, expand=True)
+    table.add_column("", width=3, justify="center")
+    table.add_column("Status", style="bold", width=12)
+    table.add_column("Todo")
+
+    for todo in todos:
+        status = todo.get("status", "unknown")
+        icon, color = STATUS_STYLE.get(status, ("?", "white"))
+        # For the active task, the present-tense activeForm reads best.
+        if status == "in_progress":
+            content = todo.get("activeForm") or todo.get("content", "")
+            content = f"[bold]{content}[/bold]"
+        else:
+            content = todo.get("content", "")
+        table.add_row(
+            f"[{color}]{icon}[/{color}]",
+            f"[{color}]{status.upper()}[/{color}]",
+            content,
+        )
+
+    pct_desc = f"{done}/{total} completed"
+    if in_progress:
+        pct_desc += f", {in_progress} in progress"
+    pct = (done / total * 100) if total else 0
+
+    bar = Table.grid(padding=(0, 1))
+    bar.add_column()
+    bar.add_column()
+    bar.add_column(justify="right")
+    bar.add_row(
+        pct_desc,
+        ProgressBar(total=total, completed=done, width=40),
+        f"{pct:>3.0f}%",
+    )
+
+    return Group(panel, table, bar)
+
+
+def collect_results(project_dir: Path):
+    """Return [(ts, session_file, todos, meta), ...] newest-first, or None if empty."""
+    session_files = list(project_dir.glob("*.jsonl"))
+    if not session_files:
+        return None
+
+    results = []
+    for session_file in session_files:
+        ts, todos, meta = scan_session(session_file)
+        if todos:
+            results.append((ts, session_file, todos, meta))
+
+    if not results:
+        return []
+
+    # Sort by todo timestamp (not file mtime) so we get the truly latest state.
+    results.sort(key=lambda r: r[0] or "", reverse=True)
+    return results
+
+
+def build_output(results, all_sessions: bool):
+    """Build a single renderable for one or all sessions' latest todos."""
+    targets = results if all_sessions else results[:1]
+    parts = []
+    for ts, session_file, todos, meta in targets:
+        parts.append(build_todos_renderable(session_file.stem, ts, todos, meta))
+        parts.append("")
+    return Group(*parts)
+
+
+def main():
+    parser = argparse.ArgumentParser(
+        description="Print current TODOs (and status) for a Claude VSCode project."
+    )
+    parser.add_argument(
+        "--cwd", default=os.getcwd(),
+        help="Project working directory to look up (default: current directory)."
+    )
+    parser.add_argument(
+        "--claude-dir", default=str(Path.home() / ".claude"),
+        help="Root Claude config directory (default: ~/.claude)."
+    )
+    parser.add_argument(
+        "--all-sessions", action="store_true",
+        help="Show the latest todo snapshot from every session file that has one."
+    )
+    parser.add_argument(
+        "-w", "--watch", action="store_true",
+        help="Continuously watch for changes and update the display in place."
+    )
+    parser.add_argument(
+        "--interval", type=float, default=1.0,
+        help="Polling interval in seconds when watching (default: 1.0)."
+    )
+    args = parser.parse_args()
+
+    claude_dir = Path(args.claude_dir)
+    project_dir = find_project_dir(claude_dir, args.cwd)
+
+    if project_dir is None:
+        console.print(f"[red]No Claude project directory found for cwd={args.cwd!r}[/red]")
+        sys.exit(1)
+
+    if args.watch:
+        watch(project_dir, args.all_sessions, args.interval)
+        return
+
+    results = collect_results(project_dir)
+    if results is None:
+        console.print(f"[red]No session files found in {project_dir}[/red]")
+        sys.exit(1)
+    if not results:
+        console.print("[yellow]No TodoWrite entries found in any session for this project.[/yellow]")
+        sys.exit(0)
+
+    console.print(build_output(results, args.all_sessions))
+
+
+def watch(project_dir: Path, all_sessions: bool, interval: float):
+    """Poll for todo changes and redraw in place until 'q'/ESC or Ctrl-C."""
+    def snapshot():
+        results = collect_results(project_dir)
+        if not results:
+            return Panel(
+                "[yellow]No TodoWrite entries found yet…[/yellow]",
+                border_style="yellow",
+            )
+        return build_output(results, all_sessions)
+
+    hint = "[dim]press q or esc to quit[/dim]"
+
+    def frame():
+        return Group(snapshot(), hint)
+
+    def should_quit(timeout):
+        """Wait up to `timeout`s for a keypress; return True on q/ESC."""
+        ready, _, _ = select.select([sys.stdin], [], [], timeout)
+        if not ready:
+            return False
+        ch = sys.stdin.read(1)
+        return ch in ("q", "Q", "\x1b")
+
+    # Keyboard-to-quit needs a real TTY in cbreak mode. When stdin is piped
+    # (no TTY), fall back to a plain sleep loop and rely on Ctrl-C.
+    interactive = sys.stdin.isatty()
+
+    with Live(frame(), console=console, screen=False, auto_refresh=False) as live:
+        old_settings = None
+        try:
+            if interactive:
+                old_settings = termios.tcgetattr(sys.stdin)
+                tty.setcbreak(sys.stdin.fileno())
+            while True:
+                if interactive:
+                    if should_quit(interval):
+                        break
+                else:
+                    time.sleep(interval)
+                live.update(frame(), refresh=True)
+        except KeyboardInterrupt:
+            pass
+        finally:
+            if old_settings is not None:
+                termios.tcsetattr(sys.stdin, termios.TCSADRAIN, old_settings)
+
+
+if __name__ == "__main__":
+    main()
